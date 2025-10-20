@@ -82,7 +82,7 @@ export default function HeroSection() {
               className={`block px-4 py-2 text-sm font-semibold transition ${
                 link.isYellow
                   ? "bg-[#21336C] text-white py-5"
-                  : "hover:bg-gray-100"
+                  : "hover:bg-gray-400"
               }`}
             >
               {link.name}
@@ -114,12 +114,14 @@ function CategoryHoverItem({ category }: CategoryHoverItemProps) {
     category.subCategories && category.subCategories.length > 0;
 
   return (
-    <div className="border-b border-gray-200 relative group">
+    <div className="border-b border-gray-200 relative group mb-2">
+      {" "}
+      {/* Added mb-2 for spacing */}
       <Link
         href={category.href}
-        className={`flex items-center justify-between px-4 py-2 text-sm transition ${
+        className={`flex items-center justify-between px-4 py-5 text-sm transition ${
           hasSubCategories
-            ? "group-hover:bg-gray-500 group-hover:text-white"
+            ? "group-hover:bg-gray-700 group-hover:text-white"
             : "hover:bg-gray-100"
         }`}
       >
@@ -128,10 +130,9 @@ function CategoryHoverItem({ category }: CategoryHoverItemProps) {
           <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-white" />
         )}
       </Link>
-
       {hasSubCategories && (
         <div className="hidden group-hover:block absolute top-0 left-full w-64 bg-white shadow-2xl border border-gray-200 z-50 min-h-full">
-          <h4 className="text-md font-bold px-4 pt-3 pb-2 border-b border-gray-100">
+          <h4 className="text-md font-bold px-4  pb-2 border-b border-gray-100">
             {category.name}
           </h4>
           <nav className="p-2">

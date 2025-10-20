@@ -92,7 +92,7 @@ import { Star, MapPin } from "lucide-react";
 import { useState } from "react";
 
 export default function FeaturedListings() {
-  const [visibleCount, setVisibleCount] = useState(8); // show more initially
+  const [visibleCount, setVisibleCount] = useState(8);
   const featured = listings.slice(0, visibleCount);
 
   const handleShowMore = () => {
@@ -104,16 +104,16 @@ export default function FeaturedListings() {
       <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Businesses</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto break-words">
             Explore our most popular and highly-rated businesses
           </p>
         </div>
 
         {/* Listings Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {featured.map((listing) => (
             <Link key={listing.id} href={`/listings/${listing.id}`}>
-              <div className="card-base overflow-hidden h-full hover:shadow-lg transition-all cursor-pointer">
+              <div className="card-base overflow-hidden h-full hover:shadow-lg transition-all cursor-pointer flex flex-col">
                 {/* Cover Image */}
                 <div className="relative h-48 bg-gray-200 overflow-hidden">
                   <img
@@ -124,44 +124,48 @@ export default function FeaturedListings() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="p-4 md:p-6 flex-1 flex flex-col">
                   {/* Logo & Name */}
-                  <div className="flex items-start gap-4 mb-4">
+                  <div className="flex items-start gap-3 md:gap-4 mb-3 md:mb-4">
                     <img
                       src={listing.logo || "/placeholder.svg"}
                       alt={listing.companyName}
-                      className="w-12 h-12 rounded-lg object-cover"
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover flex-shrink-0"
                     />
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg text-foreground">{listing.name}</h3>
-                      <p className="text-sm text-muted-foreground">{listing.companyName}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-base md:text-lg text-foreground truncate">
+                        {listing.name}
+                      </h3>
+                      <p className="text-xs md:text-sm text-muted-foreground truncate">
+                        {listing.companyName}
+                      </p>
                     </div>
                   </div>
 
                   {/* Category & Rating */}
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
+                  <div className="flex items-center justify-between mb-3 text-xs md:text-sm">
+                    <span className="font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full truncate">
                       {listing.category}
                     </span>
                     <div className="flex items-center gap-1">
-                      <Star size={16} className="fill-accent text-accent" />
-                      <span className="font-semibold text-sm">{listing.rating}</span>
-                      <span className="text-xs text-muted-foreground">({listing.reviews})</span>
+                      <Star size={16} className="fill-accent text-accent flex-shrink-0" />
+                      <span className="font-semibold">{listing.rating}</span>
+                      <span className="text-muted-foreground">({listing.reviews})</span>
                     </div>
                   </div>
 
                   {/* Address */}
-                  <div className="flex items-start gap-2 mb-4 text-sm text-muted-foreground">
+                  <div className="flex items-start gap-2 mb-3 md:mb-4 text-xs md:text-sm text-muted-foreground">
                     <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                    <span className="line-clamp-2">{listing.address}</span>
+                    <span className="line-clamp-2 break-words">{listing.address}</span>
                   </div>
 
                   {/* Labels */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mt-auto">
                     {listing.labels.slice(0, 2).map((label, idx) => (
                       <span
                         key={idx}
-                        className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded"
+                        className="text-xs md:text-sm bg-muted text-muted-foreground px-2 py-1 rounded truncate"
                       >
                         {label}
                       </span>
