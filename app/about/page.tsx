@@ -1,4 +1,4 @@
-import { CheckCircle, Users, Zap, Globe } from "lucide-react"
+import { CheckCircle, Users, Zap, Globe } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -8,7 +8,8 @@ export default function AboutPage() {
         <div className="container-custom text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">About Listify</h1>
           <p className="text-lg text-gray-100 max-w-2xl mx-auto">
-            Connecting businesses with customers through a trusted, comprehensive directory platform
+            Connecting businesses with customers through a trusted,
+            comprehensive directory platform
           </p>
         </div>
       </section>
@@ -20,19 +21,27 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
               <p className="text-muted-foreground text-lg mb-4 leading-relaxed">
-                At Listify, we believe that every business deserves to be discovered. Our mission is to create a vibrant
-                marketplace where businesses can showcase their services and customers can find exactly what they're
-                looking for.
+                At Listify, we believe that every business deserves to be
+                discovered. Our mission is to create a vibrant marketplace where
+                businesses can showcase their services and customers can find
+                exactly what they're looking for.
               </p>
               <p className="text-muted-foreground text-lg leading-relaxed">
-                We're committed to building a platform that's easy to use, trustworthy, and beneficial for both business
-                owners and customers alike.
+                We're committed to building a platform that's easy to use,
+                trustworthy, and beneficial for both business owners and
+                customers alike.
               </p>
             </div>
-            <div className="bg-muted rounded-lg p-8 h-96 flex items-center justify-center">
+            <div className="bg-muted rounded-lg   flex items-center justify-center">
               <div className="text-center">
-                <div className="text-6xl mb-4">🎯</div>
-                <p className="text-muted-foreground">Connecting businesses with opportunities</p>
+                {/* <div className="text-6xl mb-4"> */}
+                  <img
+                    src="https://i.postimg.cc/k4WR27q4/wrgfj.png"
+                    alt="Business Club Hero"
+                    className="object-contain h-full w-full"
+                  />
+            
+           
               </div>
             </div>
           </div>
@@ -48,7 +57,8 @@ export default function AboutPage() {
               {
                 icon: CheckCircle,
                 title: "Trust",
-                description: "We build trust through transparency and reliability",
+                description:
+                  "We build trust through transparency and reliability",
               },
               {
                 icon: Users,
@@ -69,7 +79,9 @@ export default function AboutPage() {
               <div key={idx} className="card-base p-6 text-center">
                 <value.icon className="w-12 h-12 text-primary mx-auto mb-4" />
                 <h3 className="font-bold text-lg mb-2">{value.title}</h3>
-                <p className="text-muted-foreground text-sm">{value.description}</p>
+                <p className="text-muted-foreground text-sm">
+                  {value.description}
+                </p>
               </div>
             ))}
           </div>
@@ -85,7 +97,9 @@ export default function AboutPage() {
               <p className="text-muted-foreground">Businesses Listed</p>
             </div>
             <div>
-              <div className="text-4xl font-bold text-primary mb-2">50,000+</div>
+              <div className="text-4xl font-bold text-primary mb-2">
+                50,000+
+              </div>
               <p className="text-muted-foreground">Active Users</p>
             </div>
             <div>
@@ -101,7 +115,8 @@ export default function AboutPage() {
         <div className="container-custom">
           <h2 className="text-3xl font-bold text-center mb-12">Our Team</h2>
           <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
-            We're a passionate team of professionals dedicated to making Listify the best business directory platform.
+            We're a passionate team of professionals dedicated to making Listify
+            the best business directory platform.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -126,7 +141,8 @@ export default function AboutPage() {
         <div className="container-custom text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Join Us?</h2>
           <p className="text-lg text-gray-100 mb-8 max-w-2xl mx-auto">
-            Whether you're a business looking to grow or a customer searching for services, Listify is here for you.
+            Whether you're a business looking to grow or a customer searching
+            for services, Listify is here for you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -145,5 +161,5 @@ export default function AboutPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

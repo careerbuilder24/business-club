@@ -206,15 +206,18 @@
 //     </div>
 //   )
 // }
-"use client";
+"use client"
 
 import { listings } from "@/lib/data";
-import { useState } from "react";
+import { useState, use } from "react"; // use() is required to unwrap params
 import { Star, MapPin, Phone, Mail, Globe, Facebook, Share2 } from "lucide-react";
 
-export default function ListingDetailsPage({ params }: { params: { id: string } }) {
+export default function ListingDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params); // unwrap the params
+  const id = resolvedParams.id;
+
   // Find the listing by ID
-  const listing = listings.find((l) => l.id === params.id);
+  const listing = listings.find((l) => l.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
 
   if (!listing) {

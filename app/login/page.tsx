@@ -67,7 +67,7 @@ export default function LoginPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-xl">L</span>
+              {/* <span className="text-white font-bold text-xl">L</span> */}
             </div>
             <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
             <p className="text-muted-foreground">Sign in to your Listify account</p>
