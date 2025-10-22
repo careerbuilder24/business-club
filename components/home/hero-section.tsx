@@ -214,7 +214,7 @@ export default function App() {
         </div>
 
         {/* Right Banner Section */}
-        <div className="w-full lg:flex-grow h-[25vh] lg:h-full relative p-5">
+        <div className="w-full lg:flex-grow h-[25vh] lg:h-full relative ">
           <BannerCarousel slides={carouselSlides} />
         </div>
 
