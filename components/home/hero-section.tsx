@@ -191,7 +191,7 @@ export default function App() {
         {/* Left Sidebar */}
         <div
           className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#2C8845] text-white shadow-lg
-                      lg:static lg:w-[18%] lg:flex lg:flex-col lg:z-30 lg:shadow-none
+                      lg:static lg:w-[14%] lg:flex lg:flex-col lg:z-30 lg:shadow-none
                       transform transition-transform duration-300 ease-in-out
                       ${isCategorySidebarOpen ? "translate-x-0" : "-translate-x-full"} 
                       lg:translate-x-0`}
