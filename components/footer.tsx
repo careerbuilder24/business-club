@@ -154,6 +154,11 @@ export default function Footer() {
                   About
                 </Link>
               </li>
+              <li>
+                <Link href="/PricingTablePage" className="hover:text-primary transition">
+                  Pricing
+                </Link>
+              </li>
             </ul>
           </div>
 

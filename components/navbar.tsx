@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -12,6 +11,7 @@ export default function Navbar() {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Add Listing", href: "/add-listing" },
+    { label: "Pricing", href: "/PricingTablePage" },
     { label: "All Listings", href: "/listings" },
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },
@@ -25,7 +25,6 @@ export default function Navbar() {
   return (
     // 1. STICKY HEADER
     <header className="w-full shadow-lg sticky top-0 z-50 bg-white">
-   
       <div className="bg-[#ffff] text-white">
         <div className="w-full mx-auto flex items-center justify-between px-4 py-3 lg:py-2">
           {/* Logo */}
@@ -39,7 +38,6 @@ export default function Navbar() {
             />
           </Link>
 
- 
           <div className="hidden lg:flex items-center gap-6 text-sm flex-grow justify-center ml-6 text-gray-700">
             {navItems.map((item) => (
               <Link
@@ -83,10 +81,8 @@ export default function Navbar() {
         </div>
       </div>
 
- 
       <nav className="hidden lg:block bg-[#2C8845] border-t border-gray-200 text-white">
         <div className="w-full mx-auto flex items-center justify-center px-4 py-3">
-        
           <div className="flex w-full max-w-4xl">
             <select className="bg-[#ffffff] text-[#2C8845] px-3 py-2 cursor-pointer rounded-l-md border-none outline-none">
               <option>Business</option>
@@ -106,7 +102,6 @@ export default function Navbar() {
         </div>
       </nav>
 
- 
       <div
         className={`fixed inset-0 z-40 bg-white lg:hidden transform transition-transform duration-300 ease-in-out ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
@@ -132,9 +127,8 @@ export default function Navbar() {
               <Search size={18} />
             </button>
           </div>
-          
         </div>
-        
+
         {/* Mobile Nav Links */}
         <nav className="flex flex-col p-4 space-y-2">
           <Link

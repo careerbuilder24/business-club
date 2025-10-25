@@ -52,6 +52,8 @@ export const metadata: Metadata = {
   },
 };
 
+// app/layout.tsx
+
 export default function RootLayout({
   children,
 }: {
@@ -59,7 +61,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={geistSans.className}>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground" suppressHydrationWarning>
         <Navbar />
         <main>{children}</main>
         <Footer />
