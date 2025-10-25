@@ -157,11 +157,11 @@ export default function AddListingForm() {
                 required
               >
                 <option value="">Select a category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+                {/* {categories.map((cat, index) => (
+                  <option key={cat.name || index} value={cat.name}>
+                    {cat.name}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
             <div>

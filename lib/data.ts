@@ -534,6 +534,122 @@ export const businessCategories: string[] = [
   "Food & Beverage",
   "Real Estate & Construction",
 ];
+// export const categories: DivisionCategory[] = [
+//   {
+//     division: "Dhaka",
+    
+//     districts: [
+//       "Dhaka",
+//       "Faridpur",
+//       "Gazipur",
+//       "Gopalganj",
+//       "Kishoreganj",
+//       "Madaripur",
+//       "Manikganj",
+//       "Munshiganj",
+//       "Narayanganj",
+//       "Narsingdi",
+//       "Rajbari",
+//       "Shariatpur",
+//       "Tangail",
+//     ],
+      
+//   },
+//   {
+//     division: "Chattogram",
+//     districts: [
+//       "Bandarban",
+//       "Brahmanbaria",
+//       "Chandpur",
+//       "Chattogram",
+//       "Cumilla",
+//       "Cox's Bazar",
+//       "Feni",
+//       "Khagrachhari",
+//       "Lakshmipur",
+//       "Noakhali",
+//       "Rangamati",
+//     ],
+//   },
+//   {
+//     division: "Rajshahi",
+//     districts: [
+//       "Bogura",
+//       "Joypurhat",
+//       "Naogaon",
+//       "Natore",
+//       "Nawabganj",
+//       "Pabna",
+//       "Rajshahi",
+//       "Sirajganj",
+//     ],
+//   },
+//   {
+//     division: "Khulna",
+//     districts: [
+//       "Bagerhat",
+//       "Chuadanga",
+//       "Jashore",
+//       "Jhenaidah",
+//       "Khulna",
+//       "Kushtia",
+//       "Magura",
+//       "Meherpur",
+//       "Narail",
+//       "Satkhira",
+//     ],
+//   },
+//   {
+//     division: "Barishal",
+//     districts: [
+//       "Barguna",
+//       "Barishal",
+//       "Bhola",
+//       "Jhalokati",
+//       "Patuakhali",
+//       "Pirojpur",
+//     ],
+//   },
+//   {
+//     division: "Sylhet",
+//     districts: [
+//       "Habiganj",
+//       "Moulvibazar",
+//       "Sunamganj",
+//       "Sylhet",
+//     ],
+//   },
+//   {
+//     division: "Rangpur",
+//     districts: [
+//       "Dinajpur",
+//       "Gaibandha",
+//       "Kurigram",
+//       "Lalmonirhat",
+//       "Nilphamari",
+//       "Panchagarh",
+//       "Rangpur",
+//       "Thakurgaon",
+//     ],
+//   },
+//   {
+//     division: "Mymensingh",
+//     districts: [
+//       "Jamalpur",
+//       "Mymensingh",
+//       "Netrokona",
+//       "Sherpur",
+//     ],
+//   },
+// ];
+
+
+// lib/data.ts
+export interface DivisionCategory {
+  division: string;
+  districts: string[];
+}
+
 export const categories: DivisionCategory[] = [
   {
     division: "Dhaka",
@@ -610,12 +726,7 @@ export const categories: DivisionCategory[] = [
   },
   {
     division: "Sylhet",
-    districts: [
-      "Habiganj",
-      "Moulvibazar",
-      "Sunamganj",
-      "Sylhet",
-    ],
+    districts: ["Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"],
   },
   {
     division: "Rangpur",
@@ -632,14 +743,10 @@ export const categories: DivisionCategory[] = [
   },
   {
     division: "Mymensingh",
-    districts: [
-      "Jamalpur",
-      "Mymensingh",
-      "Netrokona",
-      "Sherpur",
-    ],
+    districts: ["Jamalpur", "Mymensingh", "Netrokona", "Sherpur"],
   },
 ];
+
 
 /**
  * Directory listings data (using District names in 'category' field).
@@ -1107,3 +1214,4 @@ export const blogPosts: BlogPost[] = [
     comments: [],
   },
 ];
+
