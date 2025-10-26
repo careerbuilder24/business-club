@@ -493,6 +493,9 @@ export interface BlogPost {
   image: string;
   content: string;
   comments: Comment[];
+  // --- ADDED FIXES BELOW ---
+  category: string; // Add the main category field
+  location: string; // Add the location/district field (e.g., Khulna, Dhaka)
 }
 
 export interface Listing {
@@ -1189,11 +1192,12 @@ export const listings: Listing[] = [
 export const blogPosts: BlogPost[] = [
   {
     id: "1",
-    title: "The Future of Digital Marketing in 2025",
-    author: "Sarah Johnson",
+    title: "Creative Design Studio",
+    author: "Creative Design Co.",
     date: "2025-01-15",
-    image: "/placeholder.svg?height=400&width=600",
-    content: "Explore the latest trends in digital marketing and how businesses can adapt to stay competitive in 2025.",
+    image: "https://i.postimg.cc/13PX2LHd/oiyfyuhb.png",
+    content:
+      "Award-winning design studio creating stunning visual identities and user experiences. We specialize in branding, graphic design, and digital experiences.",
     comments: [
       {
         id: "1",
@@ -1202,16 +1206,22 @@ export const blogPosts: BlogPost[] = [
         date: "2025-01-16",
       },
     ],
+    // --- ADDED FIXES BELOW ---
+    category: "Creative & Design", // Example value
+    location: "Khulna", // Example value
   },
   {
     id: "2",
-    title: "Building a Strong Brand Identity",
-    author: "Mike Chen",
+    title: "Tech Solutions Pro",
+    author: "Tech Solutions Inc.",
     date: "2025-01-10",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "https://i.postimg.cc/13PX2LHd/oiyfyuhb.png",
     content:
-      "Learn the essential steps to create a memorable and consistent brand identity that resonates with your audience.",
+      "Leading technology solutions provider specializing in cloud infrastructure, software development, and IT consulting. We help businesses transform their digital operations.",
     comments: [],
+    // --- ADDED FIXES BELOW ---
+    category: "Technology & Software", // Example value
+    location: "Dhaka", // Example value
   },
 ];
 
