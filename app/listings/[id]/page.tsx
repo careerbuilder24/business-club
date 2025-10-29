@@ -1,19 +1,27 @@
-
 "use client";
 
-import { listings } from "@/lib/data";
-import { useState, use } from "react";
+import { listings, Listing, businessCategories, categories } from "@/lib/data";
+import Link from "next/link";
+import { useState } from "react";
 import {
   Star,
   MapPin,
   Phone,
   Mail,
   Globe,
-  Facebook,
   Share2,
+  Filter,
+  ListOrdered,
+  Briefcase,
+  Users,
+  Info,
+  ChevronDown,
 } from "lucide-react";
 
-// --- Demo Products and Services ---
+// NOTE: The state declarations that caused the error were removed from here
+// and moved inside the ListingDetailPage component below.
+
+// --- FAKE DATA ---
 const FAKE_PRODUCTS = [
   {
     id: "p1",
@@ -30,14 +38,6 @@ const FAKE_PRODUCTS = [
     description:
       "Brew your morning coffee from your phone. Features programmable schedules and integrated bean grinder.",
     rating: 4.2,
-  },
-  {
-    id: "p3",
-    name: "Eco-Friendly Backpack",
-    image: "https://picsum.photos/id/60/400/300",
-    description:
-      "Made from recycled materials, this backpack is durable, waterproof, and stylish for daily commute or travel.",
-    rating: 4.9,
   },
 ];
 
@@ -60,378 +60,501 @@ const FAKE_SERVICES = [
   },
 ];
 
-// --- Interfaces ---
-interface RatingStarsProps {
+const FAKE_REVIEWS = [
+  {
+    id: 1,
+    author: "A. Rahman",
+    rating: 5.0,
+    date: "2 months ago",
+    comment:
+      "Outstanding service! They delivered the project ahead of schedule and the quality was superb.",
+  },
+  {
+    id: 2,
+    author: "B. Khatun",
+    rating: 4.0,
+    date: "1 week ago",
+    comment:
+      "Very professional team. Communication was clear, only slight delay on one minor feature.",
+  },
+];
+
+// --- COMPONENTS ---
+const RatingStars = ({
+  rating,
+  size = 16,
+}: {
   rating: number;
-}
-
-type ProductOrServiceItem = (typeof FAKE_PRODUCTS)[0];
-
-interface ProductOrServiceCardProps {
-  item: ProductOrServiceItem;
-}
-
-// --- Helper Components ---
-const RatingStars = ({ rating }: RatingStarsProps) => {
+  size?: number;
+}) => {
   const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0 && rating > 0;
+  const hasHalfStar = rating % 1 !== 0;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
     <div className="flex items-center text-yellow-500">
       {[...Array(fullStars)].map((_, i) => (
-        <Star
-          key={`full-${i}`}
-          size={16}
-          className="fill-yellow-500 text-yellow-500"
-        />
+        <Star key={`f-${i}`} size={size} className="fill-yellow-500" />
       ))}
       {hasHalfStar && (
-        <div className="relative w-4 h-4 mr-1">
-          <Star size={16} className="absolute top-0 left-0 text-gray-300" />
-          <div
-            className="absolute top-0 left-0 overflow-hidden"
-            style={{ width: "50%" }}
-          >
-            <Star size={16} className="fill-yellow-500 text-yellow-500" />
+        <div className="relative" style={{ width: size, height: size }}>
+          <Star size={size} className="text-gray-300" />
+          <div className="absolute top-0 left-0 w-1/2 overflow-hidden">
+            <Star size={size} className="fill-yellow-500 text-yellow-500" />
           </div>
         </div>
       )}
       {[...Array(emptyStars)].map((_, i) => (
-        <Star key={`empty-${i}`} size={16} className="text-gray-300" />
+        <Star key={`e-${i}`} size={size} className="text-gray-300" />
       ))}
-      <span className="ml-2 text-sm font-semibold text-foreground">
+      <span className="ml-2 text-sm font-semibold text-gray-800">
         {rating.toFixed(1)}
       </span>
     </div>
   );
 };
 
-const ProductOrServiceCard = ({ item }: ProductOrServiceCardProps) => (
-  <div className="flex flex-col sm:flex-row gap-4 border border-border rounded-xl p-5 bg-muted/50 transition-shadow hover:shadow-lg">
-    <img
-      src={item.image || "/placeholder.svg"}
-      alt={item.name}
-      className="w-full sm:w-32 h-32 object-cover rounded-lg flex-shrink-0"
-    />
-    <div className="flex-1">
-      <h3 className="text-xl font-bold mb-1 text-primary">{item.name}</h3>
-      <p className="text-muted-foreground mb-3 line-clamp-2 text-sm">
-        {item.description}
-      </p>
-      <div className="flex items-center">
-        <RatingStars rating={item.rating || 0} />
-      </div>
-    </div>
-  </div>
-);
+// Assuming you have this data structure defined elsewhere (e.g., in "@/lib/data")
+// This is added here to make the sidebar rendering possible without the actual imported data
+const districtCategories = [
+  {
+    division: "Dhaka",
+    districts: ["Dhaka", "Gazipur", "Narayanganj", "Munshiganj"],
+  },
+  {
+    division: "Chittagong",
+    districts: ["Chittagong", "Cox's Bazar", "Comilla"],
+  },
+  // Add other divisions/districts as needed for filter to work
+];
 
-// --- Main Component ---
-export default function ListingDetailsPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const resolvedParams = use(params);
-  const id = resolvedParams.id;
+// --- MAIN PAGE ---
+export default function ListingDetailPage({ id }: { id?: string }) {
+  // 👇 CORRECT PLACEMENT FOR HOOKS
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>(""); // Location Filter
+  // Initial state for openDivision must be set to an existing division for initial render (e.g., "Dhaka")
+  const [openDivision, setOpenDivision] = useState<string>("Dhaka");
 
-  // Find listing by ID
-  const foundListing = listings.find((l) => l.id === id);
+  const listing: Listing | undefined =
+    listings.find((l) => l.id === id) || listings[0];
+  const [activeTab, setActiveTab] = useState<
+    "products" | "services" | "reviews" | "about"
+  >("products");
 
-  if (!foundListing) {
+  // Helper function to count listings per district
+  const getDistrictCount = (district: string): number => {
+    // NOTE: This relies on the 'listings' array imported from "@/lib/data"
+    return listings.filter((listing) => listing.district === district).length;
+  };
+
+  // Helper function to count listings per business type
+  const getBusinessTypeCount = (type: string): number => {
+    // NOTE: This relies on the 'listings' array imported from "@/lib/data"
+    return listings.filter((listing) => listing.businessType === type).length;
+  };
+
+  if (!listing) {
     return (
-      <div className="min-h-screen bg-muted py-12">
-        <div className="container-custom text-center">
-          <h1 className="text-3xl font-bold mb-4">Listing Not Found</h1>
-          <p className="text-muted-foreground">
-            The business you're looking for doesn't exist.
-          </p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-2xl font-bold text-red-600">Listing Not Found</h1>
       </div>
     );
   }
 
-  // Merge googleMapUrl if missing
-  const listing = {
-    ...foundListing,
-    googleMapUrl:
-      foundListing.googleMapUrl ||
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.902!2d90.4004!3d23.8103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c782c5a0f5c3%3A0x2b7b11e0d04a85a!2sDhaka%2C%20Bangladesh!5e0!3m2!1sen!2sus!4v1698399999999!5m2!1sen!2sus",
+  const tabContentMap = {
+    about: (
+      <div className="space-y-4 px-4 sm:px-0">
+        {" "}
+        {/* Re-added small padding for content only */}
+        <h2 className="text-2xl font-bold text-[#2C8845]">
+          About {listing.companyName}
+        </h2>
+        <p className="text-gray-700">{listing.description}</p>
+      </div>
+    ),
+    products: (
+      <div className="space-y-4 px-4 sm:px-0">
+        {" "}
+        {/* Re-added small padding for content only */}
+        <h2 className="text-2xl font-bold text-[#2C8845]">Products</h2>
+        {FAKE_PRODUCTS.map((p) => (
+          <div
+            key={p.id}
+            className="border rounded-xl p-4 bg-white shadow hover:shadow-lg transition"
+          >
+            <div className="flex gap-4">
+              <img
+                src={p.image}
+                className="w-32 h-32 object-cover rounded-lg"
+                alt=""
+              />
+              <div>
+                <h3 className="font-bold text-lg text-[#2C8845]">{p.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{p.description}</p>
+                <RatingStars rating={p.rating} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ),
+    services: (
+      <div className="space-y-4 px-4 sm:px-0">
+        {" "}
+        {/* Re-added small padding for content only */}
+        <h2 className="text-2xl font-bold text-[#2C8845]">Services</h2>
+        {FAKE_SERVICES.map((s) => (
+          <div
+            key={s.id}
+            className="border rounded-xl p-4 bg-white shadow hover:shadow-lg transition"
+          >
+            <div className="flex gap-4">
+              <img
+                src={s.image}
+                className="w-32 h-32 object-cover rounded-lg"
+                alt=""
+              />
+              <div>
+                <h3 className="font-bold text-lg text-[#2C8845]">{s.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{s.description}</p>
+                <RatingStars rating={s.rating} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ),
+    reviews: (
+      <div className="space-y-4 px-4 sm:px-0">
+        {" "}
+        {/* Re-added small padding for content only */}
+        <h2 className="text-2xl font-bold text-[#2C8845]">Reviews</h2>
+        {FAKE_REVIEWS.map((r) => (
+          <div key={r.id} className="border p-3 rounded-lg bg-white shadow-sm">
+            <div className="flex justify-between">
+              <span className="font-bold">{r.author}</span>
+              <span className="text-xs text-gray-500">{r.date}</span>
+            </div>
+            <RatingStars rating={r.rating} />
+            <p className="text-sm mt-1">{r.comment}</p>
+          </div>
+        ))}
+      </div>
+    ),
   };
 
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [activeTab, setActiveTab] = useState<"products" | "services">(
-    "products"
-  );
+  // Handlers
+  const handleDistrictSelect = (district: string) => {
+    setSelectedDistrict(district);
 
-  const products = FAKE_PRODUCTS;
-  const services = FAKE_SERVICES;
-  const allImages = [listing.coverImage, ...(listing.gallery || [])];
+    if (isMobileFilterOpen) {
+      setIsMobileFilterOpen(false);
+    }
+  };
+  const handleBusinessTypeSelect = (businessType: string) => {
+    setSelectedBusinessType(businessType);
 
+    if (isMobileFilterOpen) {
+      setIsMobileFilterOpen(false);
+    }
+  };
   return (
-    <div className="min-h-screen bg-muted py-12">
-      <div className="container-custom max-w-4xl">
-        {/* Cover Gallery */}
-        <div className="mb-8">
-          <div className="relative h-96 bg-gray-200 rounded-lg overflow-hidden mb-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* The main container now has NO PADDING ('p-4 sm:p-8' removed).
+              The gap is removed ('gap-6' changed to 'gap-0'). 
+          */}
+      {/* Grid Structure: Updated to lg:grid-cols-12 */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 max-w-full">
+        {/* Mobile/Tablet Filter Button (Hamburger) - Retained small padding for visibility */}
+        <div className="lg:hidden p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
+          <button
+            onClick={() => setIsMobileFilterOpen(true)}
+            className="w-full flex items-center justify-center p-3 text-lg font-semibold text-white bg-green-700 rounded-lg hover:bg-green-800 transition-colors shadow-md"
+          >
+            <Filter size={20} className="mr-2" />
+            Filters (
+            {selectedDistrict || selectedBusinessType ? "Active" : "All"})
+          </button>
+        </div>
+        
+        {/* LEFT SIDEBAR - UNCHANGED (lg:col-span-2) 
+        */}
+        <div
+          className={`
+            min-h-screen bg-green-700 text-white p-0
+            lg:col-span-2 lg:block lg:sticky lg:top-0 lg:overflow-y-auto
+            ${
+              isMobileFilterOpen
+                ? "fixed top-0 left-0 h-full w-64 z-50 transform translate-x-0 transition-transform duration-300 ease-in-out"
+                : "fixed top-0 left-0 h-full w-64 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-full lg:max-w-[250px] lg:z-auto" // Added max-width to sidebar for better look on large screens
+            }
+          `}
+        >
+          {/* Close button for mobile filter */}
+          <div className="lg:hidden p-4 flex justify-end">
+            <button
+              onClick={() => setIsMobileFilterOpen(false)}
+              className="text-white hover:text-gray-300 text-2xl"
+            >
+              &times;
+            </button>
+          </div>
+
+          <div className="p-4">
+            {/* Reset to All */}
+            <button
+              onClick={() => {
+                handleDistrictSelect("");
+                handleBusinessTypeSelect("");
+              }}
+              className={`
+                w-full text-center px-4 py-3 mb-4 cursor-pointer transition-colors text-lg font-bold rounded-lg
+                ${
+                  selectedDistrict === "" &&
+                  selectedBusinessType === ""
+                    ? "bg-green-800 border-2 border-white"
+                    : "hover:bg-green-600 border-2 border-transparent"
+                }
+              `}
+            >
+              All Business
+            </button>
+          </div>
+
+          <div className="mb-6 border-b border-green-600 pb-4 px-4">
+            <h3 className="text-lg font-bold mb-2 text-white/90">
+              Business Type
+            </h3>
+            <div className="space-y-1">
+              {businessCategories.map((category) => (
+                <div key={category.name}>
+                  <button
+                    onClick={() => handleBusinessTypeSelect(category.name)}
+                    className={`
+                      w-full flex justify-between items-center text-left px-2 py-2 transition-colors text-sm font-medium rounded-md
+                      ${
+                        selectedBusinessType === category.name
+                          ? "bg-green-800 text-white border-l-4 border-white"
+                          : "hover:bg-green-600/80 border-l-4 border-transparent text-white/90"
+                      }
+                    `}
+                  >
+                    <span className="truncate">{category.name}</span>
+                    <span className="text-white/70 ml-2 text-xs flex-shrink-0">
+                      ({getBusinessTypeCount(category.name)})
+                    </span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* --- LOCATION (DISTRICT) FILTER --- */}
+          <div className="mb-6 px-4">
+            <h3 className="text-lg font-bold mb-2 text-white/90">
+              Location (District)
+            </h3>
+            {/* Map over Divisions (The Bivag) */}
+            {districtCategories.map((divisionGroup) => (
+              <div key={divisionGroup.division} className="mt-2">
+                {/* Division Header (Toggle) */}
+                <button
+                  onClick={() =>
+                    setOpenDivision(
+                      openDivision === divisionGroup.division
+                        ? ""
+                        : divisionGroup.division
+                    )
+                  }
+                  className="w-full flex justify-between items-center text-left px-2 py-2 cursor-pointer bg-green-600 hover:bg-green-500 transition-colors text-sm font-bold rounded-md"
+                >
+                  <span className="truncate">
+                    {divisionGroup.division} Division
+                  </span>
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-300 ${
+                      openDivision === divisionGroup.division
+                        ? "rotate-180"
+                        : "rotate-0"
+                    }`}
+                  />
+                </button>
+
+                {/* District List (Jela) */}
+                <div
+                  className={`
+                    overflow-hidden transition-max-height duration-500 ease-in-out
+                    ${
+                      openDivision ===
+                      divisionGroup.division
+                        ? "max-h-96"
+                        : "max-h-0"
+                    }
+                  `}
+                >
+                  <div className="space-y-0.5 py-1">
+                    {divisionGroup.districts.map((district) => (
+                      <Link
+                        key={district}
+                        href={`#dist-${district
+                          .toLowerCase()
+                          .replace(/\s/g, "-")}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDistrictSelect(district);
+                        }}
+                        className={`
+                          w-full flex justify-between items-center text-left pl-4 py-1.5 transition-colors text-xs font-medium
+                          ${
+                            selectedDistrict ===
+                            district
+                              ? "bg-green-800 text-white border-l-4 border-white"
+                              : "hover:bg-green-700/80 border-l-4 border-transparent text-white/90"
+                          }
+                        `}
+                      >
+                        <span className="truncate">{district}</span>
+                        <span className="text-white/70 ml-2 text-xs flex-shrink-0">
+                          ({getDistrictCount(district)})
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* MAIN CONTENT - MODIFIED: Increased width from lg:col-span-7 to lg:col-span-8 
+        */}
+        <main className="lg:col-span-8 p-4 sm:p-6 lg:p-8">
+          {/* Banner */}
+          <div className="h-64 w-full rounded-xl overflow-hidden shadow">
             <img
-              src={allImages[selectedImage] || "/placeholder.svg"}
-              alt={listing.name}
+              src={listing.coverImage}
+              alt="banner"
               className="w-full h-full object-cover"
             />
           </div>
-          {allImages.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {allImages.map((image, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                    selectedImage === idx ? "border-primary" : "border-border"
-                  }`}
-                >
-                  <img
-                    src={image || "/placeholder.svg"}
-                    alt={`Gallery ${idx}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
 
-        {/* Main Content */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row gap-6 mb-8 pb-8 border-b border-border">
+          {/* Company Info */}
+          <div className="p-6 relative bg-white mt-[-3rem] rounded-2xl shadow-md">
             <img
-              src={listing.logo || "/placeholder.svg"}
-              alt={listing.companyName}
-              className="w-24 h-24 rounded-lg object-cover"
+              src={listing.logo}
+              alt={listing.name}
+              className="absolute -top-12 left-6 w-24 h-24 rounded-2xl border-4 border-white shadow-lg object-cover"
             />
-            <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-2">{listing.name}</h1>
-              <p className="text-lg text-muted-foreground mb-4">
-                {listing.companyName}
+
+            <div className="ml-32">
+              <h1 className="text-3xl font-bold text-gray-900">
+                {listing.name}
+              </h1>
+              <p className="text-lg text-[#2C8845]">{listing.companyName}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {listing.district}, {listing.businessType}
               </p>
 
-              {/* Rating & Category */}
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <Star size={20} className="fill-accent text-accent" />
-                  <span className="font-bold text-lg">{listing.rating}</span>
-                  <span className="text-muted-foreground">
-                    ({listing.reviews} reviews)
-                  </span>
-                </div>
-                <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-                  {listing.category}
-                </span>
+              {/* Rating */}
+              <div className="mt-3">
+                <RatingStars rating={listing.rating} size={20} />
               </div>
 
-              {/* Share */}
-              <div className="flex gap-2">
-                <button className="flex items-center gap-2 px-4 py-2 bg-muted ease-in-out duration-300 hover:bg-[#2C8845] hover:text-white rounded-lg transition-colors text-sm font-semibold">
-                  <Share2 size={16} /> Share
-                </button>
-              </div>
-            </div>
-
-            {/* About */}
-            <div className="flex-1 mt-4 md:mt-0">
-              <p className="text-muted-foreground leading-relaxed">
-                {listing.description}
-              </p>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-border">
-            {/* Address, Phone, Email */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin
-                    size={20}
-                    className="text-primary flex-shrink-0 mt-1"
-                  />
-                  <div>
-                    <p className="font-semibold text-foreground">Address</p>
-                    <p className="text-muted-foreground">{listing.address}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone
-                    size={20}
-                    className="text-primary flex-shrink-0 mt-1"
-                  />
-                  <div>
-                    <p className="font-semibold text-foreground">Phone</p>
-                    <a
-                      href={`tel:${listing.phone}`}
-                      className="text-primary hover:underline"
-                    >
-                      {listing.phone}
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail size={20} className="text-primary flex-shrink-0 mt-1" />
-                  <div>
-                    <p className="font-semibold text-foreground">Email</p>
-                    <a
-                      href={`mailto:${listing.email}`}
-                      className="text-primary hover:underline"
-                    >
-                      {listing.email}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Social */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6">Connect</h2>
-              <div className="space-y-3">
-                {listing.website && (
-                  <a
-                    href={listing.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 bg-muted hover:bg-border rounded-lg transition-colors"
-                  >
-                    <Globe size={20} className="text-primary" />
+              {/* Info Grid */}
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+                {[
+                  {
+                    icon: <MapPin size={18} className="text-[#2C8845]" />,
+                    label: "Address",
+                    value: "123 Tech Park Avenue, Banani, Dhaka 1213",
+                  },
+                  {
+                    icon: <Phone size={18} className="text-[#2C8845]" />,
+                    label: "Phone",
+                    value: "+880 1711-555444",
+                  },
+                  {
+                    icon: <Mail size={18} className="text-[#2C8845]" />,
+                    label: "Email",
+                    value: "info@techsolutionspro.com",
+                  },
+                  {
+                    icon: <Briefcase size={18} className="text-[#2C8845]" />,
+                    label: "Business Type",
+                    value: "Technology & Software Development",
+                  },
+                  {
+                    icon: <Globe size={18} className="text-[#2C8845]" />,
+                    label: "Website",
+                    value: (
+                      <a
+                        href="https://www.techsolutionspro.com"
+                        target="_blank"
+                        className="text-[#2C8845] hover:underline"
+                      >
+                        www.techsolutionspro.com
+                      </a>
+                    ),
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start space-x-2">
+                    <div>{item.icon}</div>
                     <div>
-                      <p className="font-semibold text-foreground">Website</p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {listing.website}
-                      </p>
+                      <span className="font-semibold">{item.label}: </span>
+                      <span>{item.value}</span>
                     </div>
-                  </a>
-                )}
-                {listing.facebook && (
-                  <a
-                    href={listing.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 bg-muted hover:bg-border rounded-lg transition-colors"
-                  >
-                    <Facebook size={20} className="text-primary" />
-                    <div>
-                      <p className="font-semibold text-foreground">Facebook</p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {listing.facebook}
-                      </p>
-                    </div>
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Products & Services */}
-          <div className="mb-8 pb-8 border-b border-border">
-            <h2 className="text-2xl font-bold mb-6">Products & Services</h2>
-            <div className="flex p-1 bg-muted rounded-xl w-full max-w-sm mx-auto mb-6 shadow-inner">
-              <button
-                onClick={() => setActiveTab("products")}
-                className={`flex-1 py-2 text-center rounded-lg font-semibold transition-all ${
-                  activeTab === "products"
-                    ? "bg-[#2C8845] text-white shadow-md"
-                    : "text-foreground hover:bg-white/50"
-                }`}
-              >
-                Products
-              </button>
-              <button
-                onClick={() => setActiveTab("services")}
-                className={`flex-1 py-2 text-center rounded-lg font-semibold transition-all ${
-                  activeTab === "services"
-                    ? "bg-[#2C8845] text-white shadow-md"
-                    : "text-foreground hover:bg-white/50"
-                }`}
-              >
-                Services
-              </button>
-            </div>
-            <div className="space-y-4">
-              {activeTab === "products"
-                ? products.map((product) => (
-                    <ProductOrServiceCard key={product.id} item={product} />
-                  ))
-                : services.map((service) => (
-                    <ProductOrServiceCard key={service.id} item={service} />
-                  ))}
-            </div>
-          </div>
-
-          {/* Labels */}
-          {listing.labels?.length > 0 && (
-            <div className="mb-8 pb-8 border-b border-border">
-              <h2 className="text-2xl font-bold mb-4">Labels</h2>
-              <div className="flex flex-wrap gap-2">
-                {listing.labels.map((label, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-primary/10 text-primary px-4 py-2 rounded-full font-semibold"
-                  >
-                    {label}
-                  </span>
+                  </div>
                 ))}
               </div>
             </div>
-          )}
-
-          {/* About + Google Map */}
-          <div>
-            <h2 className="text-2xl font-bold mb-4">About</h2>
-            <div className="prose prose-sm max-w-none text-muted-foreground leading-relaxed">
-              <p>{listing.description}</p>
-            </div>
-
-            {listing.googleMapUrl && (
-              <div className="mt-6 rounded-lg overflow-hidden shadow-md">
-                <iframe
-                  src={listing.googleMapUrl}
-                  width="100%"
-                  height="350"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Google Location"
-                ></iframe>
-              </div>
-            )}
           </div>
 
-          {/* CTA Section */}
-          <div className="bg-[#2C8845] my-10 text-white rounded-lg p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">
-              Interested in this business?
-            </h2>
-            <p className="mb-6 text-gray-100">
-              Get in touch with them directly
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href={`tel:${listing.phone}`}
-                className="px-8 py-3 bg-white text-primary rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-              >
-                Call Now
-              </a>
-              <a
-                href={`mailto:${listing.email}`}
-                className="px-8 py-3 bg-white/20 hover:bg-white/30 rounded-lg font-semibold transition-colors"
-              >
-                Send Email
-              </a>
-            </div>
+          {/* Tabs */}
+          <nav className="bg-white p-4 mt-6 shadow border rounded-xl">
+            <ul className="flex flex-wrap gap-3">
+              {[
+                { key: "products", label: "Products", icon: ListOrdered },
+                { key: "services", label: "Services", icon: Briefcase },
+                { key: "reviews", label: "Reviews", icon: Users },
+                { key: "about", label: "About", icon: Info },
+              ].map(({ key, label, icon: Icon }) => (
+                <li key={key}>
+                  <button
+                    onClick={() => setActiveTab(key as any)}
+                    className={`flex items-center px-4 py-2 text-sm font-bold rounded-lg ${
+                      activeTab === key
+                        ? "bg-[#2C8845] text-white"
+                        : "hover:bg-[#2C8845]/10 text-gray-700"
+                    }`}
+                  >
+                    <Icon size={16} className="mr-2" />
+                    {label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="bg-white p-6 mt-4 rounded-xl shadow border">
+            {tabContentMap[activeTab]}
           </div>
-        </div>
+        </main>
+
+        {/* RIGHT SIDEBAR (Adsense) - MODIFIED: Reduced width from lg:col-span-3 to lg:col-span-2 
+        */}
+        <aside className="lg:col-span-2 p-4 sm:p-6 lg:p-8 space-y-4">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-gray-100 border border-gray-300 rounded-xl h-[250px] flex items-center justify-center text-gray-500 text-sm"
+            >
+              AD SENSE {i + 1} (150x250)
+            </div>
+          ))}
+        </aside>
       </div>
     </div>
   );
