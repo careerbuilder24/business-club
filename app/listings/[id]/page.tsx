@@ -130,7 +130,7 @@ const districtCategories = [
 
 // --- MAIN PAGE ---
 export default function ListingDetailPage({ id }: { id?: string }) {
-  // 👇 CORRECT PLACEMENT FOR HOOKS
+  //  CORRECT PLACEMENT FOR HOOKS
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>(""); // Location Filter
@@ -260,13 +260,14 @@ export default function ListingDetailPage({ id }: { id?: string }) {
       setIsMobileFilterOpen(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* The main container now has NO PADDING ('p-4 sm:p-8' removed).
               The gap is removed ('gap-6' changed to 'gap-0'). 
           */}
       {/* Grid Structure: Updated to lg:grid-cols-12 */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 max-w-full">
+      <div className="flex flex-col lg:flex-row w-full">
         {/* Mobile/Tablet Filter Button (Hamburger) - Retained small padding for visibility */}
         <div className="lg:hidden p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
           <button
@@ -278,9 +279,9 @@ export default function ListingDetailPage({ id }: { id?: string }) {
             {selectedDistrict || selectedBusinessType ? "Active" : "All"})
           </button>
         </div>
-        
-        {/* LEFT SIDEBAR - UNCHANGED (lg:col-span-2) 
-        */}
+
+        {/* LEFT SIDEBAR - UNCHANGED (lg:col-span-2)
+         */}
         <div
           className={`
             min-h-screen bg-green-700 text-white p-0
@@ -312,8 +313,7 @@ export default function ListingDetailPage({ id }: { id?: string }) {
               className={`
                 w-full text-center px-4 py-3 mb-4 cursor-pointer transition-colors text-lg font-bold rounded-lg
                 ${
-                  selectedDistrict === "" &&
-                  selectedBusinessType === ""
+                  selectedDistrict === "" && selectedBusinessType === ""
                     ? "bg-green-800 border-2 border-white"
                     : "hover:bg-green-600 border-2 border-transparent"
                 }
@@ -388,8 +388,7 @@ export default function ListingDetailPage({ id }: { id?: string }) {
                   className={`
                     overflow-hidden transition-max-height duration-500 ease-in-out
                     ${
-                      openDivision ===
-                      divisionGroup.division
+                      openDivision === divisionGroup.division
                         ? "max-h-96"
                         : "max-h-0"
                     }
@@ -409,8 +408,7 @@ export default function ListingDetailPage({ id }: { id?: string }) {
                         className={`
                           w-full flex justify-between items-center text-left pl-4 py-1.5 transition-colors text-xs font-medium
                           ${
-                            selectedDistrict ===
-                            district
+                            selectedDistrict === district
                               ? "bg-green-800 text-white border-l-4 border-white"
                               : "hover:bg-green-700/80 border-l-4 border-transparent text-white/90"
                           }
@@ -429,9 +427,9 @@ export default function ListingDetailPage({ id }: { id?: string }) {
           </div>
         </div>
 
-        {/* MAIN CONTENT - MODIFIED: Increased width from lg:col-span-7 to lg:col-span-8 
-        */}
-        <main className="lg:col-span-8 p-4 sm:p-6 lg:p-8">
+        {/* MAIN CONTENT - MODIFIED: Increased width from lg:col-span-7 to lg:col-span-8
+         */}
+        <main className="flex-[0.6] p-4 sm:p-6 lg:p-5 bg-gray-50 min-h-screen">
           {/* Banner */}
           <div className="h-64 w-full rounded-xl overflow-hidden shadow">
             <img
@@ -541,11 +539,25 @@ export default function ListingDetailPage({ id }: { id?: string }) {
           <div className="bg-white p-6 mt-4 rounded-xl shadow border">
             {tabContentMap[activeTab]}
           </div>
+
+          {/* FAKE GOOGLE MAP */}
+          <div className="mt-6 w-full h-64 rounded-xl overflow-hidden shadow">
+            <iframe
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                "123 Tech Park Avenue, Banani, Dhaka 1213"
+              )}&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         </main>
 
-        {/* RIGHT SIDEBAR (Adsense) - MODIFIED: Reduced width from lg:col-span-3 to lg:col-span-2 
-        */}
-        <aside className="lg:col-span-2 p-4 sm:p-6 lg:p-8 space-y-4">
+        {/* RIGHT SIDEBAR (Adsense) - MODIFIED: Reduced width from lg:col-span-3 to lg:col-span-2
+         */}
+        <aside className="hidden lg:flex lg:flex-col lg:w-[250px] p-4 space-y-4">
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
