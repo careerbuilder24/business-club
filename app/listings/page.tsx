@@ -296,7 +296,7 @@ export default function ListingsPage() {
           {isMobileFilterOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsMobileFilterOpen(false)}></div>}
 
           {/* Middle Content */}
-          <div className="flex-1 p-8 bg-white max-w-6xl">
+          <div className="flex-1 p-8 bg-white max-w-3xl">
             <div className="mb-8">
               <h1 className="text-4xl font-bold mb-2">
                 Business Club:<span className="text-green-700">{selectedBusinessType || selectedDistrict ? "" : " Bangladesh"}</span>
