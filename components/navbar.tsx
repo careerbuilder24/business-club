@@ -11,11 +11,11 @@ export default function Navbar() {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Add Listing", href: "/add-listing" },
-    { label: "Pricing", href: "/PricingTablePage" },
+    // { label: "Pricing", href: "/PricingTablePage" },
     { label: "All Listings", href: "/listings" },
-    { label: "Blog", href: "/blog" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    // { label: "Blog", href: "/blog" },
+    // { label: "About", href: "/about" },
+    // { label: "Contact", href: "/contact" },
   ];
 
   const toggleMenu = () => {
@@ -82,7 +82,7 @@ export default function Navbar() {
       </div>
 
       <nav className="hidden lg:block bg-[#2C8845] border-t border-gray-200 text-white">
-        <div className="w-full mx-auto flex items-center justify-center px-4 py-3">
+        <div className="w-3/12 mx-auto flex items-center justify-center px-4 py-3">
           <div className="flex w-full max-w-4xl">
             <select className="bg-[#ffffff] text-[#2C8845] px-3 py-2 cursor-pointer rounded-l-md border-none outline-none">
               <option>Business</option>
