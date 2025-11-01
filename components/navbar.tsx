@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "Add Listing", href: "/add-listing" },
+    // { label: "Add Listing", href: "/add-listing" },
     // { label: "Pricing", href: "/PricingTablePage" },
     { label: "All Listings", href: "/listings" },
     // { label: "Blog", href: "/blog" },
@@ -43,7 +43,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="hover:text-[#2C8845] font-medium transition-colors"
+                className="text-[#2C8845] hover:text-yellow-400 transition font-medium transition-colors"
               >
                 {item.label}
               </Link>
@@ -52,7 +52,17 @@ export default function Navbar() {
 
           {/* Right Icons (Optimized for both mobile and desktop) */}
           <div className="flex items-center gap-5 ml-4 text-[#2C8845]">
-            {/* Shopping Bag */}
+       
+
+            {/* ➕ Add Your Business link */}
+            <Link
+              href="/add-listing"
+              className="hidden lg:flex items-center gap-1 font-medium text-[#2C8845] hover:text-yellow-400 transition"
+            >
+              Add Your Business
+            </Link>
+
+                 {/* Shopping Bag */}
             <div className="relative flex items-center gap-1 cursor-pointer">
               <ShoppingBag size={22} />
               <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-4 h-4 flex items-center justify-center">
