@@ -182,7 +182,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, User, Eye, Menu, X } from "lucide-react";
-import { useWatchList } from "../app/context/WatchlistContext";
+import { useWatchList } from "../app/context/WatchListContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

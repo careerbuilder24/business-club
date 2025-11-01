@@ -129,7 +129,7 @@ import Link from "next/link";
 import { listings } from "@/lib/data";
 import { Star, MapPin, Eye } from "lucide-react";
 import { useState } from "react";
-import { useWatchList } from "../../app/context/WatchlistContext";
+import { useWatchList } from "../../app/context/WatchListContext";
 import { Heart } from "lucide-react";
 
 export default function FeaturedListings() {

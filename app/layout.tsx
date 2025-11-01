@@ -76,7 +76,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import { WatchListProvider } from "../app/context/WatchlistContext"; // ✅ import context
+import { WatchListProvider } from "../app/context/WatchListContext"; // ✅ import context
 
 const geistSans = Geist({ subsets: ["latin"] });
 const geistMono = Geist_Mono({ subsets: ["latin"] });
