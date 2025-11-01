@@ -578,12 +578,7 @@ import Link from "next/link";
 import { useState } from "react";
 import {
   Star,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
-  Share2,
-  Filter,
+
   ListOrdered,
   Briefcase,
   Users,

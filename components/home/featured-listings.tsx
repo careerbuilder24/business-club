@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -18,7 +17,9 @@ export default function FeaturedListings() {
     <section className="py-16 md:py-24 bg-muted">
       <div className="container-custom">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Businesses</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Featured Businesses
+          </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto break-words">
             Explore our most popular and highly-rated businesses
           </p>
@@ -62,17 +63,33 @@ export default function FeaturedListings() {
                     <span className="font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full truncate">
                       {listing.category}
                     </span>
-                    <div className="flex items-center gap-1">
-                      <Star size={16} className="fill-accent text-accent flex-shrink-0" />
-                      <span className="font-semibold">{listing.rating}</span>
-                      <span className="text-muted-foreground">({listing.reviews})</span>
+
+                    {/* Rating (right aligned) */}
+                    <div className="flex items-center gap-1 ml-auto">
+                      {/* Show 4 Gold Stars */}
+                      {[1, 2, 3, 4].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          size={16}
+                          className="text-yellow-400 flex-shrink-0"
+                        />
+                      ))}
+
+                      <span className="font-semibold text-right">
+                        {listing.rating}
+                      </span>
+                      <span className="text-muted-foreground">
+                        ({listing.reviews})
+                      </span>
                     </div>
                   </div>
 
                   {/* Address */}
                   <div className="flex items-start gap-2 mb-3 md:mb-4 text-xs md:text-sm text-muted-foreground">
                     <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                    <span className="line-clamp-2 break-words">{listing.address}</span>
+                    <span className="line-clamp-2 break-words">
+                      {listing.address}
+                    </span>
                   </div>
 
                   {/* Labels */}

@@ -52,7 +52,14 @@ export default function Navbar() {
 
           {/* Right Icons (Optimized for both mobile and desktop) */}
           <div className="flex items-center gap-5 ml-4 text-[#2C8845]">
-       
+               {/* Shopping Bag */}
+            <div className="relative flex items-center gap-1 cursor-pointer">
+              <ShoppingBag size={22} />
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                0
+              </span>
+            </div>
+
 
             {/* ➕ Add Your Business link */}
             <Link
@@ -62,14 +69,7 @@ export default function Navbar() {
               Add Your Business
             </Link>
 
-                 {/* Shopping Bag */}
-            <div className="relative flex items-center gap-1 cursor-pointer">
-              <ShoppingBag size={22} />
-              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                0
-              </span>
-            </div>
-
+         
             {/* Login/Register (Visible on LG screens only) */}
             <Link
               href="/login"
@@ -91,8 +91,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav className="hidden lg:block bg-[#2C8845] border-t border-gray-200 text-white">
-        <div className="w-3/12 mx-auto flex items-center justify-center px-4 py-3">
+      <nav className="hidden lg:block bg-[#2C8845] border-t border-gray-200  text-white ">
+        <div className="w-7/12 mx-auto flex items-center justify-center px-4 py-3 ">
           <div className="flex w-full max-w-4xl">
             <select className="bg-[#ffffff] text-[#2C8845] px-3 py-2 cursor-pointer rounded-l-md border-none outline-none">
               <option>Business</option>
