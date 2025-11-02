@@ -575,7 +575,7 @@
 
 import { listings, Listing, businessCategories, categories } from "@/lib/data";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Star,
 
@@ -689,7 +689,14 @@ const RatingStars = ({
 };
 
 export default function ListingDetailPage({ id }: { id?: string }) {
+
+
+    const [mounted, setMounted] = useState(false);
+
+
+
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  
   const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [openDivision, setOpenDivision] = useState<string>("Dhaka");
@@ -697,8 +704,15 @@ export default function ListingDetailPage({ id }: { id?: string }) {
     "products" | "services" | "reviews" | "about"
   >("products");
 
+   useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const listing: Listing | undefined =
     listings.find((l) => l.id === id) || listings[0];
+    
+
+  if (!mounted) return null;  
 
   if (!listing)
     return (
