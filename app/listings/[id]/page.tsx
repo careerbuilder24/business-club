@@ -1,7 +1,6 @@
 "use client";
-
 import { listings, Listing, businessCategories, categories } from "@/lib/data";
-import Link from "next/link";
+import { Phone, Mail, Globe, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Star,
@@ -386,24 +385,24 @@ export default function ListingDetailPage({ id }: { id?: string }) {
           </div>
 
           {/* Right side: Contact Info */}
-          <div className="flex flex-col justify-center text-sm text-gray-700 mt-4 sm:mt-0 sm:text-right">
-            {listing.email && (
-              <a
-                href={`mailto:${listing.email}`}
-                className="flex sm:justify-end items-center gap-2 text-[#2C8845] hover:text-yellow-400 ease-in-out duration-300 "
-              >
-                <span className="truncate font-bold">{listing.email}</span>
-                :Email
-              </a>
-            )}
-
+          <div className="flex flex-col justify-center text-sm text-gray-700 mt-4 sm:mt-0 text-left">
             {listing.phone && (
               <a
                 href={`tel:${listing.phone}`}
-                className="flex sm:justify-end items-center gap-2 text-[#2C8845] hover:text-yellow-400 ease-in-out duration-300 "
+                className="flex items-center gap-2 text-[#2C8845] hover:text-yellow-400 transition duration-300 ease-in-out"
               >
-                <span className="font-bold">{listing.phone}</span>
-                :Phone
+                <Phone size={16} />
+                <span>{listing.phone}</span>
+              </a>
+            )}
+
+            {listing.email && (
+              <a
+                href={`mailto:${listing.email}`}
+                className="flex items-center gap-2 text-[#2C8845] hover:text-yellow-400 transition duration-300 ease-in-out"
+              >
+                <Mail size={16} />
+                <span className="truncate">{listing.email}</span>
               </a>
             )}
 
@@ -412,11 +411,18 @@ export default function ListingDetailPage({ id }: { id?: string }) {
                 href={listing.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex sm:justify-end items-center gap-2 text-[#2C8845] hover:text-yellow-400 ease-in-out duration-300 "
+                className="flex items-center gap-2 text-[#2C8845] hover:text-yellow-400 transition duration-300 ease-in-out"
               >
-                <span className="truncate font-bold">{listing.website}</span>
-                :Web Link
+                <Globe size={16} />
+                <span className="truncate">{listing.website}</span>
               </a>
+            )}
+
+            {listing.address && (
+              <p className="flex items-center gap-2 text-[#2C8845] mt-1">
+                <MapPin size={16} />
+                <span>{listing.address}</span>
+              </p>
             )}
           </div>
         </div>
