@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Head from "next/head";
 import { Phone, Mail, Globe, MapPin, Star, ListOrdered, Briefcase, Users, Info, ChevronDown, } from "lucide-react";
 
 import { listings,  businessCategories, categories } from "@/lib/data";
@@ -157,8 +158,24 @@ export default function ListingDetailPage({ listing, products, services, reviews
     setSelectedBusinessType(type);
     if (isMobileFilterOpen) setIsMobileFilterOpen(false);
   };
+
+    // Generate meta description (first 150 chars of listing description)
+  const metaDescription = listing.description
+    ? listing.description.slice(0, 150) + (listing.description.length > 150 ? "..." : "")
+    : `${listing.name} - ${listing.businessType} in ${listing.district}`;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row w-full">
+
+    <>
+       <Head>
+        <title>{listing.name} | {listing.businessType} in {listing.district}</title>
+        <meta name="description" content={metaDescription} />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content={`${listing.name} | ${listing.businessType}`} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:type" content="website" />
+      </Head>
+     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row w-full">
 
 
         {/* --- Sidebar --- */}
@@ -340,5 +357,7 @@ export default function ListingDetailPage({ listing, products, services, reviews
         ))}
       </aside>
     </div>
+    </>
+   
   );
 }

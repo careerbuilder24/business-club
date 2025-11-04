@@ -81,14 +81,24 @@ import { WatchListProvider } from "../app/context/WatchListContext"; // ✅ impo
 const geistSans = Geist({ subsets: ["latin"] });
 const geistMono = Geist_Mono({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Business Club",
+// export const metadata: Metadata = {
+//   title: "Business Club",
+//   description: "Discover and list businesses in our professional directory",
+//   generator: "v0.app",
+//   icons: {
+//     icon: "https://i.postimg.cc/P5Y7Zyj5/dghoij-removebg-preview.png", // favicon
+//   },
+// };
+
+export const metadata = {
   description: "Discover and list businesses in our professional directory",
-  generator: "v0.app",
+  generator: "WebTech.com.bd",
   icons: {
-    icon: "https://i.postimg.cc/P5Y7Zyj5/dghoij-removebg-preview.png", // favicon
+    icon: "https://i.postimg.cc/P5Y7Zyj5/dghoij-removebg-preview.png",
   },
 };
+
+
 
 export default function RootLayout({
   children,
