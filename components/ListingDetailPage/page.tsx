@@ -286,7 +286,7 @@ export default function ListingDetailPage({ listing, products, services, reviews
         </div>
 
         {/* Logo + Info */}
-        <div className="p-6 relative bg-white mt-[-3rem] rounded-2xl shadow-md flex justify-between flex-wrap">
+        <div className="p-6 relative bg-white mt-[-3rem] rounded-2xl shadow-md flex justify-between">
           <div className="flex items-start gap-4">
             <img src={listing.logo} alt={listing.name} className="w-28 h-28 rounded-2xl border-4 border-white shadow-lg object-cover" />
             <div>

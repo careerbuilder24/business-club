@@ -12,6 +12,7 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
+  House
 } from "lucide-react";
 import {
   listings as importedListings,
@@ -209,11 +210,12 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
           <p className="text-sm text-green-700 font-medium mb-2">
             {listing.companyName}
           </p>
-          <p className="text-gray-600 mb-3 text-sm line-clamp-2">
+          <p className="text-gray-600  text-sm line-clamp-2">
             {listing.description}
           </p>
+       
 
-          <div className="flex flex-col gap-3 text-xs text-gray-600">
+          <div className="flex flex-col gap-1 mt-2 text-xs text-gray-600">
             <span className="flex items-center">
               <Phone size={12} className="mr-1 text-blue-500" />
               {listing.phone}
@@ -239,6 +241,11 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
                 </a>
               </span>
             )}
+
+             <span className="flex items-center">
+              <House size={12} className="mr-1 text-orange-500" />
+              {listing.address}
+            </span>
           </div>
         </div>
       </div>
