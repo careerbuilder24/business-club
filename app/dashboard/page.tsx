@@ -617,6 +617,7 @@ import BusinessContent from "@/components/dashboard/business-content";
 import ManageListingsContent from "@/components/dashboard/manage-listings-content";
 import ManageUsersContent from "@/components/dashboard/manage-users-content";
 import ReportsContent from "@/components/dashboard/reports-content";
+import PackagesContent from "@/components/dashboard/packages-content";
 
 type PageType =
   | "dashboard"
@@ -897,6 +898,19 @@ export default function DashboardPage() {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <ProfileContent />
+                </motion.div>
+              )}
+
+
+              {currentPage === "packages" && userType === "user" && (
+                <motion.div
+                  key="packages"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <PackagesContent />
                 </motion.div>
               )}
 

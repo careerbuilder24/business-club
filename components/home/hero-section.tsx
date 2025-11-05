@@ -185,11 +185,11 @@ const BannerCarousel = ({ slides }: { slides: typeof carouselSlides }) => {
   }, [slides.length]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden ">
+    <div className="relative w-full h-full overflow-hidden  ">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
-          className={`absolute  inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+          className={`absolute   inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
             index === currentSlide ? "opacity-100 z-30" : "opacity-0 z-20"
           }`}
         >
@@ -247,49 +247,46 @@ export default function App() {
       </div>
 
       {/* Hero Section */}
-{/* Hero Section */}
-<section className="flex flex-col lg:flex-row w-full h-[35vh] sm:h-[45vh] md:h-[55vh] lg:h-[60vh] overflow-hidden">
-
-  {/* Left Sidebar */}
-  <div
-    className={`fixed inset-y-0 left-0 z-40 w-60 bg-[#2C8845] text-white shadow-lg
+      {/* Hero Section */}
+      <section className="flex flex-col lg:flex-row w-full h-[35vh] sm:h-[45vh] md:h-[55vh] lg:h-[60vh] overflow-hidden">
+        {/* Left Sidebar */}
+        <div
+          className={`fixed inset-y-0 left-0 z-40 w-60 bg-[#2C8845] text-white shadow-lg
           lg:relative lg:w-[13%] lg:flex-shrink-0 lg:z-30 lg:shadow-none
           transform transition-transform duration-300 ease-in-out
           ${isCategorySidebarOpen ? "translate-x-0" : "-translate-x-full"} 
           lg:translate-x-0`}
-  >
-    {/* Mobile Close Header */}
-    <div className="lg:hidden flex justify-between items-center p-4 bg-[#308C48] border-b border-white/10">
-      <h2 className="text-lg font-semibold">All Categories</h2>
-      <button onClick={() => setIsCategorySidebarOpen(false)}>
-        <X size={24} />
-      </button>
-    </div>
+        >
+          {/* Mobile Close Header */}
+          <div className="lg:hidden flex justify-between items-center p-4 bg-[#308C48] border-b border-white/10">
+            <h2 className="text-lg font-semibold">All Categories</h2>
+            <button onClick={() => setIsCategorySidebarOpen(false)}>
+              <X size={24} />
+            </button>
+          </div>
 
-    <CategorySearchBox />
+          <CategorySearchBox />
 
-    <nav className="py-2 overflow-hidden flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
-      {categoriesWithSubMenus.map((category) => (
-        <CategoryHoverItem key={category.name} category={category} />
-      ))}
-    </nav>
-  </div>
+          <nav className="py-2 overflow-hidden flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+            {categoriesWithSubMenus.map((category) => (
+              <CategoryHoverItem key={category.name} category={category} />
+            ))}
+          </nav>
+        </div>
 
-  {/* Right Banner Section */}
-  <div className="flex-grow w-full relative ">
-    <BannerCarousel slides={carouselSlides} />
-  </div>
+        {/* Right Banner Section */}
+        <div className="flex-grow w-full relative ">
+          <BannerCarousel slides={carouselSlides} />
+        </div>
 
-  {/* Mobile Overlay */}
-  {isCategorySidebarOpen && (
-    <div
-      onClick={() => setIsCategorySidebarOpen(false)}
-      className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-    ></div>
-  )}
-</section>
-
-
+        {/* Mobile Overlay */}
+        {isCategorySidebarOpen && (
+          <div
+            onClick={() => setIsCategorySidebarOpen(false)}
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          ></div>
+        )}
+      </section>
     </div>
   );
 }
