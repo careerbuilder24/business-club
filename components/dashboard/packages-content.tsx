@@ -347,7 +347,7 @@ export default function PackagesContent() {
   ];
 
   return (
-    <div className="py-12 bg-white text-gray-800">
+    <div className="py-1 bg-white text-gray-800">
       <div className="mx-auto text-center mb-12 px-4">
         <h2 className="text-3xl font-bold mb-3 text-[#2C8845]">
           Business Club Packages
@@ -363,7 +363,7 @@ export default function PackagesContent() {
         <table className="min-w-full border border-gray-200 text-sm shadow-md rounded-lg overflow-hidden">
           <thead className="bg-[#2C8845] text-white">
             <tr>
-              <th className="border border-gray-200 p-3 text-left font-semibold">
+              <th className="border border-gray-200 p-3  text-center font-semibold">
                 Services
               </th>
               {packages.map((pkg) => (
