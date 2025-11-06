@@ -265,7 +265,6 @@ export default function PackagesContent() {
       id: "starter",
       name: "Starter Package",
       price: 10000,
-      description: "Perfect for small businesses starting their journey.",
       included: [
         "Domain Registration",
         "Web Hosting",
@@ -280,7 +279,6 @@ export default function PackagesContent() {
       id: "growth",
       name: "Growth Package",
       price: 25000,
-      description: "For growing businesses looking to expand their presence.",
       popular: true,
       included: [
         "Domain Registration",
@@ -300,7 +298,6 @@ export default function PackagesContent() {
       id: "professional",
       name: "Professional Package",
       price: 50000,
-      description: "Ideal for established companies scaling up operations.",
       included: [
         "Domain Registration",
         "Web Hosting",
@@ -322,7 +319,6 @@ export default function PackagesContent() {
       id: "advanced",
       name: "Advanced Package",
       price: 57000,
-      description: "Comprehensive marketing and branding suite.",
       included: [
         "Domain Registration",
         "Web Hosting",
@@ -346,16 +342,17 @@ export default function PackagesContent() {
       id: "elite",
       name: "Elite Package",
       price: 100000,
-      description: "All-in-one solution for premium business clients.",
       included: allServices,
     },
   ];
 
   return (
-    <div className="text-white">
-      <div className="mx-auto text-center mb-12 px-4 text-black">
-        <h2 className="text-3xl font-bold mb-3">Business Club Packages</h2>
-        <p className="max-w-2xl mx-auto">
+    <div className="py-12 bg-white text-gray-800">
+      <div className="mx-auto text-center mb-12 px-4">
+        <h2 className="text-3xl font-bold mb-3 text-[#2C8845]">
+          Business Club Packages
+        </h2>
+        <p className="max-w-2xl mx-auto text-gray-600">
           Compare all packages and choose the one that fits your business best.
           Join our Business Club and save up to <strong>50%</strong> on branding
           and marketing!
@@ -363,30 +360,44 @@ export default function PackagesContent() {
       </div>
 
       <div className="overflow-x-auto px-6">
-        <table className="min-w-full border border-gray-700 text-sm">
-          <thead className="bg-gray-800">
+        <table className="min-w-full border border-gray-200 text-sm shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-[#2C8845] text-white">
             <tr>
-              <th className="border border-gray-700 p-3 text-left">Services</th>
+              <th className="border border-gray-200 p-3 text-left font-semibold">
+                Services
+              </th>
               {packages.map((pkg) => (
                 <th
                   key={pkg.id}
-                  className={`border border-gray-700 p-3 text-center ${
+                  className={`border border-gray-200 p-3 text-center ${
                     pkg.id === "growth"
-                      ? "bg-[#009689] text-white font-semibold"
-                      : ""
+                      ? "bg-[#E8F6EE] text-[#2C8845]"
+                      : "bg-[#2C8845]/90"
                   }`}
                 >
                   <div className="flex flex-col items-center">
-                    <span className="text-lg font-bold">{pkg.name}</span>
-                    <span className="text-gray-200">৳ {pkg.price}</span>
+                    <span
+                      className={`text-lg font-bold ${
+                        pkg.id === "growth" ? "text-[#2C8845]" : "text-white"
+                      }`}
+                    >
+                      {pkg.name}
+                    </span>
+                    <span
+                      className={`text-sm ${
+                        pkg.id === "growth" ? "text-[#2C8845]" : "text-white/80"
+                      }`}
+                    >
+                      ৳ {pkg.price}
+                    </span>
                     <Button
                       onClick={() => handleSelectPackage(pkg.id)}
-                      className={`mt-2 text-xs py-1 px-3 rounded ${
+                      className={`mt-2 text-xs py-1 px-3 rounded font-semibold ${
                         selectedPackage === pkg.id
-                          ? "bg-white text-[#009689]"
+                          ? "bg-white text-[#2C8845] border border-[#2C8845]"
                           : pkg.id === "growth"
-                          ? "bg-[#007f77] hover:bg-[#00a398]"
-                          : "bg-[#2C8845] hover:bg-[#3CAE5B]"
+                          ? "bg-[#2C8845] text-white hover:bg-[#25973F]"
+                          : "bg-white text-[#2C8845] hover:bg-[#E8F6EE]"
                       }`}
                     >
                       {selectedPackage === pkg.id ? "Selected" : "Choose"}
@@ -401,28 +412,22 @@ export default function PackagesContent() {
             {allServices.map((service, i) => (
               <tr
                 key={i}
-                className={`border-t border-gray-700 ${
-                  i % 2 === 0 ? "bg-[#10294E]" : "bg-[#0B203E]"
+                className={`border-t border-gray-200 ${
+                  i % 2 === 0 ? "bg-white" : "bg-[#F9FBF9]"
                 }`}
               >
-                <td className="p-3 text-left text-gray-200">{service}</td>
+                <td className="p-3 text-left text-gray-700">{service}</td>
                 {packages.map((pkg) => (
                   <td
                     key={pkg.id}
                     className={`text-center p-3 ${
-                      pkg.id === "growth" ? "bg-[#013f3c]" : ""
+                      pkg.id === "growth" ? "bg-[#F1FAF5]" : ""
                     }`}
                   >
                     {pkg.included.includes(service) ? (
-                      <Check
-                        className={`inline w-4 h-4 ${
-                          pkg.id === "growth"
-                            ? "text-[#00c4b2]"
-                            : "text-[#2C8845]"
-                        }`}
-                      />
+                      <Check className="inline w-4 h-4 text-[#2C8845]" />
                     ) : (
-                      <X className="inline text-red-500 w-4 h-4" />
+                      <X className="inline text-red-400 w-4 h-4" />
                     )}
                   </td>
                 ))}
