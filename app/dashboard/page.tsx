@@ -607,6 +607,9 @@ import {
   AlertCircle,
   ChevronDown,
   CreditCard,
+  LayoutDashboard,
+  User,
+  Briefcase,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -717,25 +720,27 @@ export default function DashboardPage() {
 
                     <button
                       onClick={() => handleMenuClick("dashboard")}
-                      className={`w-full text-left px-4 py-2 bg-[#16A34A] rounded-lg flex items-center justify-between transition-colors ${
-                        businessDropdownOpen
-                          ? "bg-[#16A34A]"
-                          : "hover:bg-[#37A856]"
+                      className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg transition-colors ${
+                        currentPage === "dashboard"
+                          ? "bg-white text-[#2C8845]"
+                          : "hover:bg-[#37A856] text-white"
                       }`}
                     >
-                      Dashboard
+                      <LayoutDashboard size={20} />
+                      <span>Dashboard</span>
                     </button>
 
                     {/* Profile */}
                     <button
                       onClick={() => handleMenuClick("profile")}
-                      className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                      className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg transition-colors ${
                         currentPage === "profile"
                           ? "bg-white text-[#2C8845]"
                           : "hover:bg-[#37A856] text-white"
                       }`}
                     >
-                      Profile
+                      <User size={20} />
+                      <span>Profile</span>
                     </button>
 
                     {/* Business (User Only) */}
@@ -743,13 +748,16 @@ export default function DashboardPage() {
                       <div>
                         <button
                           onClick={handleBusinessClick}
-                          className={`w-full text-left px-4 py-2 bg-[#16A34A] rounded-lg flex items-center justify-between transition-colors ${
+                          className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
                             businessDropdownOpen
                               ? "bg-[#16A34A]"
                               : "hover:bg-[#37A856]"
                           }`}
                         >
-                          <span>Business</span>
+                          <div className="flex items-center gap-3">
+                            <Briefcase size={20} />
+                            <span>Business</span>
+                          </div>
                           <ChevronDown
                             size={16}
                             className={`transition-transform ${
