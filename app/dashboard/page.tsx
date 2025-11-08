@@ -610,6 +610,7 @@ import {
   LayoutDashboard,
   User,
   Briefcase,
+  Home,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -642,7 +643,7 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState<PageType>("dashboard");
   const [businessDropdownOpen, setBusinessDropdownOpen] = useState(false);
 
-  // ✅ Simulated Authentication
+  //  Simulated Authentication
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType");
     if (storedUserType === "admin" || storedUserType === "user") {
@@ -730,10 +731,18 @@ export default function DashboardPage() {
                       <span>Dashboard</span>
                     </button>
 
+                    {/* Home */}
+                    <Link
+                      className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg transition-colors hover:bg-[#37A856] text-white duration-300 ease-in-out`}
+                      href={"/"}
+                    >
+                      <Home size={20} />
+                      <span>Home</span>
+                    </Link>
                     {/* Profile */}
                     <button
                       onClick={() => handleMenuClick("profile")}
-                      className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg transition-colors ${
+                      className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg transition-colors cursor-pointer duration-300 ease-in-out ${
                         currentPage === "profile"
                           ? "bg-white text-[#2C8845]"
                           : "hover:bg-[#37A856] text-white"
@@ -748,13 +757,13 @@ export default function DashboardPage() {
                       <div>
                         <button
                           onClick={handleBusinessClick}
-                          className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
+                          className={`w-full flex items-center justify-between px-4 py-2 rounded-lg duration-300 ease-in-out transition-colors cursor-pointer ${
                             businessDropdownOpen
                               ? "bg-[#16A34A]"
                               : "hover:bg-[#37A856]"
                           }`}
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 cursor-pointer">
                             <Briefcase size={20} />
                             <span>Business</span>
                           </div>
@@ -778,7 +787,7 @@ export default function DashboardPage() {
                             >
                               <button
                                 onClick={() => handleMenuClick("business")}
-                                className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${
+                                className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
                                   currentPage === "business"
                                     ? "bg-white text-[#2C8845]"
                                     : "hover:bg-[#37A856] text-white"
@@ -795,7 +804,7 @@ export default function DashboardPage() {
 
                               <button
                                 onClick={() => handleMenuClick("add-business")} // ✅ changed
-                                className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${
+                                className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors cursor-pointer duration-300 ease-in-out ${
                                   currentPage === "add-business"
                                     ? "bg-white text-[#2C8845]"
                                     : "hover:bg-[#37A856] text-white"
@@ -813,7 +822,7 @@ export default function DashboardPage() {
                     {userType === "user" && (
                       <button
                         onClick={() => handleMenuClick("packages")}
-                        className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${
+                        className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors  cursor-pointer duration-300 ease-in-out ${
                           currentPage === "packages"
                             ? "bg-white text-[#2C8845]"
                             : "hover:bg-[#37A856] text-white"
@@ -823,10 +832,10 @@ export default function DashboardPage() {
                         <span>Packages</span>
                       </button>
                     )}
-                    {/* ✅ New History Button */}
+                    {/*  New History Button */}
                     <button
                       onClick={() => handleMenuClick("history")}
-                      className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${
+                      className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors cursor-pointer duration-300 ease-in-out ${
                         currentPage === "history"
                           ? "bg-white text-[#2C8845]"
                           : "hover:bg-[#37A856] text-white"
@@ -838,7 +847,7 @@ export default function DashboardPage() {
                     {/* Settings (Both) */}
                     <button
                       onClick={() => handleMenuClick("settings")}
-                      className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
+                      className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-2 transition-colors cursor-pointer duration-300 ease-in-out ${
                         currentPage === "settings"
                           ? "bg-white text-[#2C8845]"
                           : "hover:bg-[#37A856] text-white"

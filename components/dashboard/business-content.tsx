@@ -377,10 +377,10 @@ export default function BusinessContent() {
           </p>
         </div>
 
-        <Button className="flex items-center gap-2">
+        {/* <Button className="flex items-center gap-2">
           <Plus size={18} />
           Add New Business
-        </Button>
+        </Button> */}
       </div>
 
       {/* Stat Cards */}
