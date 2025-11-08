@@ -40,10 +40,10 @@ export default function BusinessContent() {
           <h1 className="text-3xl font-bold text-foreground mb-2">My Businesses</h1>
           <p className="text-muted-foreground">Manage all your business listings</p>
         </div>
-        <Button className="flex items-center gap-2">
+        {/* <Button className="flex items-center gap-2">
           <Plus size={18} />
           Add New Business
-        </Button>
+        </Button> */}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

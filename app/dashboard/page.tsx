@@ -618,15 +618,19 @@ import ManageListingsContent from "@/components/dashboard/manage-listings-conten
 import ManageUsersContent from "@/components/dashboard/manage-users-content";
 import ReportsContent from "@/components/dashboard/reports-content";
 import PackagesContent from "@/components/dashboard/packages-content";
+import AddBusinessContent from "@/components/dashboard/add-business";
+import HistoryContent from "@/components/dashboard/history-content";
 
 type PageType =
   | "dashboard"
   | "profile"
   | "settings"
   | "business"
+  | "add-business"
   | "manage-listings"
   | "manage-users"
   | "reports"
+  | "history"
   | "packages";
 
 export default function DashboardPage() {
@@ -774,9 +778,20 @@ export default function DashboardPage() {
                               >
                                 My Businesses
                               </button>
-                              <button
+                              {/* <button
                                 onClick={() => handleMenuClick("business")}
                                 className="w-full text-left px-4 py-2 rounded-lg text-sm hover:bg-[#37A856] text-white transition-colors"
+                              >
+                                Add Business
+                              </button> */}
+
+                              <button
+                                onClick={() => handleMenuClick("add-business")} // ✅ changed
+                                className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${
+                                  currentPage === "add-business"
+                                    ? "bg-white text-[#2C8845]"
+                                    : "hover:bg-[#37A856] text-white"
+                                }`}
                               >
                                 Add Business
                               </button>
@@ -790,7 +805,7 @@ export default function DashboardPage() {
                     {userType === "user" && (
                       <button
                         onClick={() => handleMenuClick("packages")}
-                        className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors ${
+                        className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${
                           currentPage === "packages"
                             ? "bg-white text-[#2C8845]"
                             : "hover:bg-[#37A856] text-white"
@@ -800,7 +815,18 @@ export default function DashboardPage() {
                         <span>Packages</span>
                       </button>
                     )}
-
+                    {/* ✅ New History Button */}
+                    <button
+                      onClick={() => handleMenuClick("history")}
+                      className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${
+                        currentPage === "history"
+                          ? "bg-white text-[#2C8845]"
+                          : "hover:bg-[#37A856] text-white"
+                      }`}
+                    >
+                      <TrendingUp size={20} />
+                      <span>History</span>
+                    </button>
                     {/* Settings (Both) */}
                     <button
                       onClick={() => handleMenuClick("settings")}
@@ -901,6 +927,17 @@ export default function DashboardPage() {
                 </motion.div>
               )}
 
+              {currentPage === "add-business" && userType === "user" && (
+                <motion.div
+                  key="add-business"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <AddBusinessContent />
+                </motion.div>
+              )}
 
               {currentPage === "packages" && userType === "user" && (
                 <motion.div
@@ -911,6 +948,18 @@ export default function DashboardPage() {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <PackagesContent />
+                </motion.div>
+              )}
+
+              {currentPage === "history" && userType === "user" && (
+                <motion.div
+                  key="history"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <HistoryContent />
                 </motion.div>
               )}
 
