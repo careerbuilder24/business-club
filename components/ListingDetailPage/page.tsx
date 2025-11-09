@@ -112,7 +112,8 @@ export default function ListingDetailPage({ listing, products, services, reviews
             <div className="flex-1">
               <h3 className="font-bold text-lg text-[#2C8845]">{p.name}</h3>
               <p className="text-sm text-gray-600">{p.description}</p>
-              <RatingStars rating={p.rating} />
+              {/* <RatingStars rating={p.rating} /> */}
+              <p className="text-sm text-gray-600">Web Link: www.webtech.com</p>
             </div>
           </div>
         ))}
@@ -126,7 +127,8 @@ export default function ListingDetailPage({ listing, products, services, reviews
             <div className="flex-1">
               <h3 className="font-bold text-lg text-[#2C8845]">{s.name}</h3>
               <p className="text-sm text-gray-600">{s.description}</p>
-              <RatingStars rating={s.rating} />
+              <p className="text-sm text-gray-600">Web Link: www.webtech.com</p>
+              {/* <RatingStars rating={s.rating} /> */}
             </div>
           </div>
         ))}

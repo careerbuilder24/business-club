@@ -624,6 +624,8 @@ import ReportsContent from "@/components/dashboard/reports-content";
 import PackagesContent from "@/components/dashboard/packages-content";
 import AddBusinessContent from "@/components/dashboard/add-business";
 import HistoryContent from "@/components/dashboard/history-content";
+import FinanceContent from "@/components/dashboard/FinanceContent";
+import AddFinanceContent from "@/components/dashboard/AddFinanceContent";
 
 type PageType =
   | "dashboard"
@@ -634,7 +636,10 @@ type PageType =
   | "manage-listings"
   | "manage-users"
   | "reports"
+  | "add-finance"
   | "history"
+  | "finance-history"
+  | "finance"
   | "packages";
 
 export default function DashboardPage() {
@@ -642,7 +647,9 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState<PageType>("dashboard");
   const [businessDropdownOpen, setBusinessDropdownOpen] = useState(false);
+ const [financeDropdownOpen, setFinanceDropdownOpen] = useState(false);
 
+  
   //  Simulated Authentication
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType");
@@ -885,6 +892,66 @@ export default function DashboardPage() {
                         >
                           Manage Users
                         </button>
+                        {/* Finance Dropdown (Admin Only) */}
+                        <div>
+                          <button
+                            onClick={() =>
+                              setFinanceDropdownOpen(!financeDropdownOpen)
+                            }
+                            className={`w-full flex items-center justify-between px-4 py-2 rounded-lg duration-300 ease-in-out transition-colors cursor-pointer ${
+                              financeDropdownOpen
+                                ? "bg-[#16A34A]"
+                                : "hover:bg-[#37A856] text-white"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <AlertCircle size={18} />
+                              <span>Finance</span>
+                            </div>
+                            <ChevronDown
+                              size={16}
+                              className={`transition-transform ${
+                                financeDropdownOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+
+                          <AnimatePresence>
+                            {financeDropdownOpen && (
+                              <motion.div
+                                key="finance-dropdown"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.25 }}
+                                className="pl-4 space-y-2 mt-2"
+                              >
+                                <button
+                                  onClick={() => handleMenuClick("add-finance")}
+                                  className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${
+                                    currentPage === "add-finance"
+                                      ? "bg-white text-[#2C8845]"
+                                      : "hover:bg-[#37A856] text-white"
+                                  }`}
+                                >
+                                  Add Finance
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleMenuClick("finance-history")
+                                  }
+                                  className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${
+                                    currentPage === "finance-history"
+                                      ? "bg-white text-[#2C8845]"
+                                      : "hover:bg-[#37A856] text-white"
+                                  }`}
+                                >
+                                  Finance History
+                                </button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
 
                         <button
                           onClick={() => handleMenuClick("reports")}
@@ -1027,6 +1094,43 @@ export default function DashboardPage() {
                   <ManageUsersContent />
                 </motion.div>
               )}
+              {currentPage === "finance-history" && userType === "admin" && (
+                <motion.div
+                  key="finance"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <FinanceContent />
+                </motion.div>
+              )}
+
+              {/* {currentPage === "finance" && userType === "admin" && (
+                <motion.div
+                  key="reports"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <FinanceContent />
+                </motion.div>
+              )} */}
+
+          
+              {currentPage === "add-finance" && userType === "admin" && (
+                <motion.div
+                  key="add-finance"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <AddFinanceContent />
+                </motion.div>
+              )}
+
 
               {currentPage === "reports" && userType === "admin" && (
                 <motion.div
