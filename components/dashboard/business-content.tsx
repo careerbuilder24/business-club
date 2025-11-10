@@ -908,7 +908,7 @@ export default function BusinessContent() {
                   <th className="px-4 py-3">Products</th>
                   <th className="px-4 py-3">Package Status</th>
                   <th className="px-4 py-3">Join Date</th>
-                  <th className="px-4 py-3">Expiry Date</th> {/* ✅ New column */}
+                  <th className="px-4 py-3">Expiry Date</th> 
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
