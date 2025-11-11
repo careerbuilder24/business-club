@@ -4,9 +4,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Users,
-  FileText,
-  Eye,
+
   TrendingUp,
   LogOut,
   Menu,
@@ -65,7 +63,7 @@ export default function DashboardPage() {
     if (storedUserType === "user" || storedUserType === "user") {
       setUserType(storedUserType);
     } else {
-      setUserType("user");  // text user
+      setUserType("admin");  // text user
     }
   }, []);
 
