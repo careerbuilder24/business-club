@@ -76,7 +76,8 @@ export const businessCategories: BusinessCategory[] = [
   { name: "Buying House" },
   { name: "Dealer" },
   { name: "Trader" },
-  { name: "Importer / Exporter" },
+  { name: "Importer" },
+  { name: " Exporter" },
 ];
 
 

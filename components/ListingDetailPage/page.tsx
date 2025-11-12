@@ -460,14 +460,15 @@ const getBusinessTypeCount = (type: string) =>
   listings.filter((l) => l.businessType === type).length;
 
 export default function ListingDetailPage({ listing, products, services, reviews }: Props) {
-  const [activeTab, setActiveTab] = useState<"products" | "services" | "reviews" | "about">("products");
+  // Active tab state is now only for Products, Services, Reviews
+  const [activeTab, setActiveTab] = useState<"products" | "services" | "reviews">("products"); 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
   const [openDivision, setOpenDivision] = useState<string>("Dhaka");
 
   const tabContentMap = {
-    about: <p className="text-gray-700 mt-2">{listing.description}</p>,
+    // 'about' content (listing.description) has been removed from here and moved to a non-toggled section below.
     products: (
       <div className="space-y-4 mt-4">
         {products.map((p) => (
@@ -689,6 +690,16 @@ export default function ListingDetailPage({ listing, products, services, reviews
             </div>
           </div>
 
+          {/* --- New Section (Outside of Toggle) - Displays the full description using the new design --- */}
+          <div className="bg-white p-4 sm:p-6 mt-6 rounded-xl shadow border">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              About {listing.name}
+            </h2>
+            {/* Using the full listing description here */}
+            <p className="text-gray-700">{listing.description}</p>
+          </div>
+          {/* --- End New Section --- */}
+
           {/* Tabs */}
           <nav className="bg-white p-4 mt-6 shadow border rounded-xl overflow-x-auto">
             <ul className="flex gap-3 min-w-max">
@@ -696,7 +707,7 @@ export default function ListingDetailPage({ listing, products, services, reviews
                 { key: "products", label: "Products", icon: ListOrdered },
                 { key: "services", label: "Services", icon: Briefcase },
                 { key: "reviews", label: "Reviews", icon: Users },
-                { key: "about", label: "About", icon: Info },
+                // The 'About' tab is intentionally excluded here
               ].map(({ key, label, icon: Icon }) => (
                 <li key={key}>
                   <button
