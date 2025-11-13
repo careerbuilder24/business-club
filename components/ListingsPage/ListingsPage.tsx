@@ -146,7 +146,7 @@ const RatingStars: React.FC<{ rating: number }> = ({ rating }) => {
   return <div className="flex space-x-0.5">{stars}</div>;
 };
 
-// Listing Card Component
+
 // Listing Card Component
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   // Use the context hook
