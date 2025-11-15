@@ -63,7 +63,7 @@ export default function DashboardPage() {
     if (storedUserType === "user" || storedUserType === "user") {
       setUserType(storedUserType);
     } else {
-      setUserType("admin");  // text user
+      setUserType("user");  // text user
     }
   }, []);
 

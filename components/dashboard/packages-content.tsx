@@ -440,6 +440,7 @@
 //   );
 // }
 "use client";
+import React from "react";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -452,24 +453,56 @@ export default function PackagesContent() {
     setSelectedPackage(id);
   };
 
+  // Section headings (non-data rows)
+  const sectionHeaders = [
+    "Basic Services",
+    "Training Program",
+    "Platform Setup for Online Presence",
+    "Platform Setup for Digital Marketing",
+    "Graphic Design Services",
+    "Digital Marketing Services",
+    "Content Writing Services",
+    "Video Creation",
+    "Business Consultancy",
+  ];
+
+  // All rows (services)
   const allServices = [
+    // Basic Services
     "Package Price",
     "Member Type",
     "ID Card",
+    // Training Program
     "Business Training",
     "SEO Training",
     "SMM Training",
-    "SOURCES Business Page",
+    // Platform Setup for Online Presence
+    "SOURCES Page",
+    "Domain (.com)",
+    "Web Hosting",
+    "Business Website",
+    "eCommerce Website",
+    // Platform Setup for Digital Marketing
     "Facebook Page",
     "LinkedIn Page",
     "YouTube Channel",
     "TikTok Profile",
+    // Graphic Design Services
     "Logo Design",
     "Visiting Card Design",
-    "Domain (.com)",
-    "Web Hosting",
-    "Website",
-    "eCommerce",
+    "Social Media Design",
+    // Digital Marketing Services
+    "SMM Service",
+    "SEO Service",
+    "Press Release",
+    // Content Writing Services
+    "Blog Writing Service",
+    "Website Content Writing",
+    // Video Creation
+    "Video Ad",
+    "Motion Ad",
+    // Business Consultancy
+    "Consultancy",
   ];
 
   const packages = [
@@ -481,20 +514,37 @@ export default function PackagesContent() {
         "Package Price": "6000/Year (+5% VAT)",
         "Member Type": "Basic Member",
         "ID Card": "Gray Card",
+
         "Business Training": "Basic Training",
         "SEO Training": "Basic Training",
         "SMM Training": "Basic Training",
-        "SOURCES Business Page": "14 Products",
+
+        "SOURCES Page": "14 Products",
+        "Domain (.com)": "No",
+        "Web Hosting": "No",
+        "Business Website": "No",
+        "eCommerce Website": "No",
+
         "Facebook Page": "Yes",
         "LinkedIn Page": "Yes",
         "YouTube Channel": "Yes",
         "TikTok Profile": "Yes",
+
         "Logo Design": "Yes",
         "Visiting Card Design": "Yes",
-        "Domain (.com)": "No",
-        "Web Hosting": "No",
-        "Website": "No",
-        "eCommerce": "No",
+        "Social Media Design": "No",
+
+        "SMM Service": "No",
+        "SEO Service": "No",
+        "Press Release": "No",
+
+        "Blog Writing Service": "No",
+        "Website Content Writing": "No",
+
+        "Video Ad": "No",
+        "Motion Ad": "No",
+
+        Consultancy: "1 Hour",
       },
     },
     {
@@ -505,20 +555,37 @@ export default function PackagesContent() {
         "Package Price": "12000/Year (+5% VAT)",
         "Member Type": "Standard Member",
         "ID Card": "Blue Card",
+
         "Business Training": "Standard Training",
         "SEO Training": "Standard Training",
         "SMM Training": "Standard Training",
-        "SOURCES Business Page": "28 Products",
+
+        "SOURCES Page": "28 Products",
+        "Domain (.com)": "Yes",
+        "Web Hosting": "1 GB",
+        "Business Website": "No",
+        "eCommerce Website": "No",
+
         "Facebook Page": "Yes",
         "LinkedIn Page": "Yes",
         "YouTube Channel": "Yes",
         "TikTok Profile": "Yes",
+
         "Logo Design": "Yes",
         "Visiting Card Design": "Yes",
-        "Domain (.com)": "Yes",
-        "Web Hosting": "1 GB",
-        "Website": "No",
-        "eCommerce": "No",
+        "Social Media Design": "24 Designs",
+
+        "SMM Service": "Yes",
+        "SEO Service": "No",
+        "Press Release": "No",
+
+        "Blog Writing Service": "No",
+        "Website Content Writing": "No",
+
+        "Video Ad": "No",
+        "Motion Ad": "No",
+
+        Consultancy: "2 Hours",
       },
     },
     {
@@ -529,20 +596,37 @@ export default function PackagesContent() {
         "Package Price": "25000/Year (+5% VAT)",
         "Member Type": "Smart Member",
         "ID Card": "Green Card",
+
         "Business Training": "Smart Training",
         "SEO Training": "Smart Training",
         "SMM Training": "Smart Training",
-        "SOURCES Business Page": "56 Products",
+
+        "SOURCES Page": "56 Products",
+        "Domain (.com)": "Yes",
+        "Web Hosting": "3 GB",
+        "Business Website": "10 Page Website",
+        "eCommerce Website": "No",
+
         "Facebook Page": "Yes",
         "LinkedIn Page": "Yes",
         "YouTube Channel": "Yes",
         "TikTok Profile": "Yes",
+
         "Logo Design": "Yes",
         "Visiting Card Design": "Yes",
-        "Domain (.com)": "Yes",
-        "Web Hosting": "3 GB",
-        "Website": "10 Page Website",
-        "eCommerce": "No",
+        "Social Media Design": "48 Designs",
+
+        "SMM Service": "Yes",
+        "SEO Service": "Yes",
+        "Press Release": "1",
+
+        "Blog Writing Service": "10,000 Words",
+        "Website Content Writing": "5000 Words",
+
+        "Video Ad": "1",
+        "Motion Ad": "1",
+
+        Consultancy: "3 Hours",
       },
     },
     {
@@ -553,20 +637,37 @@ export default function PackagesContent() {
         "Package Price": "50000/Year (+5% VAT)",
         "Member Type": "Premium Member",
         "ID Card": "Purple Card",
+
         "Business Training": "Premium Training",
         "SEO Training": "Premium Training",
         "SMM Training": "Premium Training",
-        "SOURCES Business Page": "112 Products",
+
+        "SOURCES Page": "112 Products",
+        "Domain (.com)": "Yes",
+        "Web Hosting": "6 GB",
+        "Business Website": "15 Page Website",
+        "eCommerce Website": "Yes",
+
         "Facebook Page": "Yes",
         "LinkedIn Page": "Yes",
         "YouTube Channel": "Yes",
         "TikTok Profile": "Yes",
+
         "Logo Design": "Yes",
         "Visiting Card Design": "Yes",
-        "Domain (.com)": "Yes",
-        "Web Hosting": "6 GB",
-        "Website": "15 Page Website",
-        "eCommerce": "Yes",
+        "Social Media Design": "96 Designs",
+
+        "SMM Service": "Yes",
+        "SEO Service": "Yes",
+        "Press Release": "2",
+
+        "Blog Writing Service": "20,000 Words",
+        "Website Content Writing": "10,000 Words",
+
+        "Video Ad": "2",
+        "Motion Ad": "2",
+
+        Consultancy: "4 Hours",
       },
     },
     {
@@ -577,20 +678,37 @@ export default function PackagesContent() {
         "Package Price": "75000/Year (+5% VAT)",
         "Member Type": "Elite Member",
         "ID Card": "Gold Card",
+
         "Business Training": "Elite Training",
         "SEO Training": "Elite Training",
         "SMM Training": "Elite Training",
-        "SOURCES Business Page": "224 Products",
+
+        "SOURCES Page": "224 Products",
+        "Domain (.com)": "Yes",
+        "Web Hosting": "10 GB",
+        "Business Website": "20 Page Website",
+        "eCommerce Website": "Yes",
+
         "Facebook Page": "Yes",
         "LinkedIn Page": "Yes",
         "YouTube Channel": "Yes",
         "TikTok Profile": "Yes",
+
         "Logo Design": "Yes",
         "Visiting Card Design": "Yes",
-        "Domain (.com)": "Yes",
-        "Web Hosting": "10 GB",
-        "Website": "20 Page Website",
-        "eCommerce": "Yes",
+        "Social Media Design": "192 Designs",
+
+        "SMM Service": "Yes",
+        "SEO Service": "Yes",
+        "Press Release": "3",
+
+        "Blog Writing Service": "20,000 Words",
+        "Website Content Writing": "10,000 Words",
+
+        "Video Ad": "3",
+        "Motion Ad": "3",
+
+        Consultancy: "5 Hours",
       },
     },
     {
@@ -601,26 +719,78 @@ export default function PackagesContent() {
         "Package Price": "100000/Year (+5% VAT)",
         "Member Type": "VIP Member",
         "ID Card": "Black Card",
+
         "Business Training": "VIP Training",
         "SEO Training": "VIP Training",
         "SMM Training": "VIP Training",
-        "SOURCES Business Page": "448 Products",
+
+        "SOURCES Page": "448 Products",
+        "Domain (.com)": "Yes",
+        "Web Hosting": "15 GB",
+        "Business Website": "25 Page Website",
+        "eCommerce Website": "Yes",
+
         "Facebook Page": "Yes",
         "LinkedIn Page": "Yes",
         "YouTube Channel": "Yes",
         "TikTok Profile": "Yes",
+
         "Logo Design": "Yes",
         "Visiting Card Design": "Yes",
-        "Domain (.com)": "Yes",
-        "Web Hosting": "15 GB",
-        "Website": "25 Page Website",
-        "eCommerce": "Yes",
+        "Social Media Design": "384 Designs",
+
+        "SMM Service": "Yes",
+        "SEO Service": "Yes",
+        "Press Release": "4",
+
+        "Blog Writing Service": "50,000 Words",
+        "Website Content Writing": "25,000 Words",
+
+        "Video Ad": "4",
+        "Motion Ad": "4",
+
+        Consultancy: "6 Hours",
       },
     },
   ];
 
+  // Mapping services to sections for header grouping
+  const groupedServices = {
+    "Basic Services": ["Package Price", "Member Type", "ID Card"],
+    "Training Program": ["Business Training", "SEO Training", "SMM Training"],
+    "Platform Setup for Online Presence": [
+      "SOURCES Page",
+      "Domain (.com)",
+      "Web Hosting",
+      "Business Website",
+      "eCommerce Website",
+    ],
+    "Platform Setup for Digital Marketing": [
+      "Facebook Page",
+      "LinkedIn Page",
+      "YouTube Channel",
+      "TikTok Profile",
+    ],
+    "Graphic Design Services": [
+      "Logo Design",
+      "Visiting Card Design",
+      "Social Media Design",
+    ],
+    "Digital Marketing Services": [
+      "SMM Service",
+      "SEO Service",
+      "Press Release",
+    ],
+    "Content Writing Services": [
+      "Blog Writing Service",
+      "Website Content Writing",
+    ],
+    "Video Creation": ["Video Ad", "Motion Ad"],
+    "Business Consultancy": ["Consultancy"],
+  };
+
   return (
-    <div className="py-1 bg-white text-gray-800">
+    <div className="py-1 bg-white text-gray-800 container mx-auto">
       <div className="mx-auto text-center mb-12 px-4">
         <h2 className="text-3xl font-bold mb-3 text-[#2C8845]">
           Business Club Packages
@@ -680,40 +850,59 @@ export default function PackagesContent() {
             </tr>
           </thead>
 
-          <tbody>
-            {allServices.map((service, i) => (
-              <tr
-                key={i}
-                className={`border-t border-gray-200 ${
-                  i % 2 === 0 ? "bg-white" : "bg-[#F9FBF9]"
-                }`}
-              >
-                <td className="p-3 text-left text-gray-700 font-medium">
-                  {service}
-                </td>
-                {packages.map((pkg) => {
-                  const value = pkg.data[service as keyof typeof pkg.data];
-                  const isYes = value === "Yes";
-                  const isNo = value === "No";
+      
 
-                  return (
-                    <td
-                      key={pkg.id}
-                      className={`text-center p-3 ${
-                        pkg.id === "smart" ? "bg-[#F1FAF5]" : ""
-                      }`}
-                    >
-                      {isYes ? (
-                        <Check className="inline w-4 h-4 text-[#2C8845]" />
-                      ) : isNo ? (
-                        <X className="inline text-red-400 w-4 h-4" />
-                      ) : (
-                        <span className="text-gray-700 text-sm">{value}</span>
-                      )}
+          <tbody>
+            {Object.entries(groupedServices).map(([section, services]) => (
+              <React.Fragment key={section}>
+                {/* Section Header */}
+                <tr className="bg-gray-100">
+                  <td
+                    colSpan={packages.length + 1}
+                    className="p-3 font-semibold text-[#2C8845] text-center text-lg uppercase tracking-wide"
+                  >
+                    {section}
+                  </td>
+                </tr>
+
+                {/* Services under section */}
+                {services.map((service, i) => (
+                  <tr
+                    key={service}
+                    className={`border-t border-gray-200 ${
+                      i % 2 === 0 ? "bg-white" : "bg-[#F9FBF9]"
+                    }`}
+                  >
+                    <td className="p-3 text-left text-gray-700 font-medium">
+                      {service}
                     </td>
-                  );
-                })}
-              </tr>
+                    {packages.map((pkg) => {
+                      const value = pkg.data[service as keyof typeof pkg.data];
+                      const isYes = value === "Yes";
+                      const isNo = value === "No";
+
+                      return (
+                        <td
+                          key={pkg.id}
+                          className={`text-center p-3 ${
+                            pkg.id === "smart" ? "bg-[#F1FAF5]" : ""
+                          }`}
+                        >
+                          {isYes ? (
+                            <Check className="inline w-4 h-4 text-[#2C8845]" />
+                          ) : isNo ? (
+                            <X className="inline text-red-400 w-4 h-4" />
+                          ) : (
+                            <span className="text-gray-700 text-sm">
+                              {value}
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
