@@ -8,8 +8,8 @@ import {
   Heart,
   Mail,
   Phone,
-  ChevronDown,
-  Filter,
+  // ChevronDown,
+  // Filter,
   ChevronLeft,
   ChevronRight,
   House
@@ -25,6 +25,7 @@ import {
   BusinessCategory,
 } from "@/lib/data";
 import { useWatchList } from "../../app/context/WatchListContext";
+import Sidebar from "../Sidebar/Sidebar";
 const CARDS_PER_PAGE = 10;
 
 // Pagination Component
@@ -261,8 +262,8 @@ interface ListingsPageProps {
 // Main Listings Page
 export default function ListingsPage({
   listings,
-  districtCategories,
-  businessCategories,
+  // districtCategories,
+  // businessCategories,
 }: ListingsPageProps) {
 //   const listings: Listing[] = importedListings;
 //   const districtCategories: DivisionCategory[] = importedDistricts;
@@ -272,8 +273,8 @@ export default function ListingsPage({
   const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("rating");
-  const [openDivision, setOpenDivision] = useState<string>("Dhaka");
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  // const [openDivision, setOpenDivision] = useState<string>("Dhaka");
+  // const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const allFilteredAndSortedListings = useMemo(() => {
@@ -311,17 +312,17 @@ export default function ListingsPage({
     );
   }, [allFilteredAndSortedListings, currentPage]);
 
-  const handleDistrictSelect = (district: string) => {
-    setSelectedDistrict(district);
-    setCurrentPage(1);
-    if (isMobileFilterOpen) setIsMobileFilterOpen(false);
-  };
+  // const handleDistrictSelect = (district: string) => {
+  //   setSelectedDistrict(district);
+  //   setCurrentPage(1);
+  //   if (isMobileFilterOpen) setIsMobileFilterOpen(false);
+  // };
 
-  const handleBusinessTypeSelect = (type: string) => {
-    setSelectedBusinessType(type);
-    setCurrentPage(1);
-    if (isMobileFilterOpen) setIsMobileFilterOpen(false);
-  };
+  // const handleBusinessTypeSelect = (type: string) => {
+  //   setSelectedBusinessType(type);
+  //   setCurrentPage(1);
+  //   if (isMobileFilterOpen) setIsMobileFilterOpen(false);
+  // };
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -330,16 +331,20 @@ export default function ListingsPage({
     }
   };
 
-  const getBusinessTypeCount = (type: string) =>
-    listings.filter((l) => l.businessType === type).length;
-  const getDistrictCount = (district: string) =>
-    listings.filter((l) => l.district === district).length;
+  // const getBusinessTypeCount = (type: string) =>
+  //   listings.filter((l) => l.businessType === type).length;
+  // const getDistrictCount = (district: string) =>
+  //   listings.filter((l) => l.district === district).length;
 
   return (
-    <div className="min-h-screen bg-white">
+
+    <>
+
+    <Sidebar/>
+     <div className="min-h-screen md:ml-72 bg-white">
       <div className="w-full">
         {/* Mobile Filter Button */}
-        <div className="lg:hidden p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
+        {/* <div className="lg:hidden p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
           <button
             onClick={() => setIsMobileFilterOpen(true)}
             className="w-full flex items-center justify-center p-3 text-lg font-semibold text-white bg-green-700 rounded-lg hover:bg-green-800 transition-colors shadow-md"
@@ -348,12 +353,12 @@ export default function ListingsPage({
             Filters (
             {selectedDistrict || selectedBusinessType ? "Active" : "All"})
           </button>
-        </div>
+        </div> */}
 
         {/* Main Flex Layout */}
         <div className="flex flex-col lg:flex-row lg:gap-4">
           {/* Sidebar */}
-          <div
+          {/* <div
             className={`min-h-screen bg-green-700 text-white p-0 lg:w-64 lg:block lg:sticky lg:top-0 lg:overflow-y-auto
             ${
               isMobileFilterOpen
@@ -385,7 +390,7 @@ export default function ListingsPage({
               </button>
             </div>
 
-            {/* Business Types */}
+     
             <div className="mb-6 border-b border-green-600 pb-4 px-4">
               <h3 className="text-lg font-bold mb-2 text-white/90">
                 Business Type
@@ -410,7 +415,7 @@ export default function ListingsPage({
               </div>
             </div>
 
-            {/* District Filter */}
+       
             <div className="mb-6 px-4">
               <h3 className="text-lg font-bold mb-2 text-white/90">
                 Location (District)
@@ -466,14 +471,14 @@ export default function ListingsPage({
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
-          {isMobileFilterOpen && (
+          {/* {isMobileFilterOpen && (
             <div
               className="fixed inset-0 bg-black/50 z-40 lg:hidden"
               onClick={() => setIsMobileFilterOpen(false)}
             ></div>
-          )}
+          )} */}
 
           {/* Middle Content */}
           <div className="flex-1 p-8 bg-white max-w-3xl">
@@ -543,6 +548,8 @@ export default function ListingsPage({
         </div>
       </div>
     </div>
+    </>
+   
   );
 }
 

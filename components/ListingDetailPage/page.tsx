@@ -368,8 +368,9 @@
 import { useState } from "react";
 import Head from "next/head";
 import { Phone, Mail, Globe, MapPin, Star, ListOrdered, Briefcase, Users, Info, ChevronDown, Menu } from "lucide-react";
+import Sidebar from "../Sidebar/Sidebar";
 
-import { listings, businessCategories, categories } from "@/lib/data";
+// import { listings, businessCategories, categories } from "@/lib/data";
 interface Listing {
   id: string;
   name: string;
@@ -453,19 +454,19 @@ const districtCategories = [
   },
 ];
 
-const getDistrictCount = (district: string) =>
-  listings.filter((l) => l.district === district).length;
+// const getDistrictCount = (district: string) =>
+//   listings.filter((l) => l.district === district).length;
 
-const getBusinessTypeCount = (type: string) =>
-  listings.filter((l) => l.businessType === type).length;
+// const getBusinessTypeCount = (type: string) =>
+//   listings.filter((l) => l.businessType === type).length;
 
 export default function ListingDetailPage({ listing, products, services, reviews }: Props) {
   // Active tab state is now only for Products, Services, Reviews
   const [activeTab, setActiveTab] = useState<"products" | "services" | "reviews">("products"); 
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
-  const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
-  const [openDivision, setOpenDivision] = useState<string>("Dhaka");
+  // const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  // const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  // const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
+  // const [openDivision, setOpenDivision] = useState<string>("Dhaka");
 
   const tabContentMap = {
     // 'about' content (listing.description) has been removed from here and moved to a non-toggled section below.
@@ -516,15 +517,15 @@ export default function ListingDetailPage({ listing, products, services, reviews
   };
 
 
-  const handleDistrictSelect = (district: string) => {
-    setSelectedDistrict(district);
-    if (isMobileFilterOpen) setIsMobileFilterOpen(false);
-  };
+  // const handleDistrictSelect = (district: string) => {
+  //   setSelectedDistrict(district);
+  //   if (isMobileFilterOpen) setIsMobileFilterOpen(false);
+  // };
 
-  const handleBusinessTypeSelect = (type: string) => {
-    setSelectedBusinessType(type);
-    if (isMobileFilterOpen) setIsMobileFilterOpen(false);
-  };
+  // const handleBusinessTypeSelect = (type: string) => {
+  //   setSelectedBusinessType(type);
+  //   if (isMobileFilterOpen) setIsMobileFilterOpen(false);
+  // };
 
   // Generate meta description (first 150 chars of listing description)
   const metaDescription = listing.description
@@ -542,26 +543,29 @@ export default function ListingDetailPage({ listing, products, services, reviews
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />
       </Head>
+
+
+      <Sidebar/>
       <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row w-full">
 
-        {/* --- Mobile Filter Button --- */}
-        <button
+     
+        {/* <button
           onClick={() => setIsMobileFilterOpen(true)}
           className="lg:hidden fixed bottom-4 right-4 z-40 p-3 bg-[#2C8845] text-white rounded-full shadow-lg hover:bg-green-600 transition-colors"
           aria-label="Open Filter"
         >
           <Menu size={24} />
         </button>
-        {/* Mobile Overlay */}
+       
         {isMobileFilterOpen && (
           <div
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
             onClick={() => setIsMobileFilterOpen(false)}
           ></div>
-        )}
+        )} */}
 
         {/* --- Sidebar (Filter) - MODIFIED FOR TOP POSITION ON MOBILE --- */}
-        <div
+        {/* <div
           className={`min-h-screen bg-green-700 text-white lg:w-[250px] p-0
           lg:sticky lg:top-16 lg:z-auto
           ${
@@ -581,7 +585,6 @@ export default function ListingDetailPage({ listing, products, services, reviews
             </button>
           </div>
 
-          {/* Added overflow-y-auto to allow scrolling of filter content when positioned at the top */}
           <div className="p-4 overflow-y-auto h-full max-h-[calc(80vh-4rem)]"> 
             <button
               onClick={() => {
@@ -658,12 +661,12 @@ export default function ListingDetailPage({ listing, products, services, reviews
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
 
         {/* Main part */}
 
-        <main className="flex-1 bg-gray-50 p-4 sm:p-6 max-w-4xl w-full">
+        <main className="flex-1 bg-gray-50 p-4 sm:p-6 max-w-4xl w-full lg:ml-72">
           {/* Cover Image */}
           <div className="h-40 sm:h-64 w-full rounded-xl overflow-hidden shadow">
             <img src={listing.coverImage} alt="banner" className="w-full h-full object-cover" />
