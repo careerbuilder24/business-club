@@ -45,6 +45,7 @@ import ConnectedCompany from "@/components/home/connectedCOmpany";
 import Testimonial from "@/components/home/Testimonial";
 import CategoriesSection from "@/components/home/CategoriesSection";
 import Head from "next/head";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 export default function Home() {
   return (
@@ -63,14 +64,15 @@ export default function Home() {
 
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Your Website Name - Home" />
-        <meta name="twitter:description" content="Your Website's home page showcasing products, features, and more!" />
+        <meta name="twitter:title" content="Business Club - Home" />
+        <meta name="twitter:description" content="Business Club home page showcasing products, features, and more!" />
         <meta name="twitter:image" content="/path/to/twitter-image.jpg" />
         
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <main>
+        <Sidebar />
         <HeroSection />
         <CategoriesSection />
         <FeaturedListings />
@@ -78,7 +80,8 @@ export default function Home() {
         <VisionMission />
         <ConnectedCompany />
         <Testimonial />
-      </div>
+      </main>
+
     </>
   );
 }
