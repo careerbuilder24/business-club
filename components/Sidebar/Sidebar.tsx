@@ -1,18 +1,135 @@
-
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
-// The import path for '@/lib/data' was causing an error in this environment.
-// I have commented out the external import and included placeholder data below
-// to ensure the component is fully runnable and responsive.
-// import {
-//   categories as districtCategories,
-//   businessCategories,
-// } from "@/lib/data";
+// We use interfaces and types to resolve the 'implicit any' errors, which is standard practice in TypeScript/TSX.
+import { Check, ChevronDown, ChevronUp, Menu, X, Search } from "lucide-react";
+import { SetStateAction, Dispatch } from "react"; // Importing types for setState
 
+// --- TYPE DEFINITIONS ---
+interface BusinessItem {
+  name: string;
+  count: number;
+}
 
-// --- PLACEHOLDER DATA (to fix the import error) ---
+interface FilterItemProps {
+  name: string;
+  count: number;
+  isSelected: boolean;
+  onToggle: (name: string) => void;
+  showCount?: boolean;
+}
+// ------------------------
+
+// --- FULL LIST OF CATEGORIES (RENAMED TO INDUSTRY) ---
+const ALL_CATEGORIES: BusinessItem[] = [
+  { name: "Agriculture Farm", count: 34 },
+  { name: "Aquarium Fish Farm", count: 4 },
+  { name: "Automotive Industry", count: 123 },
+  { name: "Banks", count: 0 },
+  { name: "Beauty Parlor & Spa", count: 0 },
+  { name: "Blogs & Magazines", count: 0 },
+  { name: "Brassware Industry", count: 0 },
+  { name: "Buying House", count: 12 },
+  { name: "Cement Factory", count: 0 },
+  { name: "Ceramics Factory", count: 1 },
+  { name: "Chemical Factory", count: 2 },
+  { name: "Cleaning Agency", count: 8 },
+  { name: "Coaching Center", count: 2 },
+  { name: "Construction Firm", count: 6 },
+  { name: "Construction Materials", count: 3 },
+  { name: "Consulting Firms", count: 1 },
+  { name: "Cottage Industry", count: 1 },
+  { name: "Courier Service", count: 1 },
+  { name: "Day Care Center", count: 0 },
+  { name: "Diagnostic Centers", count: 3 },
+  { name: "Ecommerce", count: 48 },
+  { name: "Education Institute", count: 8 },
+  { name: "Electronics Industry", count: 16 },
+  { name: "Engineering Workshop", count: 4 },
+  { name: "Event Management Firm", count: 0 },
+  { name: "Fashion House", count: 39 },
+  { name: "Fast Food & Restaurant", count: 2 },
+  { name: "Fertiliser Factory", count: 0 },
+  { name: "Financial Company", count: 1 },
+  { name: "Fisheries", count: 0 },
+  { name: "Food Factory", count: 27 },
+  { name: "Furniture Company", count: 6 },
+  { name: "Garments Factory", count: 16 },
+  { name: "Glass Factory", count: 1 },
+  { name: "Grocery Shop", count: 10 },
+  { name: "Gym", count: 0 },
+  { name: "Handicraft Company", count: 2 },
+  { name: "Handloon Industry", count: 0 },
+  { name: "Hatchery", count: 10 },
+  { name: "Health Care Company", count: 10 },
+  { name: "Home Appliance Company", count: 5 },
+  { name: "Home Builders", count: 1 },
+  { name: "Homeo Clinic", count: 3 },
+  { name: "Hotel", count: 1 },
+  { name: "Interior Design Firm", count: 0 },
+  { name: "Interior Firm", count: 5 },
+  { name: "Internet Service Provider", count: 1 },
+  { name: "IT Firm", count: 13 },
+  { name: "Jewellery Factory", count: 0 },
+  { name: "Jewelry Company", count: 2 },
+  { name: "Jute Factory", count: 1 },
+  { name: "Law Firms", count: 2 },
+  { name: "Leather Factory", count: 6 },
+  { name: "Life Insurance", count: 0 },
+  { name: "Machine Industry", count: 4 },
+  { name: "Madrasha", count: 1 },
+  { name: "Maid Agency", count: 1 },
+  { name: "Marine Industry", count: 0 },
+  { name: "Marketing Agency", count: 4 },
+  { name: "Marriage Media", count: 5 },
+  { name: "Medical Equipment Suppliers", count: 4 },
+  { name: "Mosquito Coil Factory", count: 0 },
+  { name: "Motor Vehicle Service", count: 1 },
+  { name: "Music Industry", count: 0 },
+  { name: "Newspaper", count: 4 },
+  { name: "Pearl Farm", count: 0 },
+  { name: "Pet Shop", count: 0 },
+  { name: "Petroleum Industry", count: 0 },
+  { name: "Pharmaceutical Industry", count: 0 },
+  { name: "Photo Studio", count: 0 },
+  { name: "Physical Therapy Center", count: 1 },
+  { name: "Poultry Farm", count: 1 },
+  { name: "Printing Press", count: 2 },
+  { name: "Publications", count: 2 },
+  { name: "Pulp & Paper Company", count: 1 },
+  { name: "Real Estate Company", count: 3 },
+  { name: "Resorts", count: 0 },
+  { name: "Restaurant", count: 0 },
+  { name: "Salon & Spa", count: 0 },
+  { name: "Sanitary Agency", count: 1 },
+  { name: "School & College", count: 2 },
+  { name: "Security Company", count: 2 },
+  { name: "Service Company", count: 13 },
+  { name: "Shoe Factory", count: 2 },
+  { name: "Steel Factory", count: 1 },
+  { name: "Tea Industry", count: 3 },
+  { name: "Telecommunications", count: 4 },
+  { name: "Textile Industry", count: 4 },
+  { name: "Transport Company", count: 1 },
+  { name: "Travel Agency", count: 4 },
+  { name: "University", count: 0 },
+  { name: "Veterinary Farm", count: 2 },
+];
+// ----------------------------------------------------
+
+// --- ORIGINAL BUSINESS TYPE DATA (Now consistent with BusinessItem interface) ---
+const BUSINESS_TYPES: BusinessItem[] = [
+  { name: "Manufacturer", count: 0 }, // Added count property
+  { name: "Supplier", count: 0 }, // Added count property
+  { name: "Buying House", count: 0 }, // Added count property
+  { name: "Dealer", count: 0 }, // Added count property
+  { name: "Trader", count: 0 }, // Added count property
+  { name: "Importer", count: 0 }, // Added count property
+  { name: "Exporter", count: 0 }, // Added count property
+];
+// ----------------------------------------------------
+
+// --- ORIGINAL PLACEHOLDER DATA (District section remains the same) ---
 const districtCategories = [
   {
     division: "Dhaka",
@@ -27,29 +144,81 @@ const districtCategories = [
     districts: ["Khulna City", "Bagerhat", "Jessore"],
   },
 ];
-
-const businessCategories = [
-  { name: "Manufacturer" },
-  { name: "Supplier" },
-  { name: "Buying House" },
-  { name: "Dealer" },
-  { name: "Trader" },
-  { name: "Importer" },
-  { name: "Exporter" },
-];
 // ----------------------------------------------------
 
+// Helper Component for both Business Type and Industry items
+// FIX: Added FilterItemProps type to component definition
+const FilterItem = ({
+  name,
+  count,
+  isSelected,
+  onToggle,
+  showCount = true,
+}: FilterItemProps) => (
+  <button
+    key={name}
+    className="w-full flex items-center justify-between text-left pr-1 pl-2 py-1.5 text-sm rounded-md hover:bg-green-600/80 transition"
+    // Use onToggle to handle selection logic
+    onClick={() => onToggle(name)}
+  >
+    <div className="flex items-center space-x-2 font-light">
+      {/* Custom styled checkbox with Check icon when selected */}
+      <div
+        className={`h-4 w-4 rounded-sm border-2 flex items-center justify-center shrink-0 transition-colors 
+        ${
+          isSelected ? "bg-white border-white" : "bg-transparent border-white"
+        }`}
+      >
+        {/* Lucide Check icon - visible only when selected */}
+        {isSelected && <Check size={12} className="text-[#008236]" />}
+      </div>
+      <span>{name}</span>
+    </div>
+    {/* Show count only for Industry items */}
+    {showCount && (
+      <span
+        className={`text-[11px] font-medium px-2 py-[1px] rounded-full ${
+          count > 0 ? "bg-green-700" : "bg-green-800 opacity-60"
+        }`}
+      >
+        ({count})
+      </span>
+    )}
+  </button>
+);
 
 export default function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDivision, setOpenDivision] = useState("");
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
 
-  // This button is now visible up to and including 'md' screens, hidden only on 'lg' and up.
+  // New states for filter selection and search query
+  const [selectedBusinessTypes, setSelectedBusinessTypes] = useState<string[]>(
+    []
+  );
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Generic toggle function for managing filter state arrays
+  // FIX: Added explicit types for setState and name to resolve 'implicit any'
+  const toggleSelection = (
+    setState: Dispatch<SetStateAction<string[]>>,
+    name: string
+  ) => {
+    setState((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+    );
+  };
+
+  const toggleBusinessType = (name: string) =>
+    toggleSelection(setSelectedBusinessTypes, name); // FIX: Added type to name
+  const toggleIndustry = (name: string) =>
+    toggleSelection(setSelectedIndustries, name); // FIX: Added type to name
+
   const MobileMenuButton = (
     <button
       onClick={() => setMenuOpen(true)}
-      // Changed md:hidden to lg:hidden to show button on medium devices
-      className="fixed bottom-4 left-4 lg:hidden bg-[#2C8845] text-white p-2 rounded-md shadow-lg z-20"
+      className="fixed bottom-4 left-4 lg:hidden bg-[#2C8845] text-white p-2 rounded-xl shadow-lg z-20 transition-all duration-300 transform hover:scale-105"
       aria-label="Open filter menu"
     >
       <Menu className="w-6 h-6" />
@@ -72,27 +241,23 @@ export default function Sidebar() {
       <aside
         className={`bg-[#008236] text-white w-64 fixed top-[140px] left-0
         h-[calc(100vh-115px)] overflow-y-auto transition-transform duration-300 z-50 
-        ${menuOpen 
-          ? "translate-x-0" 
-          // Sidebar is now hidden by default on 'sm' and 'md' devices (-translate-x-full),
-          // and only permanently visible (translate-x-0) from the 'lg' breakpoint up.
-          : "-translate-x-full lg:translate-x-0"}`
-        }
+        shadow-2xl rounded-r-lg
+        ${menuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         aria-label="Business filters"
       >
-        {/* FIX: Changed <style jsx> to a standard <style> tag to resolve the React warning */}
         <style>{`
+          /* Hide scrollbar for aesthetics */
           aside::-webkit-scrollbar {
             display: none;
           }
           aside {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
           }
         `}</style>
 
         {/* Mobile Header (Close Button) - Visible on sm and md, hidden on lg and up */}
-        <div className="lg:hidden flex justify-between items-center px-4 py-3 border-b border-green-600">
+        <div className="lg:hidden flex justify-between items-center px-4 py-3 border-b border-green-600 bg-[#008236] sticky top-0 z-10">
           <h2 className="font-semibold text-lg">Browse Filters</h2>
           <button onClick={() => setMenuOpen(false)}>
             <X className="w-6 h-6 text-white" />
@@ -100,32 +265,89 @@ export default function Sidebar() {
         </div>
 
         <div className="p-4">
-          {/* All Business Button */}
-          <div className="p-4">
-            <button className="w-full text-center px-4 py-3 mb-4 cursor-pointer transition-colors text-lg font-bold rounded-lg bg-green-800 border-2 border-white">
+          {/* All Business Button and Search Box */}
+          <div className="p-4 pt-0">
+            <button className="w-full text-center px-4 py-3 mb-3 cursor-pointer transition-colors text-lg font-bold rounded-lg bg-green-800 border-2 border-white hover:bg-green-700/90 shadow-md">
               All Business
             </button>
+
+            {/* Search Box (Updated to white background) */}
+            <div className="relative mb-4">
+              <input
+                type="text"
+                placeholder="Search business name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                // Updated classes for white background and black text
+                className="w-full p-2.5 pl-10 text-sm rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+              />
+              {/* Updated icon color for contrast */}
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              />
+            </div>
           </div>
 
-          {/* Business Type Section */}
+          {/* Business Type Section (Now with selection state) */}
           <div className="mb-6 border-b border-green-600 pb-4">
             <h3 className="text-lg font-semibold mb-2">Business Type</h3>
             <nav>
               <div className="space-y-1">
-                {businessCategories.map((type) => (
-                  <button
+                {/* FIX: BUSINESS_TYPES array elements now match expected props (count: 0 added to data) */}
+                {BUSINESS_TYPES.map((type) => (
+                  <FilterItem
                     key={type.name}
-                    className="w-full text-left px-2 py-2 text-sm font-medium rounded-md hover:bg-green-600/80 transition"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {type.name}
-                  </button>
+                    name={type.name}
+                    count={type.count} // Passed count property
+                    isSelected={selectedBusinessTypes.includes(type.name)}
+                    onToggle={toggleBusinessType}
+                    showCount={false} // Business types don't show a count
+                  />
                 ))}
               </div>
             </nav>
           </div>
 
-          {/* District Section */}
+          {/* Industry Section (Collapsible with smooth transition and selection state) */}
+          <div className="mb-6 border-b border-green-600 pb-4">
+            {/* Collapsible Header */}
+            <button
+              onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+              aria-expanded={isCategoriesOpen}
+              className="w-full flex justify-between items-center text-left px-2 py-2 text-base font-bold bg-green-600 hover:bg-green-500 rounded-md transition"
+            >
+              Industry
+              {isCategoriesOpen ? (
+                <ChevronUp size={16} />
+              ) : (
+                <ChevronDown size={16} />
+              )}
+            </button>
+
+            {/* Category List - MAX HEIGHT IS NOW A LARGE FIXED VALUE FOR SMOOTHNESS */}
+            <div
+              className="transition-[max-height] duration-500 ease-in-out overflow-hidden"
+              style={{
+                // Changed to a fixed large value (5000px) to ensure a consistently smooth transition
+                maxHeight: isCategoriesOpen ? `5000px` : "0px",
+              }}
+            >
+              <nav className="space-y-1 py-2">
+                {ALL_CATEGORIES.map((category) => (
+                  <FilterItem
+                    key={category.name}
+                    name={category.name}
+                    count={category.count}
+                    isSelected={selectedIndustries.includes(category.name)}
+                    onToggle={toggleIndustry}
+                  />
+                ))}
+              </nav>
+            </div>
+          </div>
+
+          {/* District Section (Collapsible with smooth transition) */}
           <div>
             <h3 className="text-lg font-semibold mb-2">Location by District</h3>
             {districtCategories.map((division) => (
@@ -151,9 +373,10 @@ export default function Sidebar() {
                 <div
                   className="transition-[max-height] duration-500 ease-in-out overflow-hidden"
                   style={{
+                    // Ensures smooth transition
                     maxHeight:
                       openDivision === division.division
-                        ? `${division.districts.length * 32}px`
+                        ? `${division.districts.length * 32 + 8}px` // +8px for py-1 padding
                         : "0px",
                   }}
                 >

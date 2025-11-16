@@ -104,11 +104,11 @@ export default function HeroSection() {
     return () => clearInterval(timer);
   }, []);
 
-  const nextBanner = () =>
-    setCurrentBanner((prev) => (prev + 1) % banners.length);
+  // const nextBanner = () =>
+  //   setCurrentBanner((prev) => (prev + 1) % banners.length);
 
-  const prevBanner = () =>
-    setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
+  // const prevBanner = () =>
+  //   setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
 
   return (
     <section className="relative z-10 w-full flex flex-col md:flex-row p-10">
@@ -136,18 +136,18 @@ export default function HeroSection() {
             Explore opportunities and grow your network.
           </h2>
         </div>
-        <button
+        {/* <button
           onClick={prevBanner}
           className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 text-[#2C8845] p-3 rounded-full hover:bg-white shadow-md"
         >
           ❮
-        </button>
-        <button
+        </button> */}
+        {/* <button
           onClick={nextBanner}
           className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 text-[#2C8845] p-3 rounded-full hover:bg-white shadow-md"
         >
           ❯
-        </button>
+        </button> */}
         <div className="absolute bottom-4 left-4 flex justify-start gap-2">
           {banners.map((_, i) => (
             <span
