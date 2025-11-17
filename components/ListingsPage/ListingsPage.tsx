@@ -1,18 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import {
   Star,
   Globe,
   Heart,
   Mail,
   Phone,
-  // ChevronDown,
-  // Filter,
   ChevronLeft,
   ChevronRight,
-  House
+  House,
 } from "lucide-react";
 import {
   listings as importedListings,
@@ -27,7 +24,102 @@ import {
 import { useWatchList } from "../../app/context/WatchListContext";
 import Sidebar from "../Sidebar/Sidebar";
 const CARDS_PER_PAGE = 10;
-
+export const categories = [
+  {
+    name: "Dhaka",
+    districts: [
+      "Dhaka",
+      "Gazipur",
+      "Kishoreganj",
+      "Manikganj",
+      "Munshiganj",
+      "Narayanganj",
+      "Narsingdi",
+      "Tangail",
+      "Faridpur",
+      "Gopalganj",
+      "Madaripur",
+      "Rajbari",
+      "Shariatpur",
+    ],
+  },
+  {
+    name: "Chattogram",
+    districts: [
+      "Chattogram",
+      "Cox's Bazar",
+      "Rangamati",
+      "Bandarban",
+      "Khagrachhari",
+      "Feni",
+      "Noakhali",
+      "Laxmipur",
+      "Brahmanbaria",
+      "Comilla",
+      "Chandpur",
+    ],
+  },
+  {
+    name: "Rajshahi",
+    districts: [
+      "Rajshahi",
+      "Natore",
+      "Pabna",
+      "Sirajganj",
+      "Bogura",
+      "Joypurhat",
+      "Naogaon",
+      "Chapai Nawabganj",
+    ],
+  },
+  {
+    name: "Khulna",
+    districts: [
+      "Khulna",
+      "Bagerhat",
+      "Satkhira",
+      "Jessore",
+      "Jhenaidah",
+      "Magura",
+      "Narail",
+      "Kushtia",
+      "Chuadanga",
+      "Meherpur",
+    ],
+  },
+  {
+    name: "Barishal",
+    districts: [
+      "Barishal",
+      "Bhola",
+      "Patuakhali",
+      "Barguna",
+      "Jhalokathi",
+      "Pirojpur",
+    ],
+  },
+  {
+    name: "Sylhet",
+    districts: ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
+  },
+  {
+    name: "Rangpur",
+    districts: [
+      "Rangpur",
+      "Dinajpur",
+      "Thakurgaon",
+      "Panchagarh",
+      "Nilphamari",
+      "Lalmonirhat",
+      "Kurigram",
+      "Gaibandha",
+    ],
+  },
+  {
+    name: "Mymensingh",
+    districts: ["Mymensingh", "Jamalpur", "Netrokona", "Sherpur"],
+  },
+];
 // Pagination Component
 interface PaginationProps {
   currentPage: number;
@@ -147,7 +239,6 @@ const RatingStars: React.FC<{ rating: number }> = ({ rating }) => {
   return <div className="flex space-x-0.5">{stars}</div>;
 };
 
-
 // Listing Card Component
 const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
   // Use the context hook
@@ -214,7 +305,6 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
           <p className="text-gray-600  text-sm line-clamp-2">
             {listing.description}
           </p>
-       
 
           <div className="flex flex-col gap-1 mt-2 text-xs text-gray-600">
             <span className="flex items-center">
@@ -243,7 +333,7 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
               </span>
             )}
 
-             <span className="flex items-center">
+            <span className="flex items-center">
               <House size={12} className="mr-1 text-orange-500" />
               {listing.address}
             </span>
@@ -253,28 +343,19 @@ const ListingCard: React.FC<{ listing: Listing }> = ({ listing }) => {
     </div>
   );
 };
-// 🟩 Props interface
+//  Props interface
 interface ListingsPageProps {
   listings: Listing[];
   districtCategories: DivisionCategory[];
   businessCategories: BusinessCategory[];
 }
 // Main Listings Page
-export default function ListingsPage({
-  listings,
-  // districtCategories,
-  // businessCategories,
-}: ListingsPageProps) {
-//   const listings: Listing[] = importedListings;
-//   const districtCategories: DivisionCategory[] = importedDistricts;
-//   const businessCategories: BusinessCategory[] = importedBusinessTypes;
-
+export default function ListingsPage({ listings }: ListingsPageProps) {
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("rating");
-  // const [openDivision, setOpenDivision] = useState<string>("Dhaka");
-  // const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const allFilteredAndSortedListings = useMemo(() => {
@@ -312,18 +393,6 @@ export default function ListingsPage({
     );
   }, [allFilteredAndSortedListings, currentPage]);
 
-  // const handleDistrictSelect = (district: string) => {
-  //   setSelectedDistrict(district);
-  //   setCurrentPage(1);
-  //   if (isMobileFilterOpen) setIsMobileFilterOpen(false);
-  // };
-
-  // const handleBusinessTypeSelect = (type: string) => {
-  //   setSelectedBusinessType(type);
-  //   setCurrentPage(1);
-  //   if (isMobileFilterOpen) setIsMobileFilterOpen(false);
-  // };
-
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -331,175 +400,28 @@ export default function ListingsPage({
     }
   };
 
-  // const getBusinessTypeCount = (type: string) =>
-  //   listings.filter((l) => l.businessType === type).length;
-  // const getDistrictCount = (district: string) =>
-  //   listings.filter((l) => l.district === district).length;
-
   return (
-
     <>
-
-    <Sidebar/>
-     <div className="min-h-screen md:ml-72 bg-white">
-      <div className="w-full">
-        {/* Mobile Filter Button */}
-        {/* <div className="lg:hidden p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
-          <button
-            onClick={() => setIsMobileFilterOpen(true)}
-            className="w-full flex items-center justify-center p-3 text-lg font-semibold text-white bg-green-700 rounded-lg hover:bg-green-800 transition-colors shadow-md"
-          >
-            <Filter size={20} className="mr-2" />
-            Filters (
-            {selectedDistrict || selectedBusinessType ? "Active" : "All"})
-          </button>
-        </div> */}
-
-        {/* Main Flex Layout */}
-        <div className="flex flex-col lg:flex-row lg:gap-4">
-          {/* Sidebar */}
-          {/* <div
-            className={`min-h-screen bg-green-700 text-white p-0 lg:w-64 lg:block lg:sticky lg:top-0 lg:overflow-y-auto
-            ${
-              isMobileFilterOpen
-                ? "fixed top-0 left-0 h-full w-64 z-50 transform translate-x-0 transition-transform duration-300 ease-in-out"
-                : "fixed top-0 left-0 h-full w-64 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-64 lg:z-auto"
-            }`}
-          >
-            <div className="lg:hidden p-4 flex justify-end">
-              <button
-                onClick={() => setIsMobileFilterOpen(false)}
-                className="text-white hover:text-gray-300 text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-            <div className="p-4">
-              <button
-                onClick={() => {
-                  handleDistrictSelect("");
-                  handleBusinessTypeSelect("");
-                }}
-                className={`w-full text-center px-4 py-3 mb-4 cursor-pointer transition-colors text-lg font-bold rounded-lg ${
-                  selectedDistrict === "" && selectedBusinessType === ""
-                    ? "bg-green-800 border-2 border-white"
-                    : "hover:bg-green-600 border-2 border-transparent"
-                }`}
-              >
-                All Business
-              </button>
-            </div>
-
-     
-            <div className="mb-6 border-b border-green-600 pb-4 px-4">
-              <h3 className="text-lg font-bold mb-2 text-white/90">
-                Business Type
-              </h3>
-              <div className="space-y-1">
-                {businessCategories.map((category) => (
-                  <button
-                    key={category.name}
-                    onClick={() => handleBusinessTypeSelect(category.name)}
-                    className={`w-full flex justify-between items-center text-left px-2 py-2 transition-colors text-sm font-medium rounded-md ${
-                      selectedBusinessType === category.name
-                        ? "bg-green-800 text-white border-l-4 border-white"
-                        : "hover:bg-green-600/80 border-l-4 border-transparent text-white/90"
-                    }`}
-                  >
-                    <span>{category.name}</span>
-                    <span className="text-white/70 ml-2 text-xs flex-shrink-0">
-                      ({getBusinessTypeCount(category.name)})
-                    </span>
-                  </button>
-                ))}
+      <Sidebar />
+      <div className="min-h-screen md:ml-72 bg-white">
+        <div className="w-full">
+          {/* Main Flex Layout */}
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            {/* Middle Content */}
+            <div className="flex-1 p-8 bg-white max-w-3xl">
+              <div className="mb-8">
+                <h1 className="text-4xl font-bold mb-2">
+                  Business Club:
+                  <span className="text-green-700">
+                    {selectedBusinessType || selectedDistrict
+                      ? ""
+                      : " Bangladesh"}
+                  </span>
+                </h1>
+                <p className="text-gray-500">Best Business club</p>
               </div>
-            </div>
-
-       
-            <div className="mb-6 px-4">
-              <h3 className="text-lg font-bold mb-2 text-white/90">
-                Location (District)
-              </h3>
-              {districtCategories.map((division) => (
-                <div key={division.division} className="mt-2">
-                  <button
-                    onClick={() =>
-                      setOpenDivision(
-                        openDivision === division.division
-                          ? ""
-                          : division.division
-                      )
-                    }
-                    className="w-full flex justify-between items-center text-left px-2 py-2 cursor-pointer bg-green-600 hover:bg-green-500 transition-colors text-sm font-bold rounded-md"
-                  >
-                    <span>{division.division} Division</span>
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-300 ${
-                        openDivision === division.division
-                          ? "rotate-180"
-                          : "rotate-0"
-                      }`}
-                    />
-                  </button>
-                  <div
-                    className={`overflow-hidden transition-max-height duration-500 ease-in-out ${
-                      openDivision === division.division
-                        ? "max-h-96"
-                        : "max-h-0"
-                    }`}
-                  >
-                    <div className="space-y-0.5 py-1">
-                      {division.districts.map((district) => (
-                        <button
-                          key={district}
-                          onClick={() => handleDistrictSelect(district)}
-                          className={`w-full flex justify-between items-center text-left pl-4 py-1.5 transition-colors text-xs font-medium ${
-                            selectedDistrict === district
-                              ? "bg-green-800 text-white border-l-4 border-white"
-                              : "hover:bg-green-700/80 border-l-4 border-transparent text-white/90"
-                          }`}
-                        >
-                          <span>{district}</span>
-                          <span className="text-white/70 ml-2 text-xs flex-shrink-0">
-                            ({getDistrictCount(district)})
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
-          {/* {isMobileFilterOpen && (
-            <div
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-              onClick={() => setIsMobileFilterOpen(false)}
-            ></div>
-          )} */}
-
-          {/* Middle Content */}
-          <div className="flex-1 p-8 bg-white max-w-3xl">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2">
-                Business Club:
-                <span className="text-green-700">
-                  {selectedBusinessType || selectedDistrict
-                    ? ""
-                    : " Bangladesh"}
-                </span>
-              </h1>
-              <p className="text-gray-500">Best Business club</p>
-            </div>
-
-            <div className="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md">
-              <h2 className="text-xl font-bold mb-4 md:mb-0">
-                Page: <span className="text-green-700">{currentPage}</span> of{" "}
-                <span className="text-green-700">{totalPages}</span>
-              </h2>
-              <div className="w-full md:w-1/3 mb-4 md:mb-0 md:mx-4">
+              {/* Search Bar */}
+              <div className="w-full md:w-full">
                 <input
                   type="text"
                   value={searchTerm}
@@ -508,49 +430,82 @@ export default function ListingsPage({
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                 />
               </div>
-              <div className="w-full md:w-1/4">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                >
-                  <option value="rating">Highest Rating</option>
-                  <option value="reviews">Most Reviews</option>
-                  <option value="name">Name (A-Z)</option>
-                </select>
+              <div className="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md gap-4">
+                {/* Division Dropdown */}
+                <div className="w-full md:w-1/4">
+                  <select
+                    value={selectedDistrict}
+                    onChange={(e) => setSelectedDistrict(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="">All Division</option>
+                    {categories.map((division, index) => (
+                      <option key={division.name + index} value={division.name}>
+                        {division.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* District Dropdown (auto changes based on division) */}
+                <div className="w-full md:w-1/4">
+                  <select
+                    value={selectedBusinessType}
+                    onChange={(e) => setSelectedBusinessType(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="">All District</option>
+                    {categories
+                      .find((d) => d.name === selectedDistrict)
+                      ?.districts.map((district) => (
+                        <option key={district} value={district}>
+                          {district}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                {/* Sorting Dropdown */}
+                <div className="w-full md:w-1/4">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="rating">Highest Rating</option>
+                    <option value="reviews">Most Reviews</option>
+                    <option value="name">Name (A–Z)</option>
+                  </select>
+                </div>
               </div>
+
+              {paginatedListings.map((listing) => (
+                <ListingCard key={listing.id} listing={listing} />
+              ))}
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
 
-            {paginatedListings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} />
-            ))}
-
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
-
-          {/* Right Ads */}
-          <div className="hidden lg:flex lg:flex-col lg:w-72 p-8  gap-4 flex-wrap">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-full h-40 bg-gray-200 border border-gray-300 rounded-lg flex items-center justify-center text-center text-gray-600 font-semibold text-xs shadow-inner"
-              >
-                <p>
-                  AD SENSE {i + 1} <br /> (150x250)
-                </p>
-              </div>
-            ))}
+            {/* Right Ads */}
+            <div className="hidden lg:flex lg:flex-col lg:w-72 p-8  gap-4 flex-wrap">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-full h-40 bg-gray-200 border border-gray-300 rounded-lg flex items-center justify-center text-center text-gray-600 font-semibold text-xs shadow-inner"
+                >
+                  <p>
+                    AD SENSE {i + 1} <br /> (150x250)
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
-   
   );
 }
-
-

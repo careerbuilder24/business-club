@@ -74,7 +74,7 @@ export default function Home() {
       <main>
         <Sidebar />
         <HeroSection />
-        <CategoriesSection />
+        {/* <CategoriesSection /> */}
         <FeaturedListings />
         <CTASection />
         <VisionMission />
