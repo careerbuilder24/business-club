@@ -356,11 +356,11 @@ export default function PackagesContent() {
    
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 md:px-36 mt-16">
+      <div className="container mx-auto px-4 md:px-36 mt-16 md:ml-36">
        
 
         {/* Medium & Large devices: table view */}
-        <div className="hidden md:block overflow-x-auto">
+        <div className=" overflow-x-auto">
           <table className="min-w-full table-auto border border-gray-200 text-sm shadow-md rounded-lg overflow-hidden">
             <thead className="bg-[#2C8845] text-white">
               <tr>
