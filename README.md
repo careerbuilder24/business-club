@@ -1,4 +1,4 @@
-# Business Club 🌐
+# Business Club 
 
 [**Live Website**](https://business-clubs.vercel.app/)
 
@@ -28,15 +28,15 @@ Business Club is a modern online platform designed to showcase and connect busin
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
-- **Frontend:** Next.js, React, Tailwind CSS  
+- **Frontend:** Next.js, Typescript, Tailwind CSS  
 - **Deployment:** Vercel  
 - **Additional Libraries:** Framer Motion, Lucide Icons
 
 ---
 
-## 🔗 Live Demo
+##  Live Demo
 
 Check the live version of the website here: [https://business-clubs.vercel.app/](https://business-clubs.vercel.app/)
 
