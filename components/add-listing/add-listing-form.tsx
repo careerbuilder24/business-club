@@ -5,8 +5,6 @@ import type React from "react";
 import { useState } from "react";
 import { Upload, X } from "lucide-react";
 import RichTextEditor from "./rich-text-editor";
-import { categories } from "@/lib/data";
-import SideCategory from "../sideCategory/sideCategory";
 
 export default function AddListingForm() {
   const [formData, setFormData] = useState({
@@ -97,12 +95,11 @@ export default function AddListingForm() {
 
   return (
     <>
-      {/* <div className="lg:w-[18%]">
-        <SideCategory />
-      </div> */}
+
+
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-md p-8 space-y-8"
+        className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8 space-y-8 w-full max-w-[1200px] mx-auto"
       >
         {/* Success Message */}
         {submitted && (
@@ -113,10 +110,12 @@ export default function AddListingForm() {
 
         {/* Basic Information */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-foreground">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
             Basic Information
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {/* Listing Name */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Listing Name *
@@ -131,6 +130,8 @@ export default function AddListingForm() {
                 required
               />
             </div>
+
+            {/* Company Name */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Company Name *
@@ -145,6 +146,8 @@ export default function AddListingForm() {
                 required
               />
             </div>
+
+            {/* Category */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Category *
@@ -157,13 +160,10 @@ export default function AddListingForm() {
                 required
               >
                 <option value="">Select a category</option>
-                {/* {categories.map((cat, index) => (
-                  <option key={cat.name || index} value={cat.name}>
-                    {cat.name}
-                  </option>
-                ))} */}
               </select>
             </div>
+
+            {/* Email */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Email *
@@ -183,10 +183,12 @@ export default function AddListingForm() {
 
         {/* Contact Information */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-foreground">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
             Contact Information
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {/* Phone */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Phone Number *
@@ -201,6 +203,8 @@ export default function AddListingForm() {
                 required
               />
             </div>
+
+            {/* Address */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Company Address *
@@ -215,6 +219,8 @@ export default function AddListingForm() {
                 required
               />
             </div>
+
+            {/* Website */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Website
@@ -228,6 +234,8 @@ export default function AddListingForm() {
                 className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
+
+            {/* Facebook */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Facebook URL
@@ -246,13 +254,17 @@ export default function AddListingForm() {
 
         {/* Images */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-foreground">Images</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
+            Images
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* Logo */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-foreground">
                 Company Logo
               </label>
+
               <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer">
                 <input
                   type="file"
@@ -309,11 +321,12 @@ export default function AddListingForm() {
             </div>
           </div>
 
-          {/* Gallery Images */}
+          {/* Gallery */}
           <div className="mt-6">
             <label className="block text-sm font-semibold mb-2 text-foreground">
               Gallery Images
             </label>
+
             <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer">
               <input
                 type="file"
@@ -334,9 +347,8 @@ export default function AddListingForm() {
               </label>
             </div>
 
-            {/* Gallery Preview */}
             {images.gallery.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {images.gallery.map((file, idx) => (
                   <div key={idx} className="relative group">
                     <div className="bg-muted rounded-lg p-2 aspect-square flex items-center justify-center">
@@ -360,10 +372,11 @@ export default function AddListingForm() {
 
         {/* Labels */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-foreground">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
             Listing Labels
           </h2>
-          <div className="flex gap-2 mb-4">
+
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <input
               type="text"
               value={labelInput}
@@ -383,7 +396,6 @@ export default function AddListingForm() {
             </button>
           </div>
 
-          {/* Labels Display */}
           <div className="flex flex-wrap gap-2">
             {formData.labels.map((label) => (
               <div
@@ -405,7 +417,7 @@ export default function AddListingForm() {
 
         {/* Description */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-foreground">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
             Description
           </h2>
           <RichTextEditor
@@ -414,8 +426,8 @@ export default function AddListingForm() {
           />
         </div>
 
-        {/* Submit Button */}
-        <div className="flex gap-4 pt-6 border-t border-border">
+        {/* Submit Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border">
           <button
             type="submit"
             className="flex-1 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"

@@ -61,21 +61,55 @@ export default function SignupPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (validateForm()) {
+  //     console.log("Signup submitted:", formData);
+  //     setSubmitted(true);
+  //     setTimeout(() => {
+  //       setSubmitted(false);
+  //       setFormData({
+  //         fullName: "",
+  //         email: "",
+  //         password: "",
+  //         confirmPassword: "",
+  //         agreeToTerms: false,
+  //       });
+  //     }, 2000);
+  //   }
+  // };
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Signup submitted:", formData);
+
+    if (!validateForm()) return;
+
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Show backend error
+        setErrors({ email: data.message });
+        return;
+      }
+
       setSubmitted(true);
+
+      // Redirect to login after success
       setTimeout(() => {
-        setSubmitted(false);
-        setFormData({
-          fullName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          agreeToTerms: false,
-        });
-      }, 2000);
+        window.location.href = "/login";
+      }, 1500);
+    } catch (error) {
+      console.error("Signup error:", error);
     }
   };
 
@@ -86,7 +120,6 @@ export default function SignupPage() {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Header */}
           <div className="text-center mb-8">
-          
             <h1 className="text-3xl font-bold mb-2">Create Account</h1>
             <p className="text-muted-foreground">
               Join Listify and start listing today

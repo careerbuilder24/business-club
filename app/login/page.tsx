@@ -1,63 +1,98 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Eye, EyeOff } from "lucide-react"
+import { useState } from "react";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false,
-  })
-  const [submitted, setSubmitted] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+    const newErrors: Record<string, string> = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email"
+      newErrors.email = "Please enter a valid email";
     }
     if (!formData.password) {
-      newErrors.password = "Password is required"
+      newErrors.password = "Password is required";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }))
+    }));
     if (errors[name]) {
       setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
-  }
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (validateForm()) {
-      console.log("Login submitted:", formData)
-      setSubmitted(true)
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   if (validateForm()) {
+  //     console.log("Login submitted:", formData)
+  //     setSubmitted(true)
+  //     setTimeout(() => {
+  //       setSubmitted(false)
+  //       setFormData({ email: "", password: "", rememberMe: false })
+  //     }, 2000)
+  //   }
+  // }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrors({ password: data.message });
+        return;
+      }
+
+      // Save token in localStorage
+      localStorage.setItem("token", data.token);
+
+      setSubmitted(true);
+
+      // Redirect after success
       setTimeout(() => {
-        setSubmitted(false)
-        setFormData({ email: "", password: "", rememberMe: false })
-      }, 2000)
+        window.location.href = "/dashboard"; // redirect to dashboard
+      }, 1200);
+    } catch (error) {
+      console.error("Login error:", error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary to-primary-light flex items-center justify-center py-12 px-4">
@@ -66,9 +101,10 @@ export default function LoginPage() {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Header */}
           <div className="text-center mb-8">
-           
             <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-            <p className="text-muted-foreground">Sign in to your Listify account</p>
+            <p className="text-muted-foreground">
+              Sign in to your Listify account
+            </p>
           </div>
 
           {/* Success Message */}
@@ -82,7 +118,9 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold mb-2 text-foreground">Email Address</label>
+              <label className="block text-sm font-semibold mb-2 text-foreground">
+                Email Address
+              </label>
               <input
                 type="email"
                 name="email"
@@ -93,12 +131,16 @@ export default function LoginPage() {
                   errors.email ? "border-red-500" : "border-border"
                 }`}
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold mb-2 text-foreground">Password</label>
+              <label className="block text-sm font-semibold mb-2 text-foreground">
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -118,7 +160,9 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
             </div>
 
             {/* Remember Me & Forgot Password */}
@@ -131,9 +175,14 @@ export default function LoginPage() {
                   onChange={handleChange}
                   className="w-4 h-4 rounded border-border"
                 />
-                <span className="text-sm text-muted-foreground">Remember me</span>
+                <span className="text-sm text-muted-foreground">
+                  Remember me
+                </span>
               </label>
-              <Link href="#" className="text-sm text-primary hover:underline font-semibold">
+              <Link
+                href="#"
+                className="text-sm text-primary hover:underline font-semibold"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -153,7 +202,9 @@ export default function LoginPage() {
               <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-muted-foreground">Or continue with</span>
+              <span className="px-2 bg-white text-muted-foreground">
+                Or continue with
+              </span>
             </div>
           </div>
 
@@ -172,7 +223,10 @@ export default function LoginPage() {
           {/* Sign Up Link */}
           <p className="text-center text-muted-foreground mt-6">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-primary font-semibold hover:underline">
+            <Link
+              href="/signup"
+              className="text-primary font-semibold hover:underline"
+            >
               Sign up
             </Link>
           </p>
@@ -191,5 +245,5 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
-  )
+  );
 }
