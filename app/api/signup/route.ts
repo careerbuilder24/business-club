@@ -80,7 +80,7 @@ export async function POST(req: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // --- First try Supabase if URL & KEY exist ---
-    if (process.env.SUPABASE_URL && process.env.SUPABASE_KEY) {
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
       const { data: existing, error: fetchError } = await supabase
         .from("users")
         .select("*")
