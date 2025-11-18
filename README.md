@@ -6,7 +6,7 @@ Business Club is a modern online platform designed to showcase and connect busin
 
 ---
 
-## 🚀 Features
+##  Features
 
 - **Business Listings**  
   Display and search businesses across various categories for easy discovery.
