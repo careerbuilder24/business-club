@@ -121,6 +121,7 @@ export const categories = [
   },
 ];
 // Pagination Component
+// Pagination Component
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
