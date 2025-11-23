@@ -121,7 +121,7 @@ export async function getUserByEmail(email: string | undefined): Promise<User | 
     // The query results array is destructured into [rows, fields].
     // We use User[] to correctly type the rows as an array of our User interface.
     const [rows] = await promisePool.query<User[]>(
-      "SELECT * FROM user_managements WHERE LOWER(email) = ?",
+      "SELECT * FROM users WHERE LOWER(email) = ?",
       [trimmedEmail]
     );
 
@@ -145,7 +145,7 @@ export async function createUserManagement(userData: NewUser): Promise<ResultSet
         // Note: The SQL table name 'user_managements' is used, as suggested.
         // We ensure 'created_at' is handled by the database or by a JS Date object.
         const [result] = await promisePool.execute<ResultSetHeader>(
-            `INSERT INTO user_managements (name, email, password, role, created_at)
+            `INSERT INTO users (name, email, password, role, created_at)
              VALUES (?, ?, ?, ?, NOW())`,
             [name, email, password, role]
         );

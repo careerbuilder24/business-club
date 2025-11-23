@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rememberMe: false,
+    rememberMe: true,
   });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -47,17 +47,6 @@ export default function LoginPage() {
     }
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault()
-  //   if (validateForm()) {
-  //     console.log("Login submitted:", formData)
-  //     setSubmitted(true)
-  //     setTimeout(() => {
-  //       setSubmitted(false)
-  //       setFormData({ email: "", password: "", rememberMe: false })
-  //     }, 2000)
-  //   }
-  // }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -80,14 +69,19 @@ export default function LoginPage() {
         return;
       }
 
-      // Save token in localStorage
-      localStorage.setItem("token", data.token);
-
       setSubmitted(true);
 
-      // Redirect after success
+      // Save token and role
+      // localStorage.setItem("token", data.token);
+      // localStorage.setItem("userRole", data.user.role); //  Save role
+      localStorage.setItem("token", data.clientToken);
+      localStorage.setItem("userRole", data.user.role);
+      localStorage.setItem("userEmail", data.user.email);
+
+      // Redirect
       setTimeout(() => {
-        window.location.href = "/dashboard"; // redirect to dashboard
+        window.location.href =
+          data.user.role === "admin" ? "/dashboard" : "/dashboard";
       }, 1200);
     } catch (error) {
       console.error("Login error:", error);
