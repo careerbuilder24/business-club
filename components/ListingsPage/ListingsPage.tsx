@@ -24,6 +24,112 @@ import {
 import { useWatchList } from "../../app/context/WatchListContext";
 import Sidebar from "../Sidebar/Sidebar";
 const CARDS_PER_PAGE = 10;
+
+const businessTypes = [
+  "Manufacturer",
+  "Supplier",
+  "Buying House",
+  "Dealer",
+  "Trader",
+  "Importer",
+  "Exporter",
+];
+
+const industries = [
+  { name: "Agriculture Farm", count: 34 },
+  { name: "Aquarium Fish Farm", count: 4 },
+  { name: "Automotive Industry", count: 123 },
+  { name: "Banks", count: 0 },
+  { name: "Beauty Parlor & Spa", count: 0 },
+  { name: "Blogs & Magazines", count: 0 },
+  { name: "Brassware Industry", count: 0 },
+  { name: "Buying House", count: 12 },
+  { name: "Cement Factory", count: 0 },
+  { name: "Ceramics Factory", count: 1 },
+  { name: "Chemical Factory", count: 2 },
+  { name: "Cleaning Agency", count: 8 },
+  { name: "Coaching Center", count: 2 },
+  { name: "Construction Firm", count: 6 },
+  { name: "Construction Materials", count: 3 },
+  { name: "Consulting Firms", count: 1 },
+  { name: "Cottage Industry", count: 1 },
+  { name: "Courier Service", count: 1 },
+  { name: "Day Care Center", count: 0 },
+  { name: "Diagnostic Centers", count: 3 },
+  { name: "Ecommerce", count: 48 },
+  { name: "Education Institute", count: 8 },
+  { name: "Electronics Industry", count: 16 },
+  { name: "Engineering Workshop", count: 4 },
+  { name: "Event Management Firm", count: 0 },
+  { name: "Fashion House", count: 39 },
+  { name: "Fast Food & Restaurant", count: 2 },
+  { name: "Fertiliser Factory", count: 0 },
+  { name: "Financial Company", count: 1 },
+  { name: "Fisheries", count: 0 },
+  { name: "Food Factory", count: 27 },
+  { name: "Furniture Company", count: 6 },
+  { name: "Garments Factory", count: 16 },
+  { name: "Glass Factory", count: 1 },
+  { name: "Grocery Shop", count: 10 },
+  { name: "Gym", count: 0 },
+  { name: "Handicraft Company", count: 2 },
+  { name: "Handloon Industry", count: 0 },
+  { name: "Hatchery", count: 10 },
+  { name: "Health Care Company", count: 10 },
+  { name: "Home Appliance Company", count: 5 },
+  { name: "Home Builders", count: 1 },
+  { name: "Homeo Clinic", count: 3 },
+  { name: "Hotel", count: 1 },
+  { name: "Interior Design Firm", count: 0 },
+  { name: "Interior Firm", count: 5 },
+  { name: "Internet Service Provider", count: 1 },
+  { name: "IT Firm", count: 13 },
+  { name: "Jewellery Factory", count: 0 },
+  { name: "Jewelry Company", count: 2 },
+  { name: "Jute Factory", count: 1 },
+  { name: "Law Firms", count: 2 },
+  { name: "Leather Factory", count: 6 },
+  { name: "Life Insurance", count: 0 },
+  { name: "Machine Industry", count: 4 },
+  { name: "Madrasha", count: 1 },
+  { name: "Maid Agency", count: 1 },
+  { name: "Marine Industry", count: 0 },
+  { name: "Marketing Agency", count: 4 },
+  { name: "Marriage Media", count: 5 },
+  { name: "Medical Equipment Suppliers", count: 4 },
+  { name: "Mosquito Coil Factory", count: 0 },
+  { name: "Motor Vehicle Service", count: 1 },
+  { name: "Music Industry", count: 0 },
+  { name: "Newspaper", count: 4 },
+  { name: "Pearl Farm", count: 0 },
+  { name: "Pet Shop", count: 0 },
+  { name: "Petroleum Industry", count: 0 },
+  { name: "Pharmaceutical Industry", count: 0 },
+  { name: "Photo Studio", count: 0 },
+  { name: "Physical Therapy Center", count: 1 },
+  { name: "Poultry Farm", count: 1 },
+  { name: "Printing Press", count: 2 },
+  { name: "Publications", count: 2 },
+  { name: "Pulp & Paper Company", count: 1 },
+  { name: "Real Estate Company", count: 3 },
+  { name: "Resorts", count: 0 },
+  { name: "Restaurant", count: 0 },
+  { name: "Salon & Spa", count: 0 },
+  { name: "Sanitary Agency", count: 1 },
+  { name: "School & College", count: 2 },
+  { name: "Security Company", count: 2 },
+  { name: "Service Company", count: 13 },
+  { name: "Shoe Factory", count: 2 },
+  { name: "Steel Factory", count: 1 },
+  { name: "Tea Industry", count: 3 },
+  { name: "Telecommunications", count: 4 },
+  { name: "Textile Industry", count: 4 },
+  { name: "Transport Company", count: 1 },
+  { name: "Travel Agency", count: 4 },
+  { name: "University", count: 0 },
+  { name: "Veterinary Farm", count: 2 },
+];
+
 export const categories = [
   {
     name: "Dhaka",
@@ -127,6 +233,7 @@ interface PaginationProps {
   totalPages: number;
   onPageChange: (page: number) => void;
 }
+
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
@@ -356,6 +463,7 @@ export default function ListingsPage({ listings }: ListingsPageProps) {
   const [selectedBusinessType, setSelectedBusinessType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("rating");
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -404,7 +512,7 @@ export default function ListingsPage({ listings }: ListingsPageProps) {
   return (
     <>
       <Sidebar />
-      <div className="min-h-screen md:ml-72 bg-white">
+      <div className="min-h-screen lg:ml-72 bg-white">
         <div className="w-full">
           {/* Main Flex Layout */}
           <div className="flex flex-col lg:flex-row lg:gap-4">
@@ -433,7 +541,7 @@ export default function ListingsPage({ listings }: ListingsPageProps) {
               </div>
               <div className="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md gap-4">
                 {/* Division Dropdown */}
-                <div className="w-full md:w-1/4">
+                {/* <div className="w-full md:w-1/4">
                   <select
                     value={selectedDistrict}
                     onChange={(e) => setSelectedDistrict(e.target.value)}
@@ -446,9 +554,56 @@ export default function ListingsPage({ listings }: ListingsPageProps) {
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* District Dropdown (auto changes based on division) */}
+                {/* <div className="w-full md:w-1/4">
+                  <select
+                    value={selectedBusinessType}
+                    onChange={(e) => setSelectedBusinessType(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="">All District</option>
+                    {categories
+                      .find((d) => d.name === selectedDistrict)
+                      ?.districts.map((district) => (
+                        <option key={district} value={district}>
+                          {district}
+                        </option>
+                      ))}
+                  </select>
+                </div> */}
+
+                {/* Sorting Dropdown */}
+                {/* <div className="w-full md:w-1/4">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="rating">Highest Rating</option>
+                    <option value="reviews">Most Reviews</option>
+                    <option value="name">Name (A–Z)</option>
+                  </select>
+                </div> */}
+
+                {/* Division Dropdown */}
+                <div className="w-full md:w-1/4">
+                  <select
+                    value={selectedDistrict}
+                    onChange={(e) => setSelectedDistrict(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="">All Division</option>
+                    {categories.map((division) => (
+                      <option key={division.name} value={division.name}>
+                        {division.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* District Dropdown */}
                 <div className="w-full md:w-1/4">
                   <select
                     value={selectedBusinessType}
@@ -466,16 +621,47 @@ export default function ListingsPage({ listings }: ListingsPageProps) {
                   </select>
                 </div>
 
-                {/* Sorting Dropdown */}
+                {/* Business Type Dropdown */}
                 <div className="w-full md:w-1/4">
                   <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
+                    value={selectedBusinessType}
+                    onChange={(e) => {
+                      setSelectedBusinessType(e.target.value);
+                      setSelectedIndustry(""); // Reset industry on change
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                   >
-                    <option value="rating">Highest Rating</option>
-                    <option value="reviews">Most Reviews</option>
-                    <option value="name">Name (A–Z)</option>
+                    <option value="">Business Type</option>
+                    {businessTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Industry Dropdown (Auto Filters by Business Type) */}
+                <div className="w-full md:w-1/4">
+                  <select
+                    value={selectedIndustry}
+                    onChange={(e) => setSelectedIndustry(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                  >
+                    <option value="">Industry</option>
+
+                    {industries
+                      .filter((ind) =>
+                        selectedBusinessType
+                          ? ind.name
+                              .toLowerCase()
+                              .includes(selectedBusinessType.toLowerCase())
+                          : true
+                      )
+                      .map((ind) => (
+                        <option key={ind.name} value={ind.name}>
+                          {ind.name} ({ind.count})
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
