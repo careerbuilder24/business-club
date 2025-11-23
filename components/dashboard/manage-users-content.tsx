@@ -1,99 +1,78 @@
-// "use client"
+// "use client";
 
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Button } from "@/components/ui/button"
-// import { Search, Trash2, Shield } from "lucide-react"
-// import { useState } from "react"
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import { Button } from "@/components/ui/button";
+// import { Search, Trash2, Shield } from "lucide-react";
+// import { useState } from "react";
+// import useUsers from "@/hooks/useUsers";
 
 // export default function ManageUsersContent() {
-//   const [searchTerm, setSearchTerm] = useState("")
-//   const [filterRole, setFilterRole] = useState("all")
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [filterRole, setFilterRole] = useState("all");
 
-//   const users = [
-//     {
-//       id: 1,
-//       name: "John Doe",
-//       email: "john@example.com",
-//       role: "User",
-//       status: "Active",
-//       listings: 5,
-//       joinDate: "2024-01-15",
-//     },
-//     {
-//       id: 2,
-//       name: "Jane Smith",
-//       email: "jane@example.com",
-//       role: "Admin",
-//       status: "Active",
-//       listings: 0,
-//       joinDate: "2023-06-20",
-//     },
-//     {
-//       id: 3,
-//       name: "Mike Johnson",
-//       email: "mike@example.com",
-//       role: "User",
-//       status: "Active",
-//       listings: 3,
-//       joinDate: "2024-03-10",
-//     },
-//     {
-//       id: 4,
-//       name: "Sarah Wilson",
-//       email: "sarah@example.com",
-//       role: "User",
-//       status: "Inactive",
-//       listings: 2,
-//       joinDate: "2024-02-05",
-//     },
-//   ]
+//   const { users } = useUsers();
 
-//   const filteredUsers = users.filter(
-//     (user) =>
-//       (filterRole === "all" || user.role === filterRole) &&
-//       (user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//         user.email.toLowerCase().includes(searchTerm.toLowerCase())),
-//   )
-
+//   console.log(users);
 //   return (
 //     <>
 //       <div className="mb-8">
-//         <h1 className="text-3xl font-bold text-foreground mb-2">Manage Users</h1>
-//         <p className="text-muted-foreground">View and manage all registered users</p>
+//         <h1 className="text-3xl font-bold text-foreground mb-2">
+//           Manage Users
+//         </h1>
+//         <p className="text-muted-foreground">
+//           View and manage all registered users
+//         </p>
 //       </div>
 
+//       {/* Stats */}
 //       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 //         <Card>
 //           <CardContent className="pt-6">
 //             <p className="text-sm text-muted-foreground mb-1">Total Users</p>
-//             <p className="text-3xl font-bold text-foreground">4</p>
+//             <p className="text-3xl font-bold text-foreground">{users.length}</p>
 //           </CardContent>
 //         </Card>
 //         <Card>
-//           <CardContent className="pt-6">
+//           {/* <CardContent className="pt-6">
 //             <p className="text-sm text-muted-foreground mb-1">Active Users</p>
-//             <p className="text-3xl font-bold text-foreground">3</p>
-//           </CardContent>
+//             <p className="text-3xl font-bold text-foreground">
+//               {users.filter((u) => u.status === "Active").length}
+//             </p>
+//           </CardContent> */}
 //         </Card>
 //         <Card>
-//           <CardContent className="pt-6">
+//           {/* <CardContent className="pt-6">
 //             <p className="text-sm text-muted-foreground mb-1">Admins</p>
-//             <p className="text-3xl font-bold text-foreground">1</p>
-//           </CardContent>
+//             <p className="text-3xl font-bold text-foreground">
+//               {users.filter((u) => u.role === "Admin").length}
+//             </p>
+//           </CardContent> */}
 //         </Card>
 //         <Card>
-//           <CardContent className="pt-6">
+//           {/* <CardContent className="pt-6">
 //             <p className="text-sm text-muted-foreground mb-1">Total Listings</p>
-//             <p className="text-3xl font-bold text-foreground">10</p>
-//           </CardContent>
+//             <p className="text-3xl font-bold text-foreground">
+//               {users.reduce((sum, u) => sum + u.listings, 0)}
+//             </p>
+//           </CardContent> */}
 //         </Card>
 //       </div>
 
+//       {/* Search + Filter */}
 //       <Card className="mb-6">
 //         <CardContent className="pt-6">
 //           <div className="flex flex-col md:flex-row gap-4">
 //             <div className="flex-1 relative">
-//               <Search className="absolute left-3 top-3 text-muted-foreground" size={18} />
+//               <Search
+//                 className="absolute left-3 top-3 text-muted-foreground"
+//                 size={18}
+//               />
 //               <input
 //                 type="text"
 //                 placeholder="Search users..."
@@ -115,143 +94,168 @@
 //         </CardContent>
 //       </Card>
 
+//       {/* Users Table */}
 //       <Card>
 //         <CardHeader>
-//           <CardTitle>Users ({filteredUsers.length})</CardTitle>
-//           <CardDescription>All registered users on the platform</CardDescription>
+//           {/* <CardTitle>Users ({filteredUsers.length})</CardTitle> */}
+//           <CardDescription>
+//             All registered users on the platform
+//           </CardDescription>
 //         </CardHeader>
 //         <CardContent>
 //           <div className="overflow-x-auto">
 //             <table className="w-full">
 //               <thead>
 //                 <tr className="border-b border-border">
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Name</th>
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Email</th>
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Role</th>
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Status</th>
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Listings</th>
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Join Date</th>
-//                   <th className="text-left py-3 px-4 font-semibold text-foreground">Actions</th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Name
+//                   </th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Email
+//                   </th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Role
+//                   </th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Status
+//                   </th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Listings
+//                   </th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Join Date
+//                   </th>
+//                   <th className="text-left py-3 px-4 font-semibold text-foreground">
+//                     Actions
+//                   </th>
 //                 </tr>
 //               </thead>
 //               <tbody>
-//                 {filteredUsers.map((user) => (
-//                   <tr key={user.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-//                     <td className="py-3 px-4 text-foreground font-medium">{user.name}</td>
-//                     <td className="py-3 px-4 text-muted-foreground">{user.email}</td>
-//                     <td className="py-3 px-4">
-//                       <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
-//                         {user.role}
-//                       </span>
-//                     </td>
-//                     <td className="py-3 px-4">
-//                       <span
-//                         className={`px-3 py-1 rounded-full text-sm font-medium ${
-//                           user.status === "Active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
-//                         }`}
-//                       >
-//                         {user.status}
-//                       </span>
-//                     </td>
-//                     <td className="py-3 px-4 text-muted-foreground">{user.listings}</td>
-//                     {/* <td className="py-3 px-4 text-muted-foreground">{user.join_date}</td> */}
-//                     <td className="py-3 px-4">
-//                       <div className="flex gap-2">
-//                         <Button size="sm" variant="outline" title="Make Admin">
-//                           <Shield size={16} />
-//                         </Button>
-//                         <Button
-//                           size="sm"
-//                           variant="outline"
-//                           className="text-red-600 hover:text-red-700 bg-transparent"
-//                           title="Delete"
-//                         >
-//                           <Trash2 size={16} />
-//                         </Button>
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 ))}
+//                 {users &&
+//                   users.map((user) => (
+//                     <tr
+//                       key={user.id}
+//                       className="border-b border-border hover:bg-muted/50 transition-colors"
+//                     >
+//                       <td className="py-3 px-4 text-foreground font-medium">
+//                         {user.full_name}
+//                       </td>
+//                       <td className="py-3 px-4 text-muted-foreground">
+//                         {user.email}
+//                       </td>
+//                       <td className="py-3 px-4">
+//                         <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
+//                           {user.role}
+//                         </span>
+//                       </td>
+//                       <td className="py-3 px-4">
+//                         <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+//                           Active
+//                         </span>
+//                       </td>
+//                       <td className="py-3 px-4 text-muted-foreground">0</td>
+//                       <td className="py-3 px-4 text-muted-foreground">
+//                         {new Date(user.created_at).toLocaleDateString()}
+//                       </td>
+//                       <td className="py-3 px-4">
+//                         <div className="flex gap-2">
+//                           <Button
+//                             size="sm"
+//                             variant="outline"
+//                             title="Make Admin"
+//                             disabled={user.role === "admin"}
+//                           >
+//                             <Shield
+//                               size={16}
+//                               className={
+//                                 user.role === "admin" ? "opacity-50" : ""
+//                               }
+//                             />
+//                           </Button>
+
+//                           <Button
+//                             size="sm"
+//                             variant="outline"
+//                             className="text-red-600 hover:text-red-700 bg-transparent"
+//                             title="Delete"
+//                           >
+//                             <Trash2 size={16} />
+//                           </Button>
+//                         </div>
+//                       </td>
+//                     </tr>
+//                   ))}
 //               </tbody>
 //             </table>
 //           </div>
 //         </CardContent>
 //       </Card>
 //     </>
-//   )
+//   );
 // }
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Trash2, Shield } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import useUsers from "@/hooks/useUsers";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+
+type User = {
+  id: number;
+  full_name: string;
+  email: string;
+  role: "user" | "admin";
+  created_at: string;
+};
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export default function ManageUsersContent() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterRole, setFilterRole] = useState("all");
+  const [filterRole, setFilterRole] = useState<"all" | "user" | "admin">("all");
 
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      role: "User",
-      status: "Active",
-      listings: 5,
-      joinDate: "2024-01-15",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "Admin",
-      status: "Active",
-      listings: 0,
-      joinDate: "2023-06-20",
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      email: "mike@example.com",
-      role: "User",
-      status: "Active",
-      listings: 3,
-      joinDate: "2024-03-10",
-    },
-    {
-      id: 4,
-      name: "Sarah Wilson",
-      email: "sarah@example.com",
-      role: "User",
-      status: "Inactive",
-      listings: 2,
-      joinDate: "2024-02-05",
-    },
-  ]);
+  const { users } = useUsers();
 
-  const handleMakeAdmin = (id: number) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, role: "Admin" } : user
-      )
-    );
-    alert("User promoted to Admin!");
-  };
+  // Filter + search users
+  const filteredUsers = useMemo(() => {
+    return users.filter((user: User) => {
+      const matchesRole = filterRole === "all" || user.role === filterRole;
+      const matchesSearch =
+        user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesRole && matchesSearch;
+    });
+  }, [users, searchTerm, filterRole]);
 
-  const handleDeleteUser = (id: number) => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      setUsers((prev) => prev.filter((user) => user.id !== id));
-      alert("User deleted successfully!");
-    }
-  };
+  // Admin/User stats for Pie Chart
+  const roleData = useMemo(() => {
+    const adminCount = users.filter((u: User) => u.role === "admin").length;
+    const userCount = users.filter((u: User) => u.role === "user").length;
+    return [
+      { name: "Admin", value: adminCount },
+      { name: "User", value: userCount },
+    ];
+  }, [users]);
 
-  const filteredUsers = users.filter(
-    (user) =>
-      (filterRole === "all" || user.role === filterRole) &&
-      (user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  // Monthly registration stats
+  const monthlyData = useMemo(() => {
+    const months = Array.from({ length: 12 }, (_, i) => ({
+      name: new Date(0, i).toLocaleString("default", { month: "short" }),
+      value: 0,
+    }));
+    users.forEach((user: User) => {
+      const month = new Date(user.created_at).getMonth();
+      months[month].value += 1;
+    });
+    return months;
+  }, [users]);
 
   return (
     <>
@@ -260,36 +264,73 @@ export default function ManageUsersContent() {
         <p className="text-muted-foreground">View and manage all registered users</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      {/* Stats + Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Total Users Card */}
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Total Users</p>
             <p className="text-3xl font-bold text-foreground">{users.length}</p>
           </CardContent>
         </Card>
+
+        {/* Admin/User Pie Chart */}
         <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground mb-1">Active Users</p>
-            <p className="text-3xl font-bold text-foreground">
-              {users.filter((u) => u.status === "Active").length}
-            </p>
+          <CardHeader>
+            <CardDescription>Admins vs Users</CardDescription>
+          </CardHeader>
+          <CardContent style={{ width: "100%", height: 200 }}>
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={roleData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={60}
+                  label
+                >
+                  {roleData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
+
+        {/* Monthly Registration Pie Chart */}
         <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground mb-1">Admins</p>
-            <p className="text-3xl font-bold text-foreground">
-              {users.filter((u) => u.role === "Admin").length}
-            </p>
+          <CardHeader>
+            <CardDescription>Registrations by Month</CardDescription>
+          </CardHeader>
+          <CardContent style={{ width: "100%", height: 200 }}>
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={monthlyData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={60}
+                  label
+                >
+                  {monthlyData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
+
+        {/* Placeholder Card for future stats */}
         <Card>
           <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground mb-1">Total Listings</p>
-            <p className="text-3xl font-bold text-foreground">
-              {users.reduce((sum, u) => sum + u.listings, 0)}
-            </p>
+            <p className="text-sm text-muted-foreground mb-1">Other Stats</p>
+            <p className="text-3xl font-bold text-foreground">N/A</p>
           </CardContent>
         </Card>
       </div>
@@ -310,12 +351,14 @@ export default function ManageUsersContent() {
             </div>
             <select
               value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
+              onChange={(e) =>
+                setFilterRole(e.target.value as "all" | "user" | "admin")
+              }
               className="px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="all">All Roles</option>
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
         </CardContent>
@@ -324,7 +367,6 @@ export default function ManageUsersContent() {
       {/* Users Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Users ({filteredUsers.length})</CardTitle>
           <CardDescription>All registered users on the platform</CardDescription>
         </CardHeader>
         <CardContent>
@@ -342,9 +384,12 @@ export default function ManageUsersContent() {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                    <td className="py-3 px-4 text-foreground font-medium">{user.name}</td>
+                {filteredUsers.map((user: User) => (
+                  <tr
+                    key={user.id}
+                    className="border-b border-border hover:bg-muted/50 transition-colors"
+                  >
+                    <td className="py-3 px-4 text-foreground font-medium">{user.full_name}</td>
                     <td className="py-3 px-4 text-muted-foreground">{user.email}</td>
                     <td className="py-3 px-4">
                       <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
@@ -352,36 +397,21 @@ export default function ManageUsersContent() {
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          user.status === "Active"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
-                      >
-                        {user.status}
+                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                        Active
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-muted-foreground">{user.listings}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{user.joinDate}</td>
+                    <td className="py-3 px-4 text-muted-foreground">0</td>
+                    <td className="py-3 px-4 text-muted-foreground">
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </td>
                     <td className="py-3 px-4">
                       <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          title="Make Admin"
-                          onClick={() => handleMakeAdmin(user.id)}
-                          disabled={user.role === "Admin"}
-                        >
-                          <Shield size={16} className={user.role === "Admin" ? "opacity-50" : ""} />
+                        <Button size="sm" variant="outline" title="Make Admin" disabled={user.role === "admin"}>
+                          <Shield size={16} className={user.role === "admin" ? "opacity-50" : ""} />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-red-600 hover:text-red-700 bg-transparent"
-                          title="Delete"
-                          onClick={() => handleDeleteUser(user.id)}
-                        >
+
+                        <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700 bg-transparent" title="Delete">
                           <Trash2 size={16} />
                         </Button>
                       </div>

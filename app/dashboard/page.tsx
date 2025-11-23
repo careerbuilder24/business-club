@@ -422,6 +422,7 @@ export default function DashboardPage() {
                       </>
                     )}
 
+                    {/* Admin Part in dashboard */}
                     {userType === "admin" && (
                       <>
                         {/* Admin Settings */}
