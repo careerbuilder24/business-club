@@ -28,6 +28,7 @@ export default function Navbar() {
       console.log("Logged user:", loggedUser);
     }
   }, [loggedUser]);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   const getUserName = (email?: string) => {
@@ -55,7 +56,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "All Listings", href: "/listings" },
   ];
-  console.log(loggedUser);
+  // console.log(loggedUser);
   return (
     <header className="w-full sticky top-0 z-50 bg-white shadow-md transition-all duration-300 overflow-x-hidden">
       <div className="bg-white">

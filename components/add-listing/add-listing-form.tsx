@@ -2,11 +2,119 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Upload, X } from "lucide-react";
 import RichTextEditor from "./rich-text-editor";
+import useLoggedUser from "@/hooks/useLoggedUser";
+import Swal from "sweetalert2";
+
+const businessTypes = [
+  "Manufacturer",
+  "Supplier",
+  "Buying House",
+  "Dealer",
+  "Trader",
+  "Importer",
+  "Exporter",
+];
+
+const industries = [
+  "Agriculture Farm",
+  "Aquarium Fish Farm",
+  "Automotive Industry",
+  "Banks",
+  "Beauty Parlor & Spa",
+  "Blogs & Magazines",
+  "Brassware Industry",
+  "Buying House",
+  "Cement Factory",
+  "Ceramics Factory",
+  "Chemical Factory",
+  "Cleaning Agency",
+  "Coaching Center",
+  "Construction Firm",
+  "Construction Materials",
+  "Consulting Firms",
+  "Cottage Industry",
+  "Courier Service",
+  "Day Care Center",
+  "Diagnostic Centers",
+  "Ecommerce",
+  "Education Institute",
+  "Electronics Industry",
+  "Engineering Workshop",
+  "Event Management Firm",
+  "Fashion House",
+  "Fast Food & Restaurant",
+  "Fertiliser Factory",
+  "Financial Company",
+  "Fisheries",
+  "Food Factory",
+  "Furniture Company",
+  "Garments Factory",
+  "Glass Factory",
+  "Grocery Shop",
+  "Gym",
+  "Handicraft Company",
+  "Handloon Industry",
+  "Hatchery",
+  "Health Care Company",
+  "Home Appliance Company",
+  "Home Builders",
+  "Homeo Clinic",
+  "Hotel",
+  "Interior Design Firm",
+  "Interior Firm",
+  "Internet Service Provider",
+  "IT Firm",
+  "Jewellery Factory",
+  "Jewelry Company",
+  "Jute Factory",
+  "Law Firms",
+  "Leather Factory",
+  "Life Insurance",
+  "Machine Industry",
+  "Madrasha",
+  "Maid Agency",
+  "Marine Industry",
+  "Marketing Agency",
+  "Marriage Media",
+  "Medical Equipment Suppliers",
+  "Mosquito Coil Factory",
+  "Motor Vehicle Service",
+  "Music Industry",
+  "Newspaper",
+  "Pearl Farm",
+  "Pet Shop",
+  "Petroleum Industry",
+  "Pharmaceutical Industry",
+  "Photo Studio",
+  "Physical Therapy Center",
+  "Poultry Farm",
+  "Printing Press",
+  "Publications",
+  "Pulp & Paper Company",
+  "Real Estate Company",
+  "Resorts",
+  "Restaurant",
+  "Salon & Spa",
+  "Sanitary Agency",
+  "School & College",
+  "Security Company",
+  "Service Company",
+  "Shoe Factory",
+  "Steel Factory",
+  "Tea Industry",
+  "Telecommunications",
+  "Textile Industry",
+  "Transport Company",
+  "Travel Agency",
+  "University",
+  "Veterinary Farm",
+];
 
 export default function AddListingForm() {
+  const { loggedUser, loading, error } = useLoggedUser();
   const [formData, setFormData] = useState({
     listingName: "",
     companyName: "",
@@ -19,6 +127,23 @@ export default function AddListingForm() {
     description: "",
     labels: [] as string[],
   });
+
+  // logged user
+  // useEffect(() => {
+  //   if (loggedUser) {
+  //     console.log("Logged user:", loggedUser);
+  //   }
+  // }, [loggedUser]);
+
+  useEffect(() => {
+  if (loggedUser?.email) {
+    setFormData((prev) => ({
+      ...prev,
+      email: loggedUser.email,
+    }));
+  }
+}, [loggedUser]);
+
 
   const [images, setImages] = useState({
     logo: null as File | null,
@@ -85,18 +210,130 @@ export default function AddListingForm() {
       labels: prev.labels.filter((l) => l !== label),
     }));
   };
+  // async function uploadToImgBB(file: File) {
+  //   const formData = new FormData();
+  //   formData.append("image", file);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", { formData, images });
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+  //   const res = await fetch(
+  //     `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+  //     {
+  //       method: "POST",
+  //       body: formData,
+  //     }
+  //   );
+
+  //   const data = await res.json();
+  //   return data?.data?.url;
+  // }
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   // Function to upload a file to ImgBB
+  //   const uploadToImgBB = async (file: File) => {
+  //     const formData = new FormData();
+  //     formData.append("image", file);
+  //     const res = await fetch(
+  //       `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+  //       { method: "POST", body: formData }
+  //     );
+  //     const data = await res.json();
+  //     return data?.data?.url || null;
+  //   };
+
+  //   // Upload images
+  //   const logo_url = images.logo ? await uploadToImgBB(images.logo) : null;
+  //   const cover_url = images.cover ? await uploadToImgBB(images.cover) : null;
+  //   const gallery_urls: string[] = [];
+  //   for (const img of images.gallery) {
+  //     const url = await uploadToImgBB(img);
+  //     if (url) gallery_urls.push(url);
+  //   }
+
+  //   // Send only URLs + formData
+  //   const res = await fetch("/api/listings", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ formData, logo_url, cover_url, gallery_urls }),
+  //   });
+
+  //   const data = await res.json();
+  //   if (data.success) {
+  //     setSubmitted(true);
+  //     console.log("Listing added successfully");
+  //   } else {
+  //     console.error(data.error); // will now work
+  //   }
+  // };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  // Confirm alert
+  const result = await Swal.fire({
+    title: "Submit Listing?",
+    text: "Are you sure you want to submit this listing?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Submit",
+    cancelButtonText: "Cancel",
+  });
+
+  if (!result.isConfirmed) {
+    return; // stop submission
+  }
+
+  // Function to upload a file to ImgBB
+  const uploadToImgBB = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    const res = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+      { method: "POST", body: formData }
+    );
+    const data = await res.json();
+    return data?.data?.url || null;
   };
 
+  // Upload images
+  const logo_url = images.logo ? await uploadToImgBB(images.logo) : null;
+  const cover_url = images.cover ? await uploadToImgBB(images.cover) : null;
+
+  const gallery_urls: string[] = [];
+  for (const img of images.gallery) {
+    const url = await uploadToImgBB(img);
+    if (url) gallery_urls.push(url);
+  }
+
+  // Submit form to backend
+  const res = await fetch("/api/listings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ formData, logo_url, cover_url, gallery_urls }),
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    setSubmitted(true);
+
+    Swal.fire({
+      title: "Success!",
+      text: "Listing submitted successfully!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  } else {
+    Swal.fire({
+      title: "Error!",
+      text: data.error || "Something went wrong.",
+      icon: "error",
+    });
+  }
+};
+
+  console.log(loggedUser);
   return (
     <>
-
-
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8 space-y-8 w-full max-w-[1200px] mx-auto"
@@ -147,20 +384,47 @@ export default function AddListingForm() {
               />
             </div>
 
-            {/* Category */}
-            <div>
-              <label className="block text-sm font-semibold mb-2 text-foreground">
-                Category *
-              </label>
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              >
-                <option value="">Select a category</option>
-              </select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              {/* Business Type */}
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-foreground">
+                  Business Type *
+                </label>
+                <select
+                  name="type"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                  required
+                >
+                  <option value="">Select a type</option>
+                  {businessTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-foreground">
+                  Category *
+                </label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {industries.map((industry) => (
+                    <option key={industry} value={industry}>
+                      {industry}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Email */}
@@ -172,9 +436,9 @@ export default function AddListingForm() {
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleInputChange}
-                placeholder="contact@company.com"
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                readOnly
+                disabled
+                className="w-full px-4 py-2 border border-border rounded-lg bg-gray-100 cursor-not-allowed text-gray-500"
                 required
               />
             </div>
