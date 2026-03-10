@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -11,7 +10,16 @@ import { Button } from "@/components/ui/button";
 import { Search, Trash2, Shield } from "lucide-react";
 import { useState, useMemo } from "react";
 import useUsers from "@/hooks/useUsers";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import Swal from "sweetalert2";
+
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 type User = {
   id: number;
@@ -63,11 +71,109 @@ export default function ManageUsersContent() {
     return months;
   }, [users]);
 
+  const handleMakeAdmin = async (id: number) => {
+    Swal.fire({
+      title: "Make Admin?",
+      text: "Are you sure you want to make this user an admin?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, make admin",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/api/user`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, role: "admin" }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            Swal.fire({
+              title: "Success!",
+              text: "User has been promoted to admin.",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          } else {
+            Swal.fire(
+              "Error!",
+              data.message || "Failed to update role.",
+              "error"
+            );
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error!", "Something went wrong.", "error");
+        }
+      }
+    });
+  };
+
+  const handleDeleteUser = (id: number) => {
+    Swal.fire({
+      title: "Delete User?",
+      text: "Are you sure you want to delete this user? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/api/user`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "User has been deleted.",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          } else {
+            Swal.fire(
+              "Error!",
+              data.message || "Failed to delete user.",
+              "error"
+            );
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error!", "Something went wrong.", "error");
+        }
+      }
+    });
+  };
+
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Manage Users</h1>
-        <p className="text-muted-foreground">View and manage all registered users</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2">
+          Manage Users
+        </h1>
+        <p className="text-muted-foreground">
+          View and manage all registered users
+        </p>
       </div>
 
       {/* Stats + Charts */}
@@ -96,7 +202,10 @@ export default function ManageUsersContent() {
                   label
                 >
                   {roleData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -122,7 +231,10 @@ export default function ManageUsersContent() {
                   label
                 >
                   {monthlyData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -146,7 +258,10 @@ export default function ManageUsersContent() {
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 text-muted-foreground" size={18} />
+              <Search
+                className="absolute left-3 top-3 text-muted-foreground"
+                size={18}
+              />
               <input
                 type="text"
                 placeholder="Search users..."
@@ -173,20 +288,36 @@ export default function ManageUsersContent() {
       {/* Users Table */}
       <Card>
         <CardHeader>
-          <CardDescription>All registered users on the platform</CardDescription>
+          <CardDescription>
+            All registered users on the platform
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Email</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Role</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Status</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Listings</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Join Date</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Actions</th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Name
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Email
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Role
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Status
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Listings
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Join Date
+                  </th>
+                  <th className="text-left py-3 px-4 font-semibold text-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -195,8 +326,12 @@ export default function ManageUsersContent() {
                     key={user.id}
                     className="border-b border-border hover:bg-muted/50 transition-colors"
                   >
-                    <td className="py-3 px-4 text-foreground font-medium">{user.full_name}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{user.email}</td>
+                    <td className="py-3 px-4 text-foreground font-medium">
+                      {user.full_name}
+                    </td>
+                    <td className="py-3 px-4 text-muted-foreground">
+                      {user.email}
+                    </td>
                     <td className="py-3 px-4">
                       <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
                         {user.role}
@@ -213,11 +348,28 @@ export default function ManageUsersContent() {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" title="Make Admin" disabled={user.role === "admin"}>
-                          <Shield size={16} className={user.role === "admin" ? "opacity-50" : ""} />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          title="Make Admin"
+                          disabled={user.role === "admin"}
+                          onClick={() => handleMakeAdmin(user.id)}
+                        >
+                          <Shield
+                            size={16}
+                            className={
+                              user.role === "admin" ? "opacity-50" : ""
+                            }
+                          />
                         </Button>
 
-                        <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700 bg-transparent" title="Delete">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600 hover:text-red-700 bg-transparent"
+                          title="Delete"
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
                           <Trash2 size={16} />
                         </Button>
                       </div>

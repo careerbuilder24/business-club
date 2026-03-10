@@ -1,88 +1,4 @@
-// "use client";
 
-// import { useState } from "react";
-// import { Button } from "@/components/ui/button";
-// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-
-// export default function AddFinanceContent() {
-//   const [company, setCompany] = useState("");
-//   const [packageType, setPackageType] = useState("");
-//   const [amount, setAmount] = useState("");
-//   const [paymentDate, setPaymentDate] = useState("");
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     alert(`✅ Added Finance:
-// Company: ${company}
-// Package: ${packageType}
-// Amount: ${amount}
-// Date: ${paymentDate}`);
-//   };
-
-//   return (
-//     <Card className="max-w-lg mx-auto">
-//       <CardHeader>
-//         <CardTitle>Add Finance Record</CardTitle>
-//       </CardHeader>
-//       <CardContent>
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//             <label className="block mb-1 text-sm font-medium">Company Name</label>
-//             <input
-//               value={company}
-//               onChange={(e) => setCompany(e.target.value)}
-//               className="w-full border rounded-lg px-3 py-2"
-//               placeholder="Enter company name"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block mb-1 text-sm font-medium">Package Type</label>
-//             <select
-//               value={packageType}
-//               onChange={(e) => setPackageType(e.target.value)}
-//               className="w-full border rounded-lg px-3 py-2"
-//               required
-//             >
-//               <option value="">Select Package</option>
-//               <option value="Website">Website</option>
-//               <option value="Domain">Domain</option>
-//               <option value="Hosting">Hosting</option>
-//             </select>
-//           </div>
-
-//           <div>
-//             <label className="block mb-1 text-sm font-medium">Amount Paid</label>
-//             <input
-//               type="number"
-//               value={amount}
-//               onChange={(e) => setAmount(e.target.value)}
-//               className="w-full border rounded-lg px-3 py-2"
-//               placeholder="Enter amount"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block mb-1 text-sm font-medium">Payment Date</label>
-//             <input
-//               type="date"
-//               value={paymentDate}
-//               onChange={(e) => setPaymentDate(e.target.value)}
-//               className="w-full border rounded-lg px-3 py-2"
-//               required
-//             />
-//           </div>
-
-//           <Button type="submit" className="w-full bg-[#2C8845] text-white">
-//             Add Finance
-//           </Button>
-//         </form>
-//       </CardContent>
-//     </Card>
-//   );
-// }
 "use client";
 
 import { useState } from "react";
@@ -97,7 +13,7 @@ export default function AddFinanceContent() {
   const [paymentStatus, setPaymentStatus] = useState("Paid");
   const [transactionId, setTransactionId] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!company || !amount || !paymentDate || !transactionId) {
@@ -105,21 +21,31 @@ export default function AddFinanceContent() {
       return;
     }
 
-    alert(`✅ Finance Record Added:
-Company: ${company}
-Service: ${serviceType}
-Amount: ${amount}
-Date: ${paymentDate}
-Status: ${paymentStatus}
-Transaction ID: ${transactionId}`);
+    try {
+      const res = await fetch("/api/finance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ company, serviceType, amount, paymentDate, paymentStatus, transactionId }),
+      });
 
-    // Reset form
-    setCompany("");
-    setServiceType("Listing");
-    setAmount("");
-    setPaymentDate("");
-    setPaymentStatus("Paid");
-    setTransactionId("");
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`Finance record added successfully! ID: ${data.id}`);
+        // Reset form
+        setCompany("");
+        setServiceType("Listing");
+        setAmount("");
+        setPaymentDate("");
+        setPaymentStatus("Paid");
+        setTransactionId("");
+      } else {
+        alert("Error: " + data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong while adding finance record.");
+    }
   };
 
   return (

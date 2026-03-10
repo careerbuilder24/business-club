@@ -49,7 +49,7 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
-// ✅ Define item type
+//  Define item type
 export interface WatchItem {
   id: string;
   name: string;
@@ -58,7 +58,7 @@ export interface WatchItem {
   category?: string;
 }
 
-// ✅ Context shape
+//  Context shape
 interface WatchListContextProps {
   watchList: WatchItem[];
   addToWatchList: (item: WatchItem) => void;
@@ -72,7 +72,7 @@ const WatchListContext = createContext<WatchListContextProps | undefined>(undefi
 export function WatchListProvider({ children }: { children: ReactNode }) {
   const [watchList, setWatchList] = useState<WatchItem[]>([]);
 
-  // ✅ Optional: Persist watchlist in localStorage
+  //  Optional: Persist watchlist in localStorage
   useEffect(() => {
     const stored = localStorage.getItem("watchList");
     if (stored) setWatchList(JSON.parse(stored));
@@ -82,7 +82,7 @@ export function WatchListProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("watchList", JSON.stringify(watchList));
   }, [watchList]);
 
-  // ✅ Add to watchlist
+  //  Add to watchlist
   const addToWatchList = (item: WatchItem) => {
     setWatchList((prev) => {
       if (prev.some((w) => w.id === item.id)) return prev;
@@ -90,12 +90,12 @@ export function WatchListProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  // ✅ Remove from watchlist
+  //  Remove from watchlist
   const removeFromWatchList = (id: string) => {
     setWatchList((prev) => prev.filter((w) => w.id !== id));
   };
 
-  // ✅ Toggle function (optional convenience)
+  //  Toggle function (optional convenience)
   const toggleWatch = (item: WatchItem) => {
     setWatchList((prev) =>
       prev.some((w) => w.id === item.id)
@@ -104,7 +104,7 @@ export function WatchListProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  // ✅ Check if watched
+  //  Check if watched
   const isWatched = (id: string) => watchList.some((w) => w.id === id);
 
   return (
@@ -116,7 +116,7 @@ export function WatchListProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// ✅ Hook
+//  Hook
 export function useWatchList() {
   const context = useContext(WatchListContext);
   if (!context)

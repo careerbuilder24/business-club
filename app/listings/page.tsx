@@ -1,15 +1,17 @@
 
 import ListingsPage from "@/components/ListingsPage/ListingsPage";
-import { listings, categories as districtCategories, businessCategories } from "@/lib/data";
+import { getListings } from "@/lib/api";
+import { categories as districtCategories } from "@/lib/data";
 
 export default async function Page() {
-  // This is static data — you can just pass it directly
+  const listings = await getListings(); // server fetch
+
   return (
     <ListingsPage
-      listings={listings}
-      districtCategories={districtCategories}
-      businessCategories={businessCategories}
+      listings={listings}               // pass fetched data
+      categories={districtCategories}   // pass divisions
     />
   );
 }
+
 

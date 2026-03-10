@@ -79,10 +79,20 @@ export default function LoginPage() {
       localStorage.setItem("userEmail", data.user.email);
 
       // Redirect
+      // setTimeout(() => {
+      //   window.location.href =
+      //     data.user.role === "admin" ? "/dashboard" : "/dashboard";
+      // }, 1200);
+
       setTimeout(() => {
-        window.location.href =
-          data.user.role === "admin" ? "/dashboard" : "/dashboard";
-      }, 1200);
+  const email = data.user.email;
+  if (data.user.role === "admin") {
+    window.location.href = `/dashboard/${email}?tab=dashboard`;
+  } else {
+    window.location.href = `/dashboard/${email}?tab=dashboard`;
+  }
+}, 1200);
+
     } catch (error) {
       console.error("Login error:", error);
     }

@@ -25,7 +25,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (loggedUser) {
-      console.log("Logged user:", loggedUser);
+      // console.log("Logged user:", loggedUser);
     }
   }, [loggedUser]);
 
@@ -55,6 +55,8 @@ export default function Navbar() {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "All Listings", href: "/listings" },
+    { label: "Blog", href: "/blog" },
+    { label: "news", href: "/news" },
   ];
   // console.log(loggedUser);
   return (
@@ -92,7 +94,6 @@ export default function Navbar() {
 
           {/* --- Right: Action Buttons --- */}
           <div className="flex items-center gap-5 text-[#2C8845] ml-4 shrink-0">
-           
             <div
               className="relative flex items-center cursor-pointer"
               onClick={toggleSidebar}
@@ -105,15 +106,25 @@ export default function Navbar() {
               )}
             </div>
 
-           
-            <Link
+            {/* <Link
               href="/add-listing"
               className="hidden lg:flex items-center gap-1 font-medium text-[#2C8845] hover:text-yellow-400"
             >
               Add Your Business
-            </Link>
+            </Link> */}
 
-    
+            <button
+              onClick={() => {
+                if (loggedUser) {
+                  window.location.href = "/add-listing";
+                } else {
+                  window.location.href = "/login";
+                }
+              }}
+              className="hidden cursor-pointer lg:flex items-center gap-1 font-medium text-[#2C8845] hover:text-yellow-400"
+            >
+              Add Your Business
+            </button>
 
             {!loading && loggedUser ? (
               <>
@@ -121,11 +132,17 @@ export default function Navbar() {
                   {getUserName(loggedUser.email)}
                 </span>
 
-
-
-                <Link
+                {/* <Link
                   href="/dashboard"
                   className="px-3 py-2  font-semibold flex items-center gap-2 text-[#2C8845] hover:text-yellow-400 rounded-md transition"
+                >
+                  <LayoutDashboard size={18} />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </Link> */}
+
+                <Link
+                  href={`/dashboard/${loggedUser?.email}`}
+                  className="px-3 py-2 font-semibold flex items-center gap-2 text-[#2C8845] hover:text-yellow-400 rounded-md transition"
                 >
                   <LayoutDashboard size={18} />
                   <span className="hidden sm:inline">Dashboard</span>
@@ -149,7 +166,6 @@ export default function Navbar() {
               </Link>
             )}
 
-        
             <button
               onClick={toggleMenu}
               className="text-[#2C8845] lg:hidden p-1 rounded-md"

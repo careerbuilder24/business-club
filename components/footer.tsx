@@ -1,12 +1,14 @@
-
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-white mt-20 text-gray-700">
-      <div className="container-custom py-12">
+    <footer
+      className="bg-white mt-20 text-gray-700 [@media(min-width:1033px)]:ml-72
+            [@media(min-width:1735px)]:ml-28"
+    >
+      <div className="container-custom py-12 ">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="flex flex-col items-start">
@@ -34,7 +36,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/listings" className="hover:text-primary transition">
+                <Link
+                  href="/listings"
+                  className="hover:text-primary transition"
+                >
                   Listings
                 </Link>
               </li>
@@ -49,7 +54,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/PricingTablePage" className="hover:text-primary transition">
+                <Link
+                  href="/PricingTablePage"
+                  className="hover:text-primary transition"
+                >
                   Pricing
                 </Link>
               </li>
@@ -89,29 +97,29 @@ export default function Footer() {
             <ul className="space-y-3 text-sm mb-4">
               <li className="flex items-center gap-2">
                 <Mail size={16} />
-                <span>info@listify.com</span>
+                <span>info@businessclub.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={16} />
-                <span>+1 (555) 123-4567</span>
+                <span>+8801766461773</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={16} />
-                <span>123 Business St, NY</span>
+                {/* <span>123 Business St, NY</span> */}
+                <span>571, Adept Moitry Complex, ECB Chattar, Lift-08</span>
               </li>
             </ul>
 
             {/* Google Map */}
             <div className="w-full h-40 rounded-lg overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.123456789!2d-74.006!3d40.7128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a1234567890%3A0x1234567890abcdef!2s123%20Business%20St%2C%20New%20York%2C%20NY%2010001!5e0!3m2!1sen!2sus!4v1690000000000!5m2!1sen!2sus"
-                width="100%"
-                height="100%"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1824.9538849433723!2d90.3925184!3d23.8218785!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c781c50b9989%3A0x110082b1578e0943!2sCareer%20Builder%20Institute!5e0!3m2!1sen!2sbd!4v1740987843623!5m2!1sen!2sbd"
+                className="w-full h-[180px]"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+              />
             </div>
           </div>
         </div>

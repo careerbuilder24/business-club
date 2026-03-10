@@ -1,17 +1,38 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, X, Menu, X as Close } from "lucide-react";
 
 import Sidebar from "@/components/Sidebar/Sidebar";
+import useLoggedUser from "@/hooks/useLoggedUser";
+// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import usePackages from "@/hooks/usePackages";
 
 export default function PackagesContent() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   // const [openDivision, setOpenDivision] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const {
+    packagesData,
 
-  const handleSelectPackage = (id: string) => setSelectedPackage(id);
+    saving,
+
+    savePackages,
+  } = usePackages();
+
+  // const handleSelectPackage = (id: string) => setSelectedPackage(id);
+  const handleSelectPackage = (id: string) => {
+    setSelectedPackage(id);
+
+    if (loggedUser?.email) {
+      router.push(`/dashboard/${loggedUser.email}`);
+    } else {
+      router.push("/login"); // or wherever your login page is
+    }
+  };
+
   // Section headings (non-data rows)
   const sectionHeaders = [
     "Basic Services",
@@ -348,17 +369,59 @@ export default function PackagesContent() {
     "Business Consultancy": ["Consultancy"],
   };
 
+  const { loggedUser, loading, error } = useLoggedUser();
+  const packageNames = packagesData?.packages || [];
+
+  const router = useRouter();
+
+  console.log(packagesData);
+  /**
+ * Merge API services into groupedServices
+ */
+// const mergedGroupedServices = { ...groupedServices };
+
+
+// if (packagesData?.services && packagesData?.subSections) {
+//   packagesData.services.forEach((service: string, index: number) => {
+//     const subSection = packagesData.subSections[index];
+
+//     const matchedSection = Object.keys(mergedGroupedServices).find(
+//       (section) => section.toLowerCase() === subSection?.toLowerCase()
+//     );
+
+//     if (matchedSection) {
+//       mergedGroupedServices[matchedSection] = [
+//         ...mergedGroupedServices[matchedSection],
+//         service,
+//       ];
+//     }
+//   });
+// }
+
+const mergedGroupedServices: Record<string, string[]> = { ...groupedServices };
+
+if (packagesData?.services && packagesData?.subSections) {
+  packagesData.services.forEach((service, index) => {
+    const subSection = packagesData.subSections[index];
+
+    const matchedSection = Object.keys(mergedGroupedServices).find(
+      (section) => section.toLowerCase() === subSection?.toLowerCase()
+    );
+
+    if (matchedSection) {
+      mergedGroupedServices[matchedSection] = [
+        ...mergedGroupedServices[matchedSection],
+        service,
+      ];
+    }
+  });
+}
   return (
     <section className="flex relative bg-white">
       {/* Sidebar */}
       <Sidebar />
-
-   
-
       {/* Main Content */}
       <div className="container mx-auto px-4 md:px-36 mt-16 md:ml-36">
-       
-
         {/* Medium & Large devices: table view */}
         <div className=" overflow-x-auto">
           <table className="min-w-full table-auto border border-gray-200 text-sm shadow-md rounded-lg overflow-hidden">
@@ -399,8 +462,8 @@ export default function PackagesContent() {
                           selectedPackage === pkg.id
                             ? "bg-white text-[#2C8845] border border-[#2C8845]"
                             : pkg.id === "smart"
-                            ? "bg-[#2C8845] text-white hover:bg-[#25973F]"
-                            : "bg-white text-[#2C8845] hover:bg-[#E8F6EE]"
+                              ? "bg-[#2C8845] text-white hover:bg-[#25973F]"
+                              : "bg-white text-[#2C8845] hover:bg-[#E8F6EE]"
                         }`}
                       >
                         {selectedPackage === pkg.id ? "Selected" : "Choose"}
@@ -411,7 +474,7 @@ export default function PackagesContent() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(groupedServices).map(([section, services]) => (
+              {Object.entries(mergedGroupedServices).map(([section, services]) => (
                 <React.Fragment key={section}>
                   <tr className="bg-gray-100">
                     <td
@@ -431,11 +494,47 @@ export default function PackagesContent() {
                       <td className="px-2 py-1 text-left text-gray-700 font-medium text-[10px] md:text-sm">
                         {service}
                       </td>
-                      {packages.map((pkg) => {
-                        const value =
-                          pkg.data[service as keyof typeof pkg.data];
+                      {/* {packages.map((pkg) => {
+                        // const value =
+                        //   pkg.data[service as keyof typeof pkg.data];
+                        let value =
+                          pkg.data?.[service as keyof typeof pkg.data];
+
+                        // fallback to API data
+                        if (!value && packagesData?.data?.[service]) {
+                          value = packagesData.data[service][pkg.name];
+                        }
                         const isYes = value === "Yes";
                         const isNo = value === "No";
+                        return (
+                          <td
+                            key={pkg.id}
+                            className={`px-2 py-1 text-center text-[10px] md:text-sm ${
+                              pkg.id === "smart" ? "bg-[#F1FAF5]" : ""
+                            }`}
+                          >
+                            {isYes ? (
+                              <Check className="inline w-4 h-4 text-[#2C8845]" />
+                            ) : isNo ? (
+                              <X className="inline text-red-400 w-4 h-4" />
+                            ) : (
+                              <span className="text-gray-700">{value}</span>
+                            )}
+                          </td>
+                        );
+                      })} */}
+                      {packages.map((pkg) => {
+                        let value =
+                          pkg.data?.[service as keyof typeof pkg.data];
+
+                        // fallback to API values if static doesn't exist
+                        if (!value && packagesData?.data?.[service]) {
+                          value = packagesData.data[service][pkg.name];
+                        }
+
+                        const isYes = value === "Yes";
+                        const isNo = value === "No";
+
                         return (
                           <td
                             key={pkg.id}
@@ -464,3 +563,5 @@ export default function PackagesContent() {
     </section>
   );
 }
+
+

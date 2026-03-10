@@ -1,49 +1,4 @@
-// import dotenv from "dotenv";
-// import mysql from "mysql2";
 
-// dotenv.config();
-
-// // Use a global variable to prevent creating multiple pools during hot reload in dev
-// let pool;
-// let promisePool;
-
-// if (!global._mysqlPool) {
-//   pool = mysql.createPool({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASS,
-//     database: process.env.DB_NAME,
-//     port: process.env.DB_PORT || 3306,
-//     waitForConnections: true,
-//     connectionLimit: 10, // Adjust based on your server capacity
-//     queueLimit: 0,
-//   });
-
-//   promisePool = pool.promise();
-//   global._mysqlPool = promisePool; // Store in global to reuse
-// } else {
-//   promisePool = global._mysqlPool;
-// }
-
-// // Function to get user by email
-// export async function getUserByEmail(email) {
-//   try {
-//     if (!email) return null;
-
-//     const trimmedEmail = email.trim().toLowerCase();
-//     const [rows] = await promisePool.query(
-//       "SELECT * FROM business_club.user_managements WHERE LOWER(email) = ?",
-//       [trimmedEmail]
-//     );
-
-//     return rows.length > 0 ? rows[0] : null;
-//   } catch (error) {
-//     console.error("Database query error in getUserByEmail:", error);
-//     return null;
-//   }
-// }
-
-// export default promisePool;
 import dotenv from "dotenv";
 // Import the specific types needed for a promise-based connection
 import mysql, { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";

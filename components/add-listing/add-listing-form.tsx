@@ -7,6 +7,7 @@ import { Upload, X } from "lucide-react";
 import RichTextEditor from "./rich-text-editor";
 import useLoggedUser from "@/hooks/useLoggedUser";
 import Swal from "sweetalert2";
+import DOMPurify from "dompurify";
 
 const businessTypes = [
   "Manufacturer",
@@ -115,35 +116,31 @@ const industries = [
 
 export default function AddListingForm() {
   const { loggedUser, loading, error } = useLoggedUser();
+
   const [formData, setFormData] = useState({
     listingName: "",
     companyName: "",
+    type: "",
     category: "",
     address: "",
     email: "",
     phone: "",
     website: "",
     facebook: "",
+    district: "",
+    city: "",
     description: "",
     labels: [] as string[],
   });
 
-  // logged user
-  // useEffect(() => {
-  //   if (loggedUser) {
-  //     console.log("Logged user:", loggedUser);
-  //   }
-  // }, [loggedUser]);
-
   useEffect(() => {
-  if (loggedUser?.email) {
-    setFormData((prev) => ({
-      ...prev,
-      email: loggedUser.email,
-    }));
-  }
-}, [loggedUser]);
-
+    if (loggedUser?.email) {
+      setFormData((prev) => ({
+        ...prev,
+        email: loggedUser.email,
+      }));
+    }
+  }, [loggedUser]);
 
   const [images, setImages] = useState({
     logo: null as File | null,
@@ -153,6 +150,13 @@ export default function AddListingForm() {
 
   const [labelInput, setLabelInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [products, setProducts] = useState([
+    { name: "", description: "", images: [] as File[] },
+  ]);
+
+  const [services, setServices] = useState([
+    { name: "", description: "", images: [] as File[] },
+  ]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -164,7 +168,8 @@ export default function AddListingForm() {
   };
 
   const handleDescriptionChange = (content: string) => {
-    setFormData((prev) => ({ ...prev, description: content }));
+    const cleaned = cleanHTML(content);
+    setFormData((prev) => ({ ...prev, description: cleaned }));
   };
 
   const handleImageUpload = (
@@ -210,126 +215,180 @@ export default function AddListingForm() {
       labels: prev.labels.filter((l) => l !== label),
     }));
   };
-  // async function uploadToImgBB(file: File) {
-  //   const formData = new FormData();
-  //   formData.append("image", file);
 
-  //   const res = await fetch(
-  //     `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
-  //     {
-  //       method: "POST",
-  //       body: formData,
-  //     }
-  //   );
+  const cleanHTML = (dirty: string): string => {
+    const clean = DOMPurify.sanitize(dirty, {
+      ALLOWED_ATTR: ["href", "target", "rel"],
+      ALLOWED_TAGS: [
+        "p",
+        "br",
+        "strong",
+        "b",
+        "i",
+        "ul",
+        "ol",
+        "li",
+        "a",
+        "h1",
+        "h2",
+        "h3",
+      ],
+    });
 
-  //   const data = await res.json();
-  //   return data?.data?.url;
-  // }
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   // Function to upload a file to ImgBB
-  //   const uploadToImgBB = async (file: File) => {
-  //     const formData = new FormData();
-  //     formData.append("image", file);
-  //     const res = await fetch(
-  //       `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
-  //       { method: "POST", body: formData }
-  //     );
-  //     const data = await res.json();
-  //     return data?.data?.url || null;
-  //   };
-
-  //   // Upload images
-  //   const logo_url = images.logo ? await uploadToImgBB(images.logo) : null;
-  //   const cover_url = images.cover ? await uploadToImgBB(images.cover) : null;
-  //   const gallery_urls: string[] = [];
-  //   for (const img of images.gallery) {
-  //     const url = await uploadToImgBB(img);
-  //     if (url) gallery_urls.push(url);
-  //   }
-
-  //   // Send only URLs + formData
-  //   const res = await fetch("/api/listings", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ formData, logo_url, cover_url, gallery_urls }),
-  //   });
-
-  //   const data = await res.json();
-  //   if (data.success) {
-  //     setSubmitted(true);
-  //     console.log("Listing added successfully");
-  //   } else {
-  //     console.error(data.error); // will now work
-  //   }
-  // };
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-
-  // Confirm alert
-  const result = await Swal.fire({
-    title: "Submit Listing?",
-    text: "Are you sure you want to submit this listing?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Yes, Submit",
-    cancelButtonText: "Cancel",
-  });
-
-  if (!result.isConfirmed) {
-    return; // stop submission
-  }
-
-  // Function to upload a file to ImgBB
-  const uploadToImgBB = async (file: File) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    const res = await fetch(
-      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
-      { method: "POST", body: formData }
-    );
-    const data = await res.json();
-    return data?.data?.url || null;
+    return clean;
   };
 
-  // Upload images
-  const logo_url = images.logo ? await uploadToImgBB(images.logo) : null;
-  const cover_url = images.cover ? await uploadToImgBB(images.cover) : null;
 
-  const gallery_urls: string[] = [];
-  for (const img of images.gallery) {
-    const url = await uploadToImgBB(img);
-    if (url) gallery_urls.push(url);
-  }
 
-  // Submit form to backend
-  const res = await fetch("/api/listings", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ formData, logo_url, cover_url, gallery_urls }),
-  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const data = await res.json();
-
-  if (data.success) {
-    setSubmitted(true);
-
-    Swal.fire({
-      title: "Success!",
-      text: "Listing submitted successfully!",
-      icon: "success",
-      confirmButtonText: "OK",
+    const result = await Swal.fire({
+      title: "Submit Listing?",
+      text: "Are you sure you want to submit this listing?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Submit",
+      cancelButtonText: "Cancel",
     });
-  } else {
-    Swal.fire({
-      title: "Error!",
-      text: data.error || "Something went wrong.",
-      icon: "error",
+
+    if (!result.isConfirmed) return;
+
+    // Upload to ImgBB function
+    const uploadToImgBB = async (file: File) => {
+      const fd = new FormData();
+      fd.append("image", file);
+
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+        { method: "POST", body: fd }
+      );
+
+      const data = await res.json();
+      return data?.data?.url || null;
+    };
+
+    // Upload Logo + Cover
+    const logo_url = images.logo ? await uploadToImgBB(images.logo) : null;
+    const cover_url = images.cover ? await uploadToImgBB(images.cover) : null;
+
+    // Upload Gallery
+    const gallery_urls: string[] = [];
+    for (const img of images.gallery) {
+      const url = await uploadToImgBB(img);
+      if (url) gallery_urls.push(url);
+    }
+
+    // Upload PRODUCT images
+    const uploadedProducts = [];
+    for (const product of products) {
+      const uploadedImgUrls: string[] = [];
+
+      for (const img of product.images) {
+        const url = await uploadToImgBB(img);
+        if (url) uploadedImgUrls.push(url);
+      }
+
+      uploadedProducts.push({
+        name: product.name,
+        description: product.description,
+        images: uploadedImgUrls,
+      });
+    }
+
+    // Upload SERVICE images
+    const uploadedServices = [];
+    for (const service of services) {
+      const uploadedImgUrls: string[] = [];
+
+      for (const img of service.images) {
+        const url = await uploadToImgBB(img);
+        if (url) uploadedImgUrls.push(url);
+      }
+
+      uploadedServices.push({
+        name: service.name,
+        description: service.description,
+        images: uploadedImgUrls,
+      });
+    }
+
+    // SEND everything to backend
+    const res = await fetch("/api/listings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        formData,
+        logo_url,
+        cover_url,
+        gallery_urls,
+        products: uploadedProducts,
+        services: uploadedServices,
+      }),
     });
-  }
-};
+
+    const data = await res.json();
+
+    if (data.success) {
+      setSubmitted(true);
+      Swal.fire({
+        title: "Success!",
+        text: "Listing submitted successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: data.error || "Something went wrong.",
+        icon: "error",
+      });
+    }
+  };
+
+  // ---------------- PRODUCTS ----------------
+  const handleProductChange = (index: number, field: string, value: string) => {
+    const newProducts = [...products];
+    newProducts[index][field] = value;
+    setProducts(newProducts);
+  };
+
+  const handleProductImages = (index: number, files: FileList | null) => {
+    if (!files) return;
+    const newProducts = [...products];
+    newProducts[index].images.push(...Array.from(files));
+    setProducts(newProducts);
+  };
+
+  const addProduct = () => {
+    setProducts([...products, { name: "", description: "", images: [] }]);
+  };
+
+  const removeProduct = (index: number) => {
+    setProducts(products.filter((_, i) => i !== index));
+  };
+
+  // ---------------- SERVICES ----------------
+  const handleServiceChange = (index: number, field: string, value: string) => {
+    const newServices = [...services];
+    newServices[index][field] = value;
+    setServices(newServices);
+  };
+
+  const handleServiceImages = (index: number, files: FileList | null) => {
+    if (!files) return;
+    const newServices = [...services];
+    newServices[index].images.push(...Array.from(files));
+    setServices(newServices);
+  };
+
+  const addService = () => {
+    setServices([...services, { name: "", description: "", images: [] }]);
+  };
+
+  const removeService = (index: number) => {
+    setServices(services.filter((_, i) => i !== index));
+  };
 
   console.log(loggedUser);
   return (
@@ -450,6 +509,37 @@ const handleSubmit = async (e: React.FormEvent) => {
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
             Contact Information
           </h2>
+          {/* District */}
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-foreground">
+              District *
+            </label>
+            <input
+              type="text"
+              name="district"
+              value={formData.district}
+              onChange={handleInputChange}
+              placeholder="e.g., Dhaka"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            />
+          </div>
+
+          {/* City */}
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-foreground">
+              City *
+            </label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder="e.g., Gulshan"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            />
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* Phone */}
@@ -634,6 +724,170 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
         </div>
 
+        <div>
+          {/* PRODUCTS SECTION */}
+          <div className="border border-border rounded-lg p-4 bg-white">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">Products</h2>
+
+            {products.map((product, index) => (
+              <div key={index} className="border p-4 rounded-lg mb-4 relative">
+                {/* Remove Product Button */}
+                {index > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => removeProduct(index)}
+                    className="absolute top-2 right-2 text-red-500"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+
+                {/* Product Name */}
+                <label className="block font-semibold mb-1">
+                  Product Name *
+                </label>
+                <input
+                  type="text"
+                  value={product.name}
+                  onChange={(e) =>
+                    handleProductChange(index, "name", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded mb-3"
+                  placeholder="e.g., Premium Laptop"
+                  required
+                />
+
+                {/* Product Description */}
+                <label className="block font-semibold mb-1">
+                  Description *
+                </label>
+                <textarea
+                  value={product.description}
+                  onChange={(e) =>
+                    handleProductChange(index, "description", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded mb-3"
+                  rows={3}
+                  placeholder="Short product description..."
+                  required
+                ></textarea>
+
+                {/* Product Images */}
+                <label className="block font-semibold mb-1">
+                  Product Images
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => handleProductImages(index, e.target.files)}
+                  className="border p-2 rounded w-full"
+                />
+
+                {/* Preview File Names */}
+                {product.images.length > 0 && (
+                  <ul className="text-sm mt-2 list-disc ml-4">
+                    {product.images.map((img, i) => (
+                      <li key={i}>{img.name}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+
+            {/* Add New Product Button */}
+            <button
+              type="button"
+              onClick={addProduct}
+              className="mt-2 px-4 py-2 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white rounded-lg"
+            >
+              + Add Another Product
+            </button>
+          </div>
+        </div>
+
+        <div>
+          {/* SERVICES SECTION */}
+          <div className="border border-border rounded-lg p-4 bg-white">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">Services</h2>
+
+            {services.map((service, index) => (
+              <div key={index} className="border p-4 rounded-lg mb-4 relative">
+                {/* Remove Service Button */}
+                {index > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => removeService(index)}
+                    className="absolute top-2 right-2 text-red-500"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+
+                {/* Service Name */}
+                <label className="block font-semibold mb-1">
+                  Service Name *
+                </label>
+                <input
+                  type="text"
+                  value={service.name}
+                  onChange={(e) =>
+                    handleServiceChange(index, "name", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded mb-3"
+                  placeholder="e.g., Web Development"
+                  required
+                />
+
+                {/* Service Description */}
+                <label className="block font-semibold mb-1">
+                  Description *
+                </label>
+                <textarea
+                  value={service.description}
+                  onChange={(e) =>
+                    handleServiceChange(index, "description", e.target.value)
+                  }
+                  className="w-full border px-3 py-2 rounded mb-3"
+                  rows={3}
+                  placeholder="Short service description..."
+                  required
+                ></textarea>
+
+                {/* Service Images */}
+                <label className="block font-semibold mb-1">
+                  Service Images
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => handleServiceImages(index, e.target.files)}
+                  className="border p-2 rounded w-full"
+                />
+
+                {/* Preview File Names */}
+                {service.images.length > 0 && (
+                  <ul className="text-sm mt-2 list-disc ml-4">
+                    {service.images.map((img, i) => (
+                      <li key={i}>{img.name}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+
+            {/* Add New Service Button */}
+            <button
+              type="button"
+              onClick={addService}
+              className="mt-2 px-4 py-2 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white rounded-lg"
+            >
+              + Add Another Service
+            </button>
+          </div>
+        </div>
+
         {/* Labels */}
         <div>
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
@@ -654,7 +908,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <button
               type="button"
               onClick={addLabel}
-              className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-light transition-colors font-semibold"
+              className="px-6 py-2 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white rounded-lg transition-colors font-semibold"
             >
               Add
             </button>
@@ -680,9 +934,10 @@ const handleSubmit = async (e: React.FormEvent) => {
         </div>
 
         {/* Description */}
-        <div>
+
+        <div className="border border-border rounded-lg p-4 bg-white">
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
-            Description
+            Company Description
           </h2>
           <RichTextEditor
             value={formData.description}
@@ -694,13 +949,13 @@ const handleSubmit = async (e: React.FormEvent) => {
         <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border">
           <button
             type="submit"
-            className="flex-1 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
+            className="flex-1 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white px-8 py-3 rounded-lg font-semibold  transition-colors"
           >
             Submit Listing
           </button>
           <button
             type="button"
-            className="flex-1 bg-muted text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-border transition-colors"
+            className="flex-1 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white px-8 py-3 rounded-lg font-semibold  transition-colors"
           >
             Save as Draft
           </button>

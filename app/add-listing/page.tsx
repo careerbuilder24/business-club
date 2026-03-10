@@ -1,7 +1,23 @@
+"use client";
 import AddListingForm from "@/components/add-listing/add-listing-form";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import useLoggedUser from "@/hooks/useLoggedUser";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function AddListingPage() {
+    const { loggedUser, loading } = useLoggedUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !loggedUser) {
+      router.push("/login");
+    }
+  }, [loggedUser, loading, router]);
+
+  if (loading) {
+    return <div className="p-10 text-center">Loading...</div>;
+  }
   return (
     <div className="flex">
       {/* Sidebar stays on left */}

@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className}>
       <body className="bg-background text-foreground" suppressHydrationWarning>
-        {/* ✅ Wrap your app with WatchListProvider */}
+        {/*  Wrap your app with WatchListProvider */}
         <WatchListProvider>
           <Navbar />
           <main>{children}</main>
