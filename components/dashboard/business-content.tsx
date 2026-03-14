@@ -46,7 +46,10 @@ type Listing = {
   gallery_urls?: string | string[] | any[];
 };
 
-export default function BusinessContent() {
+export default function 
+
+
+BusinessContent() {
   const { listingss, loading } = useListing();
   const { loggedUser } = useLoggedUser();
 
@@ -55,7 +58,7 @@ export default function BusinessContent() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // 🌿 INITIAL GREEN SPINNING LOADER
+  //  INITIAL GREEN SPINNING LOADER
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh]">

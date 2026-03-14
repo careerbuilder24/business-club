@@ -150,7 +150,6 @@ export default function AddListingForm() {
     }
   }, [loggedUser]);
 
-
   const userPayments =
     payments?.filter(
       (p: any) =>
@@ -538,7 +537,6 @@ export default function AddListingForm() {
                 required
               />
             </div>
-
 
             {loggedUser?.email && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
