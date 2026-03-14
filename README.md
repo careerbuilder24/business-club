@@ -2,7 +2,7 @@
 
 [**Live Website**](https://business-clubs.vercel.app/)
 
-Business Club is a modern online platform designed to showcase and connect businesses. It provides a comprehensive listing of businesses along with essential services like domain hosting, digital marketing, and web marketing solutions. Our goal is to empower businesses by providing them visibility and access to the tools they need to grow online.
+Business Club is a modern online platform designed to showcase and connect businesses. It provides a comprehensive listing of businesses along with essential services like domain hosting, digital marketing, and web marketing solutions. Our goal is to empower businesses by providing them with visibility and access to the tools they need to grow online.
 
 ---
 
