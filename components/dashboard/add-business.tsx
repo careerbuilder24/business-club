@@ -566,56 +566,25 @@ export default function AddListingForm() {
                 {packageNames.length > 0 ? (
                   <ul className="list-disc ml-5 text-sm text-blue-700 mt-2 space-y-1">
                     {/* {packageNames.map((pkg) => {
-                      const pkgData = userPayments.find(
-                        (p: any) =>
-                          p.package_name === pkg &&
-                          p.email === loggedUser?.email,
-                      );
-
-                      return (
-                        <li key={pkg} className="flex items-center gap-2">
-                          {pkg}
-
-                          {pkgData && (
-                            <span
-                              className={`text-xs px-2 py-0.5 rounded
-                  ${
-                    pkgData.payment_status === "approved"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                            >
-                              {pkgData.payment_status === "approved"
-                                ? "Approved"
-                                : "Pending"}
-                            </span>
-                          )}
-                        </li>
-                      );
-                    })} */}
-
-                    {/* {packageNames.map((pkg) => {
                       const payment = userPayments.find(
                         (p: any) =>
-                          p.package_name === pkg &&
+                          p.package_id?.toLowerCase() === pkg.toLowerCase() &&
                           p.email === loggedUser?.email,
                       );
 
-                      // const request = userPackageRequests.find(
-                      //   (r: any) => r.requested_package === pkg,
-                      // );
-
                       const request = userPackageRequests.find(
-  (r: any) => r.requested_package.toLowerCase() === pkg.toLowerCase(),
-);
+                        (r: any) =>
+                          r.requested_package?.toLowerCase() ===
+                          pkg.toLowerCase(),
+                      );
 
-
+                      // const status =
+                      //   request?.status || payment?.payment_status || "pending";
                       const status =
-                        request?.status || payment?.payment_status || "pending";
-
+                        request?.status || payment?.status || "pending";
                       return (
                         <li key={pkg} className="flex items-center gap-2">
-                          {pkg}
+                          {pkg.charAt(0).toUpperCase() + pkg.slice(1)}
 
                           <span
                             className={`text-xs px-2 py-0.5 rounded
@@ -651,7 +620,7 @@ export default function AddListingForm() {
                       );
 
                       const status =
-                        request?.status || payment?.payment_status || "pending";
+                        request?.status || payment?.status || "pending";
 
                       return (
                         <li key={pkg} className="flex items-center gap-2">
@@ -660,15 +629,15 @@ export default function AddListingForm() {
                           <span
                             className={`text-xs px-2 py-0.5 rounded
         ${
-          status === "approved"
+          status === "approved" || status === "active"
             ? "bg-green-100 text-green-700"
             : status === "rejected"
               ? "bg-red-100 text-red-600"
               : "bg-yellow-100 text-yellow-700"
         }`}
                           >
-                            {status === "approved"
-                              ? "Approved"
+                            {status === "approved" || status === "active"
+                              ? "Active"
                               : status === "rejected"
                                 ? "Denied"
                                 : "Pending"}

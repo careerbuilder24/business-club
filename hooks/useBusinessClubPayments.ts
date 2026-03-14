@@ -13,6 +13,7 @@ export interface BusinessClubPayment {
   payment_status: string;
   transaction_id: string;
   email: string;
+  status: string;
   package_name: string;
   created_at?: string;
 }
