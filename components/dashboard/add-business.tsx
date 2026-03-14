@@ -119,7 +119,7 @@ const industries = [
 
 export default function AddListingForm() {
   const { payments } = useBusinessClubPayments();
-
+  const [packageRequests, setPackageRequests] = useState<any[]>([]);
   const { loggedUser } = useLoggedUser();
 
   const [formData, setFormData] = useState({
@@ -150,6 +150,22 @@ export default function AddListingForm() {
     }
   }, [loggedUser]);
 
+  useEffect(() => {
+    const fetchPackageRequests = async () => {
+      const res = await fetch("/api/package-upgrade-request");
+      const data = await res.json();
+
+      if (data.success) {
+        setPackageRequests(data.requests);
+      }
+    };
+
+    fetchPackageRequests();
+  }, []);
+
+  const userPackageRequests = packageRequests.filter(
+    (req) => req.email === loggedUser?.email,
+  );
   const userPayments =
     payments?.filter(
       (p: any) =>
@@ -158,9 +174,12 @@ export default function AddListingForm() {
 
   const packageCount = userPayments.length;
 
-  const packageNames = [
-    ...new Set(userPayments.map((p: any) => p.package_name)),
-  ];
+  // const packageNames = [
+  //   ...new Set(userPayments.map((p: any) => p.package_name)),
+  // ];
+
+  const packageNames = [...new Set(userPayments.map((p: any) => p.package_id))];
+
   const [images, setImages] = useState({
     logo: null as File | null,
     cover: null as File | null,
@@ -546,7 +565,7 @@ export default function AddListingForm() {
 
                 {packageNames.length > 0 ? (
                   <ul className="list-disc ml-5 text-sm text-blue-700 mt-2 space-y-1">
-                    {packageNames.map((pkg) => {
+                    {/* {packageNames.map((pkg) => {
                       const pkgData = userPayments.find(
                         (p: any) =>
                           p.package_name === pkg &&
@@ -571,6 +590,89 @@ export default function AddListingForm() {
                                 : "Pending"}
                             </span>
                           )}
+                        </li>
+                      );
+                    })} */}
+
+                    {/* {packageNames.map((pkg) => {
+                      const payment = userPayments.find(
+                        (p: any) =>
+                          p.package_name === pkg &&
+                          p.email === loggedUser?.email,
+                      );
+
+                      // const request = userPackageRequests.find(
+                      //   (r: any) => r.requested_package === pkg,
+                      // );
+
+                      const request = userPackageRequests.find(
+  (r: any) => r.requested_package.toLowerCase() === pkg.toLowerCase(),
+);
+
+
+                      const status =
+                        request?.status || payment?.payment_status || "pending";
+
+                      return (
+                        <li key={pkg} className="flex items-center gap-2">
+                          {pkg}
+
+                          <span
+                            className={`text-xs px-2 py-0.5 rounded
+        ${
+          status === "approved"
+            ? "bg-green-100 text-green-700"
+            : status === "rejected"
+              ? "bg-red-100 text-red-600"
+              : "bg-yellow-100 text-yellow-700"
+        }`}
+                          >
+                            {status === "approved"
+                              ? "Approved"
+                              : status === "rejected"
+                                ? "Denied"
+                                : "Pending"}
+                          </span>
+                        </li>
+                      );
+                    })} */}
+
+                    {packageNames.map((pkg) => {
+                      const payment = userPayments.find(
+                        (p: any) =>
+                          p.package_id?.toLowerCase() === pkg.toLowerCase() &&
+                          p.email === loggedUser?.email,
+                      );
+
+                      const request = userPackageRequests.find(
+                        (r: any) =>
+                          r.requested_package?.toLowerCase() ===
+                          pkg.toLowerCase(),
+                      );
+
+                      const status =
+                        request?.status || payment?.payment_status || "pending";
+
+                      return (
+                        <li key={pkg} className="flex items-center gap-2">
+                          {pkg.charAt(0).toUpperCase() + pkg.slice(1)}
+
+                          <span
+                            className={`text-xs px-2 py-0.5 rounded
+        ${
+          status === "approved"
+            ? "bg-green-100 text-green-700"
+            : status === "rejected"
+              ? "bg-red-100 text-red-600"
+              : "bg-yellow-100 text-yellow-700"
+        }`}
+                          >
+                            {status === "approved"
+                              ? "Approved"
+                              : status === "rejected"
+                                ? "Denied"
+                                : "Pending"}
+                          </span>
                         </li>
                       );
                     })}
