@@ -162,17 +162,17 @@ export default function AddListingForm() {
 
     fetchPackageRequests();
   }, []);
-  useEffect(() => {
-    const savedDraft = localStorage.getItem(DRAFT_KEY);
+  // useEffect(() => {
+  //   const savedDraft = localStorage.getItem(DRAFT_KEY);
 
-    if (savedDraft) {
-      const parsed = JSON.parse(savedDraft);
+  //   if (savedDraft) {
+  //     const parsed = JSON.parse(savedDraft);
 
-      setFormData(parsed.formData || formData);
-      setProducts(parsed.products || []);
-      setServices(parsed.services || []);
-    }
-  }, []);
+  //     setFormData(parsed.formData || formData);
+  //     setProducts(parsed.products || []);
+  //     setServices(parsed.services || []);
+  //   }
+  // }, []);
 
   const userPackageRequests = packageRequests.filter(
     (req) => req.email === loggedUser?.email,
@@ -316,24 +316,24 @@ export default function AddListingForm() {
     setProducts((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const saveDraftToLocalStorage = () => {
-    const draft = {
-      formData,
-      products,
-      services,
-      labels: formData.labels,
-    };
+  // const saveDraftToLocalStorage = () => {
+  //   const draft = {
+  //     formData,
+  //     products,
+  //     services,
+  //     labels: formData.labels,
+  //   };
 
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  //   localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
 
-    Swal.fire({
-      title: "Draft Saved",
-      text: "Your listing draft has been saved locally.",
-      icon: "success",
-      timer: 1500,
-      showConfirmButton: false,
-    });
-  };
+  //   Swal.fire({
+  //     title: "Draft Saved",
+  //     text: "Your listing draft has been saved locally.",
+  //     icon: "success",
+  //     timer: 1500,
+  //     showConfirmButton: false,
+  //   });
+  // };
   // ---------- Services ----------
 
   const handleServiceChange = (index: number, field: string, value: string) => {
@@ -1126,13 +1126,13 @@ export default function AddListingForm() {
           >
             Save as Draft
           </button> */}
-          <button
+          {/* <button
             type="button"
             onClick={saveDraftToLocalStorage}
             className="flex-1 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white px-8 py-3 rounded-lg font-semibold transition-colors"
           >
             Save as Draft
-          </button>
+          </button> */}
         </div>
       </form>
     </>
