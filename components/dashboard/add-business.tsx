@@ -162,17 +162,6 @@ export default function AddListingForm() {
 
     fetchPackageRequests();
   }, []);
-  // useEffect(() => {
-  //   const savedDraft = localStorage.getItem(DRAFT_KEY);
-
-  //   if (savedDraft) {
-  //     const parsed = JSON.parse(savedDraft);
-
-  //     setFormData(parsed.formData || formData);
-  //     setProducts(parsed.products || []);
-  //     setServices(parsed.services || []);
-  //   }
-  // }, []);
 
   const userPackageRequests = packageRequests.filter(
     (req) => req.email === loggedUser?.email,
@@ -184,10 +173,6 @@ export default function AddListingForm() {
     ) || [];
 
   const packageCount = userPayments.length;
-
-  // const packageNames = [
-  //   ...new Set(userPayments.map((p: any) => p.package_name)),
-  // ];
 
   const packageNames = [...new Set(userPayments.map((p: any) => p.package_id))];
 
@@ -315,26 +300,6 @@ export default function AddListingForm() {
   const removeProduct = (index: number) => {
     setProducts((prev) => prev.filter((_, i) => i !== index));
   };
-
-  // const saveDraftToLocalStorage = () => {
-  //   const draft = {
-  //     formData,
-  //     products,
-  //     services,
-  //     labels: formData.labels,
-  //   };
-
-  //   localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-
-  //   Swal.fire({
-  //     title: "Draft Saved",
-  //     text: "Your listing draft has been saved locally.",
-  //     icon: "success",
-  //     timer: 1500,
-  //     showConfirmButton: false,
-  //   });
-  // };
-  // ---------- Services ----------
 
   const handleServiceChange = (index: number, field: string, value: string) => {
     const newServices = [...services];
@@ -594,47 +559,6 @@ export default function AddListingForm() {
 
                 {packageNames.length > 0 ? (
                   <ul className="list-disc ml-5 text-sm text-blue-700 mt-2 space-y-1">
-                    {/* {packageNames.map((pkg) => {
-                      const payment = userPayments.find(
-                        (p: any) =>
-                          p.package_id?.toLowerCase() === pkg.toLowerCase() &&
-                          p.email === loggedUser?.email,
-                      );
-
-                      const request = userPackageRequests.find(
-                        (r: any) =>
-                          r.requested_package?.toLowerCase() ===
-                          pkg.toLowerCase(),
-                      );
-
-                      // const status =
-                      //   request?.status || payment?.payment_status || "pending";
-                      const status =
-                        request?.status || payment?.status || "pending";
-                      return (
-                        <li key={pkg} className="flex items-center gap-2">
-                          {pkg.charAt(0).toUpperCase() + pkg.slice(1)}
-
-                          <span
-                            className={`text-xs px-2 py-0.5 rounded
-        ${
-          status === "approved"
-            ? "bg-green-100 text-green-700"
-            : status === "rejected"
-              ? "bg-red-100 text-red-600"
-              : "bg-yellow-100 text-yellow-700"
-        }`}
-                          >
-                            {status === "approved"
-                              ? "Approved"
-                              : status === "rejected"
-                                ? "Denied"
-                                : "Pending"}
-                          </span>
-                        </li>
-                      );
-                    })} */}
-
                     {packageNames.map((pkg) => {
                       const payment = userPayments.find(
                         (p: any) =>
@@ -1116,23 +1040,10 @@ export default function AddListingForm() {
         <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border">
           <button
             type="submit"
-            className="flex-1 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+            className="w-full sm:w-auto bg-[#2C8845] hover:bg-[#21b348] text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-0.5"
           >
             Submit Listing
           </button>
-          {/* <button
-            type="button"
-            className="flex-1 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white px-8 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Save as Draft
-          </button> */}
-          {/* <button
-            type="button"
-            onClick={saveDraftToLocalStorage}
-            className="flex-1 bg-[#2C8845] hover:bg-[#21b348] duration-500 ease-in-out text-white px-8 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Save as Draft
-          </button> */}
         </div>
       </form>
     </>
